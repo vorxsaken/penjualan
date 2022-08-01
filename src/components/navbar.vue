@@ -1,50 +1,57 @@
 <template>
   <span>
-    <v-system-bar class="d-flex justify-center" app color="white">
+    <v-system-bar v-if="cart" class="d-flex justify-center" app color="white">
       <v-icon>mdi-chart-donut-variant</v-icon>
       <span class="text-overline black--text">Raja Vape Mejobo</span>
     </v-system-bar>
-    <v-app-bar
-      id="nab"
-      :class="warnaNavbar"
-      app
-      :elevation="elevation"
-      class="mt-5"
-    >
-      <v-text-field
-        placeholder="Cari..."
-        filled
-        rounded
-        dense
-        background-color="grey lighten-4"
-        single-line
-        hide-details
-        :prepend-inner-icon="hideOnScroll ? 'mdi-magnify' : 'mdi-arrow-left'"
-        @focus="showKategori"
-        @click:prepend-inner="changeState"
-        ref="search"
-      >
-      </v-text-field>
-      <v-spacer v-if="cart"></v-spacer>
-      <v-btn icon v-if="cart" :to="{ name: 'Keranjang' }">
-        <v-badge
-          :content="this.$store.state.keranjang.length"
-          :value="this.$store.state.keranjang.length"
-          color="red darken-2"
-          overlap
-          
-        >
-          <v-icon color="black">$vuetify.icons.cart</v-icon>
-        </v-badge>
-      </v-btn>
+    <v-app-bar id="nab" :class="warnaNavbar" app :elevation="elevation">
+      <v-container>
+        <v-row>
+          <v-col v-if="!cart"></v-col>
+          <v-col class="px-0" :cols="this.$vuetify.breakpoint.xs ? 10 : 4">
+            <v-text-field
+              placeholder="Cari..."
+              filled
+              rounded
+              dense
+              background-color="grey lighten-4"
+              single-line
+              hide-details
+              :prepend-inner-icon="
+                hideOnScroll ? 'mdi-magnify' : 'mdi-arrow-left'
+              "
+              @focus="showKategori"
+              @click:prepend-inner="changeState"
+              ref="search"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col  :cols="this.$vuetify.breakpoint.xs ? 2 : 4">
+            <menuButton v-if="!cart" />
+            <v-btn v-else icon :to="{ name: 'Keranjang' }">
+              <v-badge
+                :content="this.$store.state.keranjang.length"
+                :value="this.$store.state.keranjang.length"
+                color="red darken-2"
+                overlap
+              >
+                <v-icon color="black">$vuetify.icons.cart</v-icon>
+              </v-badge>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-app-bar>
-    <div></div>
   </span>
 </template>
 
 <script>
+import menuButton from "./menuButtonGroup.vue";
 export default {
   name: "PenjualanNavbar",
+  components: {
+    menuButton
+  },
   data() {
     return {
       warnaNavbar: "white",
@@ -55,6 +62,9 @@ export default {
   },
 
   mounted() {},
+  created() {
+    this.watchNav();
+  },
 
   methods: {
     showKategori() {
@@ -63,7 +73,7 @@ export default {
       this.hideOnScroll = false;
       this.$router.push({ name: "Kategori" });
       this.$store.state.hideKategori = false;
-      this.cart = false;
+      // this.cart = false;
     },
     keepFocus() {
       this.$refs.search.focus();
@@ -79,7 +89,7 @@ export default {
         this.hideOnScroll = true;
         this.$router.go(-1);
         this.$refs.search.blur();
-        this.cart = true;
+        // this.cart = true;
         return;
       }
     },
@@ -89,14 +99,24 @@ export default {
         this.elevation = "0";
         this.hideOnScroll = true;
         this.$refs.search.blur();
-        this.cart = true;
+        // this.cart = true;
         return;
+      }
+    },
+    watchNav() {
+      if (this.$vuetify.breakpoint.width > 960) {
+        this.cart = false;
+      } else {
+        this.cart = true;
       }
     },
   },
   watch: {
     "$store.state.hideKategori": function () {
       this.buttonHideKategori();
+    },
+    "$vuetify.breakpoint.width": function () {
+      this.watchNav();
     },
   },
 };

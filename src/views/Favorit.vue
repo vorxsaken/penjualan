@@ -1,7 +1,7 @@
 <template>
   <div
-    :style="{ height: this.$vuetify.breakpoint.height - 140 + 'px' }"
-    class="overflow-y-auto"
+    :style="{ height: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? this.$vuetify.breakpoint.height - 140 + 'px' : '' }"
+    :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? 'overflow-y-auto' : ''"
   >
     <v-card elevation="0" class="pb-4">
       <v-card-title
@@ -41,10 +41,12 @@
       <v-card-text
         v-else-if="isLoad == false && isEmpty == false"
         class="mb-n5"
-        v-for="(items, index) in favorit"
-        :key="index"
       >
-        <favoritList :item="items" />
+        <v-row dense>
+          <v-col cols="12" lg="4" v-for="(items, index) in favorit" :key="index">
+            <favoritList :item="items" />
+          </v-col>
+        </v-row>
       </v-card-text>
     </v-card>
   </div>

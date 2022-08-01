@@ -1,12 +1,12 @@
 <template>
   <div
-    :style="{ height: this.$vuetify.breakpoint.height - 140 + 'px' }"
-    class="overflow-y-auto"
+    :style="{ height: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? this.$vuetify.breakpoint.height - 140 + 'px' : '' }"
+    :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? 'overflow-y-auto' : ''"
   >
     <v-card elevation="0">
       <v-card elevation="0">
         <v-card-title class="pb-0 pt-2 d-flex justify-center">
-          <v-avatar size="140">
+          <v-avatar size="140" color="grey lighten-3">
             <v-img :src="this.$store.state.userAvatar"></v-img>
           </v-avatar>
         </v-card-title>

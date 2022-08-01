@@ -1,53 +1,44 @@
 <template>
-  <div>
-    <v-card max-width="375" elevation="0">
-      <v-img height="200" :src="produk.gambar[0]">
-        <template v-slot:placeholder>
-          <v-row class="grey lighten-2 fill-height ma-0" align="center" justify="center">
-          </v-row>
-        </template>
-        <v-icon
-          class="ms-2 mt-2"
-          @click="favoritClick"
-          v-ripple
-          :color="isFavorit ? 'red' : 'white'"
-          >mdi-heart</v-icon
+  <v-card max-width="375" elevation="0">
+    <v-icon
+      style="position: absolute; z-index: 1"
+      class="ms-2 mt-2"
+      @click="favoritClick"
+      v-ripple
+      :color="isFavorit ? 'red' : 'white'"
+      >mdi-heart</v-icon
+    >
+    <div class="rating">
+      <v-icon color="white" x-small>mdi-star</v-icon
+      ><span class="ml-1 text-overline white--text font-weight-bold">{{
+        isNaN(produk.rating) ? "0" : produk.rating
+      }}</span>
+    </div>
+    <v-img
+      style="cursor: pointer"
+      @click="produkClick"
+      height="220"
+      class="align-end"
+      :src="produk.gambar[0]"
+      gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)"
+    >
+      <template v-slot:placeholder>
+        <v-row
+          class="grey lighten-2 fill-height ma-0"
+          align="center"
+          justify="center"
         >
-      </v-img>
-      <div
-        @click="produkClick"
-        v-ripple="{ class: 'black--text' }"
-        style="cursor: pointer; min-height: 106px; max-height: 106px"
+        </v-row>
+      </template>
+      <v-card-title class="text-subtitle-2 white--text font-weight-medium">{{
+        title
+      }}</v-card-title>
+      <v-card-subtitle
+        class="blue-grey--text text--lighten-5 text-caption font-weight-light"
+        >Rp. {{ formatedHarga }}</v-card-subtitle
       >
-        <v-card-text class="pb-1 pl-3">
-          <v-row align="center" class="mx-0 pa-0">
-            <v-rating
-              :value="produk.rating"
-              dense
-              color="red"
-              readonly
-              size="12"
-            ></v-rating>
-            <div class="grey--text text--darken-1 ms-2 text-caption">({{ produk.totalReview }})</div>
-          </v-row>
-        </v-card-text>
-        <v-list class="pt-0">
-          <v-list-item>
-            <v-list-item-content>
-              <div class="text-button-1 font-weight-medium">
-                {{ title }}
-              </div>
-              <v-list-item-subtitle
-                class="grey--text text--darken-2 font-weight-medium"
-              >
-                Rp. {{ formatedHarga }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </div>
-    </v-card>
-  </div>
+    </v-img>
+  </v-card>
 </template>
 
 <script>
@@ -84,7 +75,7 @@ export default {
     },
   },
   mounted() {},
-  created(){
+  created() {
     this.isLiked();
   },
   methods: {
@@ -95,13 +86,29 @@ export default {
     produkClick() {
       this.$emit("produkClick", this.produk.produkId);
     },
-    async isLiked(){
+    async isLiked() {
       const database = await db.collection("like").get();
-      const arr = database.docs.map(doc => doc.data());
-      if(arr.some((data) => { return data.user == firebase.auth().currentUser.email && data.produkId == this.produk.produkId})){
+      const arr = database.docs.map((doc) => doc.data());
+      if (
+        arr.some((data) => {
+          return (
+            data.user == firebase.auth().currentUser.email &&
+            data.produkId == this.produk.produkId
+          );
+        })
+      ) {
         this.isFavorit = !this.isFavorit;
       }
-    }
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.rating{
+  position: absolute;
+  z-index: 1;
+  right: 6px;
+  top: 2px;
+}
+</style>

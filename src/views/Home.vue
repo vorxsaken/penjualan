@@ -1,8 +1,8 @@
 <template>
   <div
     id="home"
-    :style="{ height: this.$vuetify.breakpoint.height - 140 + 'px' }"
-    class="overflow-y-auto"
+    :style="{ height: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? this.$vuetify.breakpoint.height - 140 + 'px' : '' }"
+    :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? 'overflow-y-auto' : ''"
   >
     <v-container v-scroll:#home="rememberScroll">
       <v-card class="mb-2" elevation="0">
@@ -145,12 +145,12 @@ export default {
     appendProduk(entries) {
       if (entries[0].isIntersecting) {
         console.log("mengambil data selanjutnya");
-        if (
-          window.innerHeight + window.pageYOffset >=
-          document.body.offsetHeight - 2
-        ) {
+        // if (
+        //   window.innerHeight + window.pageYOffset >=
+        //   document.body.offsetHeight - 2
+        // ) {
           this.$store.dispatch("getNextproduk");
-        }
+        // }
       }
     },
     rememberScroll(e) {

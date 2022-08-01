@@ -5,7 +5,7 @@ import Pesanan from '../views/Pesanan.vue';
 import Favorit from '../views/Favorit.vue';
 import Profile from '../views/Profile.vue';
 import Kategori from '../views/Kategori.vue';
-import detailProduk from "../views/detailProduk.vue";
+// import detailProduk from "../views/detailProduk.vue";
 import Login from "../views/login.vue";
 import buatAkun from "../views/buatAkun.vue";
 import Keranjang from "../views/keranjang.vue";
@@ -13,6 +13,7 @@ import Alamat from "../views/alamat.vue";
 import inputAlamat from "../views/inputAlamat.vue"; 
 import detailPesanan from "../views/detailPesanan.vue";
 import editAlamat from "../views/editAlamat.vue";
+import test from "../views/testView.vue";
 import firebase from "firebase/app";
 import "firebase/auth";
 Vue.use(VueRouter)
@@ -46,7 +47,7 @@ const routes = [
   {
     path: '/detailProduk/:id/:isFromLike',
     name: 'detailProduk',
-    component: detailProduk
+    component: test
   },
   {
     path: '/buatAkun',

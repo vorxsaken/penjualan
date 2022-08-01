@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card v-ripple elevation="0" @click="detailProduk(item.produkId)">
+    <v-card v-ripple elevation="0" outlined @click="detailProduk(item.produkId)">
       <v-list-item>
         <v-list-item-avatar tile size="90" color="grey">
           <v-img :src="item.src"></v-img>

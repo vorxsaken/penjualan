@@ -4,12 +4,16 @@
       v-if="isMounted"
       class="fill-height d-flex justify-center align-center"
     >
-      <v-img src="@/assets/Circles-menu-3.gif" max-height="25" max-width="50"></v-img>
+      <v-img
+        src="@/assets/Circles-menu-3.gif"
+        max-height="25"
+        max-width="50"
+      ></v-img>
     </div>
     <div v-else>
       <navbar />
       <v-main>
-          <router-view ></router-view>
+        <router-view></router-view>
       </v-main>
       <foot v-if="foot" />
     </div>
@@ -49,6 +53,8 @@ export default {
         this.$store.dispatch("getCurrentUser");
       }
     });
+
+    this.watchFoot();
 
     var t = this;
     Keyboard.addListener("keyboardDidShow", () => {
@@ -94,7 +100,7 @@ export default {
         this.foot = false;
         return;
       }
-      this.foot = true;
+      this.watchFoot();
       this.$store.state.hideKategori = true;
     },
     checkPopRoute() {
@@ -107,11 +113,21 @@ export default {
       this.$store.state.backCounter = 0;
       return;
     },
+    watchFoot(){
+      if(this.$vuetify.breakpoint.width > 960){
+        this.foot = false;
+      }else {
+        this.foot = true;
+      }
+    }
   },
   watch: {
-    $route(){
+    $route() {
       this.checkRoute();
       this.checkPopRoute();
+    },
+    "$vuetify.breakpoint.width": function(){
+      this.watchFoot();
     }
   },
 };

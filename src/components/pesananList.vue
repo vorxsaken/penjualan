@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card elevation="3">
+    <v-card elevation="0" outlined>
       <v-list-item class="grey lighten-4">
         <v-list-item-title>
           <span class="text-caption float-left">Pesanan: {{ order.title }}</span>
@@ -34,7 +34,7 @@
             >
           </v-list-item-title>
           <v-list-item-subtitle>
-            <v-btn large block color="primary" :to="{name: 'detailPesanan'}">Detail</v-btn>
+            <v-btn large block  text color="primary" :to="{name: 'detailPesanan'}">Detail</v-btn>
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>

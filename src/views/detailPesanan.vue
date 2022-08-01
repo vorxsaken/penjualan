@@ -1,7 +1,7 @@
 <template>
   <div
-    :style="{ height: this.$vuetify.breakpoint.height - 140 + 'px' }"
-    class="overflow-y-auto"
+    :style="{ height: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? this.$vuetify.breakpoint.height - 140 + 'px' : '' }"
+    :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? 'overflow-y-auto' : ''"
   >
     <v-card elevation="0">
       <v-card-text class="py-0">
