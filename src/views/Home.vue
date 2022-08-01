@@ -1,8 +1,17 @@
 <template>
   <div
     id="home"
-    :style="{ height: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? this.$vuetify.breakpoint.height - 140 + 'px' : '' }"
-    :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? 'overflow-y-auto' : ''"
+    :style="{
+      height:
+        this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+          ? this.$vuetify.breakpoint.height - 140 + 'px'
+          : '',
+    }"
+    :class="
+      this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+        ? 'overflow-y-auto'
+        : ''
+    "
   >
     <v-container v-scroll:#home="rememberScroll">
       <v-card class="mb-2" elevation="0">
@@ -88,7 +97,10 @@ export default {
       return finalDate;
     },
     detailProduk(payload) {
-      this.$router.push({ name: "detailProduk", params: { id: payload, isFromLike: 'false' } });
+      this.$router.push({
+        name: "detailProduk",
+        params: { id: payload, isFromLike: "false" },
+      });
     },
     async addFavorit(produkID) {
       const getLike = await db.collection("like").get();
@@ -149,7 +161,7 @@ export default {
         //   window.innerHeight + window.pageYOffset >=
         //   document.body.offsetHeight - 2
         // ) {
-          this.$store.dispatch("getNextproduk");
+        this.$store.dispatch("getNextproduk");
         // }
       }
     },

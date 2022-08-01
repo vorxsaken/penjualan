@@ -425,7 +425,7 @@ export default {
       this.servis = [];
       this.pilihServis = "";
       axios.get(
-        `http://localhost:3000/getCost/209/${
+        `http://localhost:3001/user/getCost/209/${
           this.pilihKota
         }/${ this.getWeight }/${this.pilihKurir}`
       ).then((res) => {
@@ -450,7 +450,7 @@ export default {
     },
     getProvinsi() {
       this.provinsi = [];
-      axios.get("http://localhost:3000/getProvinsi").then((res) => {
+      axios.get("http://localhost:3001/user/getProvinsi").then((res) => {
         res.data.rajaongkir.results.forEach((i) => {
           this.provinsi.push(i);
         });
@@ -460,7 +460,7 @@ export default {
       this.kota = [];
       this.pilihServis = "";
       axios
-        .get(`http://localhost:3000/getKota/${this.pilihProvinsi}`)
+        .get(`http://localhost:3001/user/getKota/${this.pilihProvinsi}`)
         .then((res) => {
           res.data.rajaongkir.results.forEach((i) => {
             this.kota.push(i);

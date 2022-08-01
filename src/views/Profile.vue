@@ -38,10 +38,10 @@
             >
             <v-list-item-title>Alamat</v-list-item-title>
           </v-list-item>
-          <v-list-item link>
+          <!-- <v-list-item link>
             <v-list-item-icon><v-icon>mdi-bank</v-icon></v-list-item-icon>
             <v-list-item-title>Bank</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item link>
             <v-list-item-icon><v-icon>mdi-lock-reset</v-icon></v-list-item-icon>
             <v-list-item-title>Ubah Password</v-list-item-title>

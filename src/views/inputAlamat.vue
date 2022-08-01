@@ -207,7 +207,7 @@ export default {
     },
     getProvinsi() {
       this.provinsi = [];
-      axios.get("http://localhost:3000/getProvinsi").then((res) => {
+      axios.get("http://localhost:3001/user/getProvinsi").then((res) => {
         res.data.rajaongkir.results.forEach((i) => {
           this.provinsi.push(i);
         });
@@ -216,7 +216,7 @@ export default {
     getKabupaten() {
       this.kabupaten = [];
       axios
-        .get(`http://localhost:3000/getKota/${this.pilihProvinsi}`)
+        .get(`http://localhost:3001/user/getKota/${this.pilihProvinsi}`)
         .then((res) => {
           res.data.rajaongkir.results.forEach((i) => {
             this.kabupaten.push(i);
