@@ -262,13 +262,16 @@ export default {
     async updateAlamat() {
       this.isLoading = true;
       const database = db.collection("alamat").doc(this.$route.params.id);
+      var literal = this.kabupaten.filter((kab) => { return kab.city_id == this.pilihKabupaten });
       await database
         .update({
           alamatId: database.id,
           userId: firebase.auth().currentUser.uid,
           title: this.title,
           provinsi: this.pilihProvinsi,
+          nama_provinsi: literal[0].province,
           kabupaten: this.pilihKabupaten,
+          nama_kota: literal[0].city_name,
           telp: this.notelp,
           detailAlamat: this.detailAlamat,
         })

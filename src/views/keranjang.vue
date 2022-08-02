@@ -13,10 +13,9 @@
       <v-icon size="80">mdi-delete-empty</v-icon>
       <h4 class="" style="font-weight: 300">Keranjang Kosong :(</h4>
     </div>
-    <v-card v-else elevation="0" :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? 
-    '' : 
-    'px-12'"
-    >
+    <v-card v-else elevation="0" :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ?
+    '' :
+    'px-12'">
       <v-card-title class="font-weight-bold text-body-1 ml-4">Keranjang</v-card-title>
       <v-card-text style="max-height: 360px" class="overflow-y-auto pt-4">
         <v-skeleton-loader v-if="isKeranjang" class="mx-auto" max-width="320" type="list-item-avatar-three-line">
@@ -161,7 +160,7 @@
                 <v-radio v-for="(bayar, i) in item.pilihan" :key="i" :value="bayar.title">
                   <template v-slot:label>
                     <v-avatar size="80" tile class="mr-2">
-                      <v-img :alt="bayar.title" contain :src="getImage(bayar.img)" ></v-img>
+                      <v-img :alt="bayar.title" contain :src="getImage(bayar.img)"></v-img>
                     </v-avatar>
                   </template>
                 </v-radio>
@@ -188,7 +187,8 @@
         </v-card-title>
       </v-card-text>
       <v-card-actions class="d-flex justify-center pb-4">
-        <v-btn width="300" rounded color="grey darken-4" class="white--text" x-large>Proses Ke Pemesanan</v-btn>
+        <v-btn width="300" @click="prosesPesanan" rounded color="grey darken-4" class="white--text" :disabled="disPesan" x-large>Proses Ke Pemesanan
+        </v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -205,6 +205,7 @@ export default {
 
   data() {
     return {
+      disPesan: true,
       disabledButton: false,
       ongkir: 0,
       showKeranjang: null,
@@ -221,7 +222,9 @@ export default {
       showServis: false,
       alamatLengkap: "",
       pilihProvinsi: "",
+      namaProvinsi: "",
       pilihKota: "",
+      namaKota: "",
       pilihKurir: "",
       pilihServis: 0,
       noTelp: "",
@@ -272,16 +275,16 @@ export default {
           title: "E wallet",
           pilihan: [
             {
-              title: "Ovo",
+              title: "ID_OVO",
               img: "ovo",
             },
             {
-              title: "Dana",
+              title: "ID_DANA",
               img: "dana",
             },
             {
-              title: "GoPay",
-              img: "gopay",
+              title: "ID_SHOPEEPAY",
+              img: "shopee",
             },
           ],
         },
@@ -305,17 +308,24 @@ export default {
   watch: {
     pilihKota() {
       this.showAlamatLengkap = true;
+      this.validate();
     },
     pilihKurir() {
       this.getCost();
       this.disabledButton = true;
+      this.validate();
     },
     pilihServis() {
       this.ongkir = this.pilihServis;
+      this.validate();
     },
     pilihAlamat() {
       this.filterUserAlamat();
+      this.validate();
     },
+    pilihanPembayaran(){
+      this.validate();
+    }
   },
   created() {
     this.getKeranjang();
@@ -344,6 +354,38 @@ export default {
     },
   },
   methods: {
+    async prosesPesanan(){
+      var literal = this.kurir.filter((lit) => {
+        return lit.value === this.pilihKurir
+      })
+      const data = {
+        subtotal: this.getSubTotal,
+        ongkir: this.ongkir,
+        total: this.total,
+        pembayaran: this.pilihanPembayaran,
+        provinsiTujuan: this.namaProvinsi,
+        kotaTujuan: this.namaKota,
+        provinsiId: this.pilihProvinsi,
+        kotaId: this.pilihKota,
+        alamatLengkap: this.detailAlamat,
+        jasaKurir: literal[0].title,
+        alamatId: this.pilihAlamat
+      }
+
+      console.log(data);
+    },
+    validate() {
+      if (
+        this.ongkir != 0 &&
+        this.pilihanPembayaran != '' &&
+        this.pilihKurir != '' &&
+        this.pilihAlamat != ""
+      ) {
+        this.disPesan = false;
+      } else {
+        this.disPesan = true;
+      }
+    },
     filterUserAlamat() {
       this.pilihProvinsi = "";
       this.pilihKota = "";
@@ -353,7 +395,9 @@ export default {
         return curr.alamatId == this.pilihAlamat;
       });
       this.pilihProvinsi = currentAlamat[0].provinsi;
+      this.namaProvinsi = currentAlamat[0].nama_provinsi;
       this.pilihKota = currentAlamat[0].kabupaten;
+      this.namaKota = currentAlamat[0].nama_kota;
       this.detailAlamat =
         currentAlamat[0].telp + ", " + currentAlamat[0].detailAlamat;
     },
@@ -367,7 +411,7 @@ export default {
         this.userAlamat.push(x);
       }
     },
-    getImage(i){
+    getImage(i) {
       var images = require.context('../assets', false, /\.png$/);
       return images('./' + i + ".png");
     },
