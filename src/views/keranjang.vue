@@ -1,48 +1,82 @@
 <template>
-  <div :style="{
-    height:
+  <div
+    :style="{
+      height:
+        this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+          ? this.$vuetify.breakpoint.height - 140 + 'px'
+          : '',
+    }"
+    :class="
       this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-        ? this.$vuetify.breakpoint.height - 140 + 'px'
-        : '',
-  }" :class="
-  this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-    ? 'overflow-y-auto'
-    : ''
-">
-    <div v-if="showKeranjang" class="d-flex flex-column justify-center fill-height align-center">
+        ? 'overflow-y-auto'
+        : ''
+    "
+  >
+    <div
+      v-if="showKeranjang"
+      class="d-flex flex-column justify-center fill-height align-center"
+    >
       <v-icon size="80">mdi-delete-empty</v-icon>
       <h4 class="" style="font-weight: 300">Keranjang Kosong :(</h4>
     </div>
-    <v-card v-else elevation="0" :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ?
-    '' :
-    'px-12'">
-      <v-card-title class="font-weight-bold text-body-1 ml-4">Keranjang</v-card-title>
+    <v-card
+      v-else
+      elevation="0"
+      :class="
+        this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+          ? ''
+          : 'px-12'
+      "
+    >
+      <v-card-title class="font-weight-bold text-body-1 ml-4"
+        >Keranjang</v-card-title
+      >
       <v-card-text style="max-height: 360px" class="overflow-y-auto pt-4">
-        <v-skeleton-loader v-if="isKeranjang" class="mx-auto" max-width="320" type="list-item-avatar-three-line">
+        <v-skeleton-loader
+          v-if="isKeranjang"
+          class="mx-auto"
+          max-width="320"
+          type="list-item-avatar-three-line"
+        >
         </v-skeleton-loader>
         <v-list dense v-else>
-          <v-list-item v-for="(list, index) in keranjang" :key="index" style="
+          <v-list-item
+            v-for="(list, index) in keranjang"
+            :key="index"
+            style="
               box-shadow: 0px 0px 15 px -5px rgba(0, 0, 0, 0.2);
               border-radius: 10px;
-            " class="mb-2">
+            "
+            class="mb-2"
+          >
             <v-list-item-avatar size="80" rounded="" color="grey">
               <v-img :src="list.src"> </v-img>
             </v-list-item-avatar>
             <v-list-item-content class="pt-0 mt-n6">
               <v-list-item-title class="text-body-1 font-weight-bold">{{
-                  list.title
+                list.title
               }}</v-list-item-title>
-              <v-list-item-subtitle>Rp
-                {{ formatHarga(list.harga, list.jumlah) }}</v-list-item-subtitle>
+              <v-list-item-subtitle
+                >Rp
+                {{ formatHarga(list.harga, list.jumlah) }}</v-list-item-subtitle
+              >
             </v-list-item-content>
             <v-list-item-action>
               <v-btn small icon :disabled="disabledButton">
-                <v-icon class="black--text font-weight-bold" @click="add(index, list.keranjangId)" small>mdi-plus
+                <v-icon
+                  class="black--text font-weight-bold"
+                  @click="add(index, list.keranjangId)"
+                  small
+                  >mdi-plus
                 </v-icon>
               </v-btn>
               <v-btn small text icon>{{ list.jumlah }}</v-btn>
               <v-btn small icon :disabled="disabledButton">
-                <v-icon @click="kurangi(index, list.keranjangId)" class="black--text font-weight-bold" small>mdi-minus
+                <v-icon
+                  @click="kurangi(index, list.keranjangId)"
+                  class="black--text font-weight-bold"
+                  small
+                  >mdi-minus
                 </v-icon>
               </v-btn>
             </v-list-item-action>
@@ -56,8 +90,18 @@
         <v-list dense>
           <v-list-item>
             <v-list-item-content>
-              <v-select v-model="pilihAlamat" hide-details="auto" single-line outlined flat :items="userAlamat"
-                item-text="title" item-value="alamatId" label="pilih alamat mu" :messages="detailAlamat">
+              <v-select
+                v-model="pilihAlamat"
+                hide-details="auto"
+                single-line
+                outlined
+                flat
+                :items="userAlamat"
+                item-text="title"
+                item-value="alamatId"
+                label="pilih alamat mu"
+                :messages="detailAlamat"
+              >
               </v-select>
             </v-list-item-content>
           </v-list-item>
@@ -126,9 +170,20 @@
           </v-list-item> -->
           <v-list-item v-if="showAlamatLengkap">
             <v-list-item-content>
-              <v-select v-model="pilihKurir" hide-details="auto" single-line outlined flat
-                :rules="[(v) => !!v || 'kurir tidak boleh kosong']" :items="kurir" item-text="title" item-value="value"
-                label="Kurir">
+              <v-select
+                v-model="pilihKurir"
+                hide-details="auto"
+                single-line
+                outlined
+                flat
+                :rules="[(v) => !!v || 'kurir tidak boleh kosong']"
+                :items="kurir"
+                item-text="title"
+                item-value="value"
+                :loading="kurirLoader"
+                loader-height="3"
+                label="Kurir"
+              >
               </v-select>
               <v-list-item-subtitle>
                 <span class="text-caption grey--text text--darken-1">
@@ -140,27 +195,46 @@
           </v-list-item>
           <v-list-item v-if="showServis">
             <v-list-item-content>
-              <v-select v-model="pilihServis" hide-details="auto" single-line outlined flat
-                :rules="[(v) => !!v || 'servis tidak boleh kosong']" :items="servis" item-text="servis"
-                item-value="ongkir" label="servis">
+              <v-select
+                v-model="pilihServis"
+                hide-details="auto"
+                single-line
+                outlined
+                flat
+                :rules="[(v) => !!v || 'servis tidak boleh kosong']"
+                :items="servis"
+                item-text="servis"
+                item-value="ongkir"
+                label="servis"
+              >
               </v-select>
             </v-list-item-content>
           </v-list-item>
         </v-list>
       </v-card-text>
       <v-card-text>
-        <span class="text-body-2 font-weight-bold black--text ml-4">Metode pembayaran</span>
+        <span class="text-body-2 font-weight-bold black--text ml-4"
+          >Metode pembayaran</span
+        >
         <v-expansion-panels flat accordion class="mt-4">
           <v-expansion-panel v-for="(item, index) in pembayaran" :key="index">
             <v-expansion-panel-header class="px-4">{{
-                item.title
+              item.title
             }}</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-radio-group v-model="pilihanPembayaran">
-                <v-radio v-for="(bayar, i) in item.pilihan" :key="i" :value="bayar.title">
+                <v-radio
+                  v-for="(bayar, i) in item.pilihan"
+                  :key="i"
+                  :value="bayar.title"
+                >
                   <template v-slot:label>
                     <v-avatar size="80" tile class="mr-2">
-                      <v-img :alt="bayar.title" contain :src="getImage(bayar.img)"></v-img>
+                      <v-img
+                        :alt="bayar.title"
+                        contain
+                        :src="getSource(bayar.img, '.png')"
+                      ></v-img>
                     </v-avatar>
                   </template>
                 </v-radio>
@@ -173,24 +247,62 @@
         <v-card-title class="black--text">
           <span class="text-body-2 font-weight-bold">Sub Total</span>
           <v-spacer></v-spacer>
-          <span class="text-body-1 font-weight-bold">Rp {{ formatHarga(getSubTotal, 1) }}</span>
+          <span class="text-body-1 font-weight-bold"
+            >Rp {{ formatHarga(getSubTotal, 1) }}</span
+          >
         </v-card-title>
         <v-card-title class="black--text">
           <span class="text-body-2 font-weight-bold">Ongkir</span>
           <v-spacer></v-spacer>
-          <span class="text-body-1 font-weight-bold">Rp {{ this.formatHarga(this.ongkir, 1) }}</span>
+          <span class="text-body-1 font-weight-bold"
+            >Rp {{ this.formatHarga(this.ongkir, 1) }}</span
+          >
         </v-card-title>
         <v-card-title class="black--text">
           <span class="text-body-2 font-weight-bold">Total</span>
           <v-spacer></v-spacer>
-          <span class="text-body-1 font-weight-bold">Rp {{ formatHarga(total, 1) }}</span>
+          <span class="text-body-1 font-weight-bold"
+            >Rp {{ formatHarga(total, 1) }}</span
+          >
         </v-card-title>
       </v-card-text>
       <v-card-actions class="d-flex justify-center pb-4">
-        <v-btn width="300" @click="prosesPesanan" rounded color="grey darken-4" class="white--text" :disabled="disPesan" x-large>Proses Ke Pemesanan
+        <v-btn
+          width="300"
+          @click="prosesPesanan"
+          rounded
+          color="grey darken-4"
+          class="white--text"
+          :disabled="disPesan"
+          x-large
+          :loading="loadPesanan"
+          >Proses Ke Pemesanan
         </v-btn>
       </v-card-actions>
     </v-card>
+    <v-dialog persistent v-model="pemesananDialog" width="350">
+      <v-card elevation="0">
+        <v-card-title class="d-flex justify-center">
+          <video
+            ref="myvideo"
+            width="200"
+            height="200"
+            src="../assets/order-success.mp4"
+          ></video>
+        </v-card-title>
+        <v-card-subtitle
+          class="d-flex justify-center text-caption blue-grey--text text--darken-1"
+        >
+          Pembuatan Pesanan Anda Berhasil
+        </v-card-subtitle>
+        <v-card-actions class="d-flex flex-column">
+          <v-btn color="primary" text class="mb-2">Proses Ke Pembayaran</v-btn>
+          <v-btn ref="buttom" color="error" text @click="pemesananKembali"
+            >Kembali</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -199,12 +311,16 @@ import db from "../plugins/firebaseInit.js";
 import axios from "axios";
 import firebase from "firebase/app";
 import "firebase/auth";
+import { getDate } from "../composes/composes.js";
 
 export default {
   name: "PenjualanKeranjang",
 
   data() {
     return {
+      pemesananDialog: false,
+      kurirLoader: false,
+      loadPesanan: false,
       disPesan: true,
       disabledButton: false,
       ongkir: 0,
@@ -314,6 +430,7 @@ export default {
       this.getCost();
       this.disabledButton = true;
       this.validate();
+      this.kurirLoader = true;
     },
     pilihServis() {
       this.ongkir = this.pilihServis;
@@ -323,9 +440,9 @@ export default {
       this.filterUserAlamat();
       this.validate();
     },
-    pilihanPembayaran(){
+    pilihanPembayaran() {
       this.validate();
-    }
+    },
   },
   created() {
     this.getKeranjang();
@@ -354,10 +471,22 @@ export default {
     },
   },
   methods: {
-    async prosesPesanan(){
-      var literal = this.kurir.filter((lit) => {
-        return lit.value === this.pilihKurir
+    pemesananKembali() {
+      this.keranjang.forEach((keranjang) => {
+        db.collection("keranjang").doc(keranjang.keranjangId).delete()
       })
+      this.$store.state.keranjang = [];
+      this.pemesananDialog = false;
+      this.$refs.myvideo.load();
+      this.$store.dispatch("getPemesanan");
+      this.$router.back();
+    },
+    async prosesPesanan() {
+      this.loadPesanan = true;
+      const collection = db.collection("pemesanan").doc();
+      var literal = this.kurir.filter((lit) => {
+        return lit.value === this.pilihKurir;
+      });
       const data = {
         subtotal: this.getSubTotal,
         ongkir: this.ongkir,
@@ -369,16 +498,40 @@ export default {
         kotaId: this.pilihKota,
         alamatLengkap: this.detailAlamat,
         jasaKurir: literal[0].title,
-        alamatId: this.pilihAlamat
-      }
+        alamatId: this.pilihAlamat,
+        created_at: getDate(),
+        pemesananId: collection.id,
+        status: 'belum bayar'
+      };
 
-      console.log(data);
+      collection
+        .set({
+          ...data,
+        })
+        .then(() => {
+          for (let x = 0; x < this.keranjang.length; x++) {
+            const subCollection = db
+              .collection("pemesanan")
+              .doc(collection.id)
+              .collection("pesanan")
+              .doc();
+            subCollection.set({ ...this.keranjang[x] });
+          }
+          this.loadPesanan = false;
+          this.pemesananDialog = true;
+          setTimeout(() => {
+            this.$refs.myvideo.play();
+          }, 300);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     validate() {
       if (
         this.ongkir != 0 &&
-        this.pilihanPembayaran != '' &&
-        this.pilihKurir != '' &&
+        this.pilihanPembayaran != "" &&
+        this.pilihKurir != "" &&
         this.pilihAlamat != ""
       ) {
         this.disPesan = false;
@@ -411,9 +564,9 @@ export default {
         this.userAlamat.push(x);
       }
     },
-    getImage(i) {
-      var images = require.context('../assets', false, /\.png$/);
-      return images('./' + i + ".png");
+    getSource(filename, format) {
+      var images = require.context("../assets", false, /\.png$/);
+      return images("./" + filename + format);
     },
     getCost() {
       this.servis = [];
@@ -432,8 +585,9 @@ export default {
             this.servis.push(ss);
           });
           this.showServis = true;
+          this.kurirLoader = false;
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     showCart() {
       if (this.$store.state.keranjang.length < 1) {

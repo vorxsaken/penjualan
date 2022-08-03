@@ -12,7 +12,7 @@
         : ''
     "
   >
-    <v-dialog hide-overlay persistent v-model="isSukses" max-width="250">
+    <v-dialog persistent v-model="isSukses" max-width="250">
       <v-card elevation="0" class="pb-4">
         <v-card-title class="d-flex justify-center">
           <v-icon color="success" size="90">mdi-check</v-icon>
@@ -113,6 +113,7 @@
                   outlined
                   type="number"
                   label="No telepon"
+                  hide-spin-buttons
                 >
                 </v-text-field>
               </v-list-item-subtitle>

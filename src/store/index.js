@@ -11,6 +11,7 @@ export default new Vuex.Store({
     footbarValueHistory: [0],
     hideKategori: null,
     pop: true,
+    pemesanan: [],
     backCounter: 0,
     produk: [],
     keranjang: [],
@@ -57,6 +58,25 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    async getPemesanan({ state }) {
+      const database = await db.collection("pemesanan").get();
+      database.forEach((document) => {
+        if (!state.pemesanan.some((doc) => { return doc.pemesananId == document.data().pemesananId })) {
+          var subCollection = [];
+          document.ref.collection("pesanan").get().then((querySnapshot) => {
+            querySnapshot.forEach((query) => {
+              subCollection.push(query.data());
+            })
+          })
+
+          var pemesanan = {
+            ...document.data(),
+            pesanan: subCollection
+          }
+          state.pemesanan.push(pemesanan);
+        }
+      })
+    },
     async getCurrentUser({ commit }) {
       const database = await db.collection("client").doc(firebase.auth().currentUser.uid);
       const get = await database.get();

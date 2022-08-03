@@ -60,7 +60,7 @@
               <v-list-item-subtitle>
                 <v-text-field v-model="notelp" hide-details="auto"
                   :rules="[(v) => !!v || 'no telepon tidak boleh kosong']" single-line flat outlined type="number"
-                  label="No telepon">
+                  label="No telepon" hide-spin-buttons>
                 </v-text-field>
               </v-list-item-subtitle>
             </v-list-item-content>
