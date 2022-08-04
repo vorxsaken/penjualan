@@ -12,7 +12,7 @@
         </v-list-item-title>
       </v-list-item>
       <v-divider></v-divider>
-      <div>
+      <div style="min-height: 215px; max-height: 215px;" class="overflow-y-auto">
         <v-list-item v-for="(item, index) in order.pesanan" :key="index">
           <v-list-item-avatar tile size="90" color="grey">
             <v-img :src="item.src"></v-img>
@@ -30,6 +30,13 @@
             >
           </v-list-item-content>
         </v-list-item>
+        <v-list-item v-if="order.pesanan.length < 2">
+          <v-list-item-title  class="py-4 d-flex justify-center flex-column" style="height: 100px" v-for="i in 5" :key="i">
+            <v-img contain height="40" src="../assets/cat.png">
+            </v-img>
+            <p class="d-flex justify-center text-caption blue-grey--text text--darken-4">meoww</p>
+          </v-list-item-title>
+        </v-list-item>
       </div>
       <v-list-item>
         <v-list-item-content>
@@ -45,7 +52,7 @@
               block
               text
               color="primary"
-              :to="{ name: 'detailPesanan' }"
+              :to="{ name: 'detailPesanan', params: {id: order.pemesananId} }"
               >Detail</v-btn
             >
           </v-list-item-subtitle>

@@ -203,6 +203,7 @@
                 flat
                 :rules="[(v) => !!v || 'servis tidak boleh kosong']"
                 :items="servis"
+                ref="servis"
                 item-text="servis"
                 item-value="ongkir"
                 label="servis"
@@ -482,11 +483,23 @@ export default {
       this.$router.back();
     },
     async prosesPesanan() {
+      var estimasi = this.$refs.servis.selectedItems[0].servis.replace(/\D/g, '').split('').join('-');
+      var metode;
       this.loadPesanan = true;
       const collection = db.collection("pemesanan").doc();
       var literal = this.kurir.filter((lit) => {
         return lit.value === this.pilihKurir;
       });
+
+      this.pembayaran.forEach((payment) => {
+        payment.pilihan.forEach((tit) => {
+          if(tit.title == this.pilihanPembayaran){
+            metode = payment.title
+          }
+        })
+      })
+
+
       const data = {
         subtotal: this.getSubTotal,
         ongkir: this.ongkir,
@@ -501,7 +514,10 @@ export default {
         alamatId: this.pilihAlamat,
         created_at: getDate(),
         pemesananId: collection.id,
-        status: 'belum bayar'
+        status: 'belum bayar',
+        namaPemesan: this.$store.state.userName,
+        metodePembayaran: metode,
+        estimasiSampai: estimasi
       };
 
       collection

@@ -7,7 +7,7 @@ export function getDate(){
     var getJam = dt.getHours();
     var getMenit = dt.getMinutes();
 
-    var date = `${getTanggal} ${getBulan} ${getTahun}, ${getJam}, ${getMenit}`;
+    var date = `${getTanggal} ${getBulan} ${getTahun}, ${getJam}.${getMenit}`;
 
     return date;
 

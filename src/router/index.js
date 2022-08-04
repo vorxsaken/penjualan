@@ -65,7 +65,7 @@ const routes = [
     component: Keranjang
   },
   {
-    path: '/detailPesanan',
+    path: '/detailPesanan/:id',
     name: 'detailPesanan',
     component: detailPesanan
   },

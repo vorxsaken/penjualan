@@ -139,4 +139,20 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+
+::-webkit-scrollbar{
+  width: 5px;
+}
+::-webkit-scrollbar-track{
+  background: #ededed;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #b4b1fa;
+  border-radius: 5px;
+
+  &:hover{
+    background: #9c9adb;
+  }
+}
 </style>
