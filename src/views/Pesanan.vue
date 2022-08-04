@@ -14,14 +14,19 @@
   >
     <div
       v-if="this.$store.state.pemesanan.length == 0"
-      :style="{height: this.$vuetify.breakpoint.height - 140 + 'px'}"
+      :style="{ height: this.$vuetify.breakpoint.height - 140 + 'px' }"
       class="fill-height d-flex justify-center align-center"
     >
       <v-img
+        v-if="showLoading && this.$store.state.user != null"
         src="@/assets/Circles-menu-3.gif"
         max-height="25"
         max-width="50"
       ></v-img>
+      <div v-else-if="!showLoading || this.$store.state.user == null" class="d-flex flex-column justify-center fill-height align-center">
+        <v-icon size="60">mdi-delete-empty</v-icon>
+        <h4 class="" style="font-weight: 300">Pesanan Kosong :(</h4>
+      </div>
     </div>
     <div v-else>
       <v-card elevation="0" class="pb-4">
@@ -73,6 +78,7 @@ export default {
   data() {
     return {
       selectedItem: 0,
+      showLoading: true,
     };
   },
 
@@ -82,9 +88,12 @@ export default {
   mounted() {},
 
   methods: {
-    getPesanan() {
+    async getPesanan() {
       if (this.$store.state.pemesanan.length == 0) {
-        this.$store.dispatch("getPemesanan");
+        await this.$store.dispatch("getPemesanan");
+        if(this.$store.state.pemesanan.length == 0){
+          this.showLoading = false;
+        }
       }
     },
   },

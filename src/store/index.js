@@ -28,7 +28,6 @@ export default new Vuex.Store({
   mutations: {
     updateUser(state, payload) {
       state.user = payload;
-      console.log(firebase.auth().currentUser);
     },
     filterProduk(state, payload) {
       state.produk = state.produk.filter((prod) => {
@@ -59,7 +58,7 @@ export default new Vuex.Store({
   },
   actions: {
     async getPemesanan({ state }) {
-      const database = await db.collection("pemesanan").get();
+      const database = await db.collection("pemesanan").where("userEmail", '==', state.userEmail).get();
       database.forEach((document) => {
         if (!state.pemesanan.some((doc) => { return doc.pemesananId == document.data().pemesananId })) {
           var subCollection = [];

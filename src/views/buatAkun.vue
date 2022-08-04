@@ -9,7 +9,7 @@
                   <span>Pilih Nama Pengguna</span></v-card-title
                 >
                 <v-card-subtitle class="d-flex justify-center"
-                  ><span>Digunakan untuk checkout dll.</span></v-card-subtitle
+                  ><span>Disarankan menggunakan nama lengkap asli, digunakan untuk checkout dll.</span></v-card-subtitle
                 >
                 <v-card-text class="px-2">
                   <v-text-field

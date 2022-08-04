@@ -474,8 +474,8 @@ export default {
   methods: {
     pemesananKembali() {
       this.keranjang.forEach((keranjang) => {
-        db.collection("keranjang").doc(keranjang.keranjangId).delete()
-      })
+        db.collection("keranjang").doc(keranjang.keranjangId).delete();
+      });
       this.$store.state.keranjang = [];
       this.pemesananDialog = false;
       this.$refs.myvideo.load();
@@ -483,7 +483,10 @@ export default {
       this.$router.back();
     },
     async prosesPesanan() {
-      var estimasi = this.$refs.servis.selectedItems[0].servis.replace(/\D/g, '').split('').join('-');
+      var estimasi = this.$refs.servis.selectedItems[0].servis
+        .replace(/\D/g, "")
+        .split("")
+        .join("-");
       var metode;
       this.loadPesanan = true;
       const collection = db.collection("pemesanan").doc();
@@ -493,12 +496,11 @@ export default {
 
       this.pembayaran.forEach((payment) => {
         payment.pilihan.forEach((tit) => {
-          if(tit.title == this.pilihanPembayaran){
-            metode = payment.title
+          if (tit.title == this.pilihanPembayaran) {
+            metode = payment.title;
           }
-        })
-      })
-
+        });
+      });
 
       const data = {
         subtotal: this.getSubTotal,
@@ -514,10 +516,11 @@ export default {
         alamatId: this.pilihAlamat,
         created_at: getDate(),
         pemesananId: collection.id,
-        status: 'belum bayar',
+        status: "belum bayar",
         namaPemesan: this.$store.state.userName,
         metodePembayaran: metode,
-        estimasiSampai: estimasi
+        estimasiSampai: estimasi,
+        userEmail: this.$store.state.userEmail
       };
 
       collection
@@ -535,9 +538,11 @@ export default {
           }
           this.loadPesanan = false;
           this.pemesananDialog = true;
+          this.$store.dispatch("getPemesanan");
           setTimeout(() => {
             this.$refs.myvideo.play();
           }, 300);
+
         })
         .catch((err) => {
           console.log(err);

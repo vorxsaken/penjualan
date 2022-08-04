@@ -138,18 +138,19 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: auto;
 }
 
 ::-webkit-scrollbar{
-  width: 5px;
+  width: 2px;
 }
 ::-webkit-scrollbar-track{
   background: #ededed;
 }
 
 ::-webkit-scrollbar-thumb{
-  background: #b4b1fa;
-  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 
   &:hover{
     background: #9c9adb;
