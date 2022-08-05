@@ -65,7 +65,7 @@
               ? 340
               : 200
           "
-          height="40"
+          height="45"
         >
           <v-icon small class="mr-1">mdi-plus-thick</v-icon>Tambah Alamat
         </v-btn>

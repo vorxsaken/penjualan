@@ -81,6 +81,13 @@ export default {
     },
   },
   watch: {},
+  beforeDestroy() {
+    if (this.$route.name == "Kategori") {
+      return true;
+    }
+    this.$store.state.backCounter = 1;
+    return;
+  },
   methods: {
     updateAvatar() {
       this.$refs.foto.click();
@@ -99,7 +106,7 @@ export default {
           }).then((res) => {
             console.log(res);
             this.upLoad = false;
-            this.$store.state.userName = this.username
+            this.$store.state.userName = this.username;
           });
         } else {
           updateWithAFile(
@@ -112,7 +119,7 @@ export default {
           ).then((ref) => {
             this.upLoad = false;
             this.$store.state.userName = this.username;
-            this.$store.state.userAvatar = ref
+            this.$store.state.userAvatar = ref;
           });
         }
       }
