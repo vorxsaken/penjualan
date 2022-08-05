@@ -183,7 +183,7 @@
                       data.username
                   }}</v-list-item-title>
                   <v-list-item-subtitle>
-                    <v-rating readonly :value="data.rating" size="12"></v-rating>
+                    <v-rating color="yellow darken-2" readonly :value="data.rating" size="12"></v-rating>
                   </v-list-item-subtitle>
                   <div class="text-caption">
                     {{ data.text }}

@@ -187,6 +187,7 @@
                           ><v-rating
                             readonly
                             :value="data.rating"
+                            color="yellow darken-1"
                             size="12"
                           ></v-rating
                         ></v-list-item-subtitle>

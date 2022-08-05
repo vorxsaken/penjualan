@@ -22,7 +22,7 @@
       <v-divider class="mx-10"></v-divider>
       <v-card-text>
         <v-list>
-          <v-list-item link>
+          <v-list-item :to="{ name: 'profileUser' }" link>
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>

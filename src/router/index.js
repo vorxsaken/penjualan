@@ -14,6 +14,7 @@ import inputAlamat from "../views/inputAlamat.vue";
 import detailPesanan from "../views/detailPesanan.vue";
 import editAlamat from "../views/editAlamat.vue";
 import test from "../views/testView.vue";
+import profileUser from "../views/profileUser.vue";
 import firebase from "firebase/app";
 import "firebase/auth";
 Vue.use(VueRouter)
@@ -83,6 +84,11 @@ const routes = [
     path: '/editAlamat/:id',
     name:'editAlamat',
     component: editAlamat
+  },
+  {
+    path: '/profileUser',
+    name: 'profileUser',
+    component: profileUser
   }
 ]
 
