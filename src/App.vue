@@ -1,14 +1,7 @@
 <template>
   <v-app style="user-select: none">
-    <div
-      v-if="isMounted"
-      class="fill-height d-flex justify-center align-center"
-    >
-      <v-img
-        src="@/assets/Circles-menu-3.gif"
-        max-height="25"
-        max-width="50"
-      ></v-img>
+    <div v-if="isMounted" class="fill-height d-flex justify-center align-center">
+      <v-img src="@/assets/Circles-menu-3.gif" max-height="25" max-width="50"></v-img>
     </div>
     <div v-else>
       <navbar />
@@ -16,6 +9,22 @@
         <router-view></router-view>
       </v-main>
       <foot v-if="foot" />
+      <v-dialog width="400" v-model="firstVisit" persistent>
+        <v-card elevation="0" class="pb-6 pt-2">
+          <v-card-title class="d-flex justify-center pb-8 font-weight-bold">Note</v-card-title>
+          <v-card-subtitle class="d-flex justify-center">
+            <v-img :src="require('./assets/cuteCat.webp')" ></v-img>
+          </v-card-subtitle>
+          <v-card-text class="d-flex justify-center">
+            <span class="text-subtitle-2 blue-grey--text text-center text--darken-1 font-weight-medium">
+              Aplikasi ini masih dalam tahap pengembangan
+            </span>
+          </v-card-text>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn outlined color="primary" rounded class="py-4 px-8" @click="notFirstTime"> Okay </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </v-app>
 </template>
@@ -39,9 +48,11 @@ export default {
       foot: null,
       isMounted: true,
       transitionName: null,
+      firstVisit: true,
     };
   },
   async created() {
+    //data and firebase auth stuff
     await this.$store.dispatch("getProduk");
     await this.$store.dispatch("getKeranjang");
     await this.$store.dispatch("getAlamat");
@@ -54,8 +65,14 @@ export default {
       }
     });
 
-    this.watchFoot();
+    //cek apakah user mengunjungi aplikasi ini untuk pertama kalinya
+    // if(localStorage.length > 1){
+    //   this.firstVisit = false;
+    // }
 
+    //footer observer
+    this.watchFoot();
+    
     var t = this;
     Keyboard.addListener("keyboardDidShow", () => {
       t.foot = false;
@@ -95,6 +112,10 @@ export default {
     };
   },
   methods: {
+    notFirstTime(){
+      this.firstVisit = false;
+      localStorage.setItem("firstVisited", "no");
+    },
     checkRoute() {
       if (this.$route.name == "Kategori") {
         this.foot = false;
@@ -113,22 +134,22 @@ export default {
       this.$store.state.backCounter = 0;
       return;
     },
-    watchFoot(){
-      if(this.$vuetify.breakpoint.width > 960){
+    watchFoot() {
+      if (this.$vuetify.breakpoint.width > 960) {
         this.foot = false;
-      }else {
+      } else {
         this.foot = true;
       }
-    }
+    },
   },
   watch: {
     $route() {
       this.checkRoute();
       this.checkPopRoute();
     },
-    "$vuetify.breakpoint.width": function(){
+    "$vuetify.breakpoint.width": function () {
       this.watchFoot();
-    }
+    },
   },
 };
 </script>
@@ -141,18 +162,18 @@ export default {
   scroll-behavior: auto;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 2px;
 }
-::-webkit-scrollbar-track{
+::-webkit-scrollbar-track {
   background: #ededed;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 
-  &:hover{
+  &:hover {
     background: #9c9adb;
   }
 }

@@ -100,7 +100,7 @@
         </v-list>
       </v-card-text>
       <v-card-actions class="d-flex justify-center pb-4" v-if="produkPesanan[0].status == 'belum bayar'">
-        <v-btn color="primary" text large rounded>
+        <v-btn class="px-8" color="primary" text large rounded>
           Proses Ke Pembayaran
         </v-btn>
       </v-card-actions>

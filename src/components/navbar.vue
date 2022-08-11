@@ -2,12 +2,16 @@
   <span>
     <v-system-bar v-if="cart" class="d-flex justify-center" app color="white">
       <v-icon>mdi-chart-donut-variant</v-icon>
-      <span class="text-overline black--text">Raja Vape Mejobo</span>
+      <span class="text-overline black--text">Eza Elektronik</span>
     </v-system-bar>
     <v-app-bar id="nab" :class="warnaNavbar" app :elevation="elevation">
       <v-container>
         <v-row>
-          <v-col v-if="!cart"></v-col>
+          <v-col v-if="!cart" class="d-flex justify-center">
+            <div style="width: 150px; height: 40px;" class="overflow-y-hidden">
+              <v-img width="150" height="40" :src="require('../assets/eza.png')"></v-img>
+            </div>
+          </v-col>
           <v-col class="px-0" :cols="this.$vuetify.breakpoint.xs ? 10 : 4">
             <v-text-field
               placeholder="Cari..."
@@ -65,8 +69,11 @@ export default {
   created() {
     this.watchNav();
   },
-
   methods: {
+    getSource(filename, format) {
+      var images = require.context("../assets", false, /\.png$/);
+      return images("./" + filename + format);
+    },
     showKategori() {
       this.warnaNavbar = "white";
       this.elevation = "0";
