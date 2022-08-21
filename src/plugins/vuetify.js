@@ -5,6 +5,7 @@ import pesananIcon from "../components/pesananIcon.vue";
 import favoritIcon from "../components/favoritIcon.vue";
 import profilIcon from "../components/profilIcon.vue";
 import cartIcon from "../components/cartIcon.vue";
+import expressIcon from "../components/expressIcon.vue";
 
 Vue.use(Vuetify);
 
@@ -37,6 +38,9 @@ export default new Vuetify({
             },
             cart: {
                 component: cartIcon
+            },
+            express: {
+                component: expressIcon
             }
         }
     }

@@ -15,6 +15,7 @@ export default new Vuex.Store({
     backCounter: 0,
     produk: [],
     keranjang: [],
+    kategori: [],
     alamat: [],
     favorit: [],
     user: null,
@@ -57,6 +58,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    async getKategori({state}){
+      const database = await db.collection("kategori").get();
+      database.forEach((kategori) => {
+        state.kategori.push(kategori.data());
+      })
+    },
     async getPemesanan({ state }) {
       const database = await db.collection("pemesanan").where("userEmail", '==', state.userEmail).get();
       database.forEach((document) => {

@@ -8,7 +8,7 @@
       <v-container>
         <v-row>
           <v-col v-if="!cart" class="d-flex justify-center">
-            <div style="width: 150px; height: 40px;" class="overflow-y-hidden">
+            <div style="width: 150px; height: 40px" class="overflow-y-hidden">
               <v-img width="150" height="40" :src="require('../assets/eza.png')"></v-img>
             </div>
           </v-col>
@@ -21,16 +21,14 @@
               background-color="grey lighten-4"
               single-line
               hide-details
-              :prepend-inner-icon="
-                hideOnScroll ? 'mdi-magnify' : 'mdi-arrow-left'
-              "
+              :prepend-inner-icon="hideOnScroll ? 'mdi-magnify' : 'mdi-arrow-left'"
               @focus="showKategori"
               @click:prepend-inner="changeState"
               ref="search"
             >
             </v-text-field>
           </v-col>
-          <v-col  :cols="this.$vuetify.breakpoint.xs ? 2 : 4">
+          <v-col :cols="this.$vuetify.breakpoint.xs ? 2 : 4">
             <menuButton v-if="!cart" />
             <v-btn v-else icon :to="{ name: 'Keranjang' }">
               <v-badge
@@ -54,7 +52,7 @@ import menuButton from "./menuButtonGroup.vue";
 export default {
   name: "PenjualanNavbar",
   components: {
-    menuButton
+    menuButton,
   },
   data() {
     return {

@@ -3,42 +3,22 @@
     <v-card elevation="0" width="700">
       <v-card-title class="d-flex justify-center mb-8">
         <input @change="stateChange" type="file" ref="foto" class="d-none" />
-        <v-avatar
-          size="180"
-          class="grey lighten-1"
-          style="cursor: pointer"
-          @click="updateAvatar"
-        >
+        <v-avatar size="180" class="grey lighten-1" style="cursor: pointer" @click="updateAvatar">
           <v-img :src="getImageUrl"> </v-img>
         </v-avatar>
       </v-card-title>
       <v-card-text>
         <v-row class="">
           <v-col class="py-0">
-            <v-text-field
-              outlined
-              flat
-              single-line
-              hide-details="auto"
-              :rules="[(v) => !!v || 'Username tidak boleh kosong']"
-              label="Username"
-              v-model="username"
-            >
+            <v-text-field outlined flat single-line hide-details="auto"
+              :rules="[(v) => !!v || 'Username tidak boleh kosong']" label="Username" v-model="username">
             </v-text-field>
           </v-col>
         </v-row>
         <v-row class="">
           <v-col class="py-0">
-            <v-text-field
-              class="mt-4"
-              outlined
-              flat
-              single-line
-              hide-details="auto"
-              label="Email"
-              :value="this.$store.state.userEmail"
-              disabled
-            >
+            <v-text-field class="mt-4" outlined flat single-line hide-details="auto" label="Email"
+              :value="this.$store.state.userEmail" disabled>
             </v-text-field>
           </v-col>
         </v-row>
@@ -66,7 +46,7 @@ export default {
       upLoad: false,
     };
   },
-  mounted() {},
+  mounted() { },
   created() {
     this.avatar = this.$store.state.userAvatar;
     this.username = this.$store.state.userName;

@@ -30,9 +30,10 @@
         >
         </v-row>
       </template>
-      <v-card-title class="text-subtitle-2 white--text font-weight-medium">{{
-        title
-      }}</v-card-title>
+      <v-card-title style="word-break: break-word;" 
+      class="text-subtitle-2 white--text font-weight-medium">
+      {{ title }}
+      </v-card-title>
       <v-card-subtitle
         class="blue-grey--text text--lighten-5 text-caption font-weight-light"
         >Rp. {{ formatedHarga }}</v-card-subtitle

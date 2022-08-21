@@ -11,17 +11,37 @@
       <foot v-if="foot" />
       <v-dialog width="400" v-model="firstVisit" persistent>
         <v-card elevation="0" class="pb-6 pt-2">
-          <v-card-title class="d-flex justify-center pb-8 font-weight-bold">Note</v-card-title>
+          <v-card-title class="d-flex justify-center pb-8 font-weight-bold"
+            >Note</v-card-title
+          >
           <v-card-subtitle class="d-flex justify-center">
-            <v-img :src="require('./assets/cuteCat.webp')" ></v-img>
+            <v-img :src="require('./assets/cuteCat.webp')"></v-img>
           </v-card-subtitle>
           <v-card-text class="d-flex justify-center">
-            <span class="text-subtitle-2 blue-grey--text text-center text--darken-1 font-weight-medium">
-              Aplikasi ini masih dalam tahap pengembangan
+            <span
+              class="text-subtitle-2 blue-grey--text text-center text--darken-1 font-weight-medium"
+            >
+              Aplikasi ini masih dalam pengembangan. <br />
+              <span class="font-weight-bold">Tech Stack</span> : <br />
+              <div class="mt-3">
+                <v-icon color="yellow darken-1" class="mr-2">mdi-firebase</v-icon>
+                <v-icon class="mr-2">$vuetify.icons.express</v-icon>
+                <v-icon color="green darken-1" class="mr-2">mdi-vuejs</v-icon>
+                <v-icon color="green darken-4" class="mr-2">mdi-nodejs</v-icon>
+              </div>
             </span>
           </v-card-text>
           <v-card-actions class="d-flex justify-center">
-            <v-btn outlined color="primary" rounded class="py-4 px-8" @click="notFirstTime"> Okay </v-btn>
+            <v-btn
+              outlined
+              color="primary"
+              rounded
+              class="py-4 px-8"
+              @click="notFirstTime"
+              :disabled="okayDisbaled"
+            >
+              Okay {{ okayDisbaled ? "(" + second + ")" : "" }}
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -49,6 +69,8 @@ export default {
       isMounted: true,
       transitionName: null,
       firstVisit: true,
+      second: 10,
+      okayDisbaled: true,
     };
   },
   async created() {
@@ -57,6 +79,7 @@ export default {
     await this.$store.dispatch("getKeranjang");
     await this.$store.dispatch("getAlamat");
     await this.$store.dispatch("getFavorit");
+    await this.$store.dispatch("getKategori");
     this.isMounted = false;
     firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit("updateUser", user);
@@ -72,7 +95,20 @@ export default {
 
     //footer observer
     this.watchFoot();
-    
+
+    //interval
+    const interval = setInterval(() => {
+      this.second--;
+      if (this.second == -1) {
+        clear();
+      }
+    }, 1000);
+
+    const clear = () => {
+      clearInterval(interval);
+      this.okayDisbaled = false;
+    };
+
     var t = this;
     Keyboard.addListener("keyboardDidShow", () => {
       t.foot = false;
@@ -112,7 +148,7 @@ export default {
     };
   },
   methods: {
-    notFirstTime(){
+    notFirstTime() {
       this.firstVisit = false;
       localStorage.setItem("firstVisited", "no");
     },

@@ -15,6 +15,7 @@ import detailPesanan from "../views/detailPesanan.vue";
 import editAlamat from "../views/editAlamat.vue";
 import test from "../views/testView.vue";
 import profileUser from "../views/profileUser.vue";
+import kategoriView from "../views/kategoriView.vue";
 import firebase from "firebase/app";
 import "firebase/auth";
 Vue.use(VueRouter)
@@ -89,6 +90,11 @@ const routes = [
     path: '/profileUser',
     name: 'profileUser',
     component: profileUser
+  },
+  {
+    path: '/kategoriView/:id',
+    name: 'kategoriView',
+    component: kategoriView
   }
 ]
 

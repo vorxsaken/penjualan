@@ -1,6 +1,5 @@
 <template>
     <cartIcon>
-        
     </cartIcon>
 </template>
 

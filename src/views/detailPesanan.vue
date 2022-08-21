@@ -1,17 +1,14 @@
 <template>
-  <div
-    :style="{
-      height:
-        this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-          ? this.$vuetify.breakpoint.height - 140 + 'px'
-          : '',
-    }"
-    :class="
+  <div :style="{
+    height:
       this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-        ? 'overflow-y-auto'
-        : ''
-    "
-  >
+        ? this.$vuetify.breakpoint.height - 140 + 'px'
+        : '',
+  }" :class="
+  this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+    ? 'overflow-y-auto'
+    : ''
+">
     <v-card elevation="0">
       <v-card-text class="py-0">
         <v-card-title class="font-weight-medium text-h5 black--text">
@@ -22,11 +19,11 @@
             {{ produkPesanan[0].namaPemesan }}
           </div>
           {{
-            produkPesanan[0].alamatLengkap +
-            ". " +
-            produkPesanan[0].kotaTujuan +
-            ", " +
-            produkPesanan[0].provinsiTujuan
+              produkPesanan[0].alamatLengkap +
+              ". " +
+              produkPesanan[0].kotaTujuan +
+              ", " +
+              produkPesanan[0].provinsiTujuan
           }}
         </v-card-text>
         <v-card-title class="pb-0 text-body-2 font-weight-medium black--text">
@@ -49,40 +46,29 @@
         <v-list>
           <v-list-item>
             <v-list-item-title>
-              <span class="text-caption float-left"
-                >Pesanan: {{ produkPesanan[0].created_at }}</span
-              >
+              <span class="text-caption float-left">Pesanan: {{ produkPesanan[0].created_at }}</span>
               <span class="text-caption font-weight-medium float-right">{{
-                produkPesanan[0].status
+                  produkPesanan[0].status
               }}</span>
             </v-list-item-title>
           </v-list-item>
-          <v-list-item
-            v-for="(item, index) in produkPesanan[0].pesanan"
-            :key="index"
-          >
+          <v-list-item v-for="(item, index) in produkPesanan[0].pesanan" :key="index">
             <v-list-item-avatar tile size="90" color="grey">
               <v-img :src="item.src"></v-img>
             </v-list-item-avatar>
             <v-list-item-content class="mt-n6">
-              <v-list-item-title
-                class="text-body-2 font-weight-bold grey--text text--darken-3"
-                >{{ item.namaProduk }}</v-list-item-title
-              >
+              <v-list-item-title class="text-body-2 font-weight-bold grey--text text--darken-3">{{ item.namaProduk }}
+              </v-list-item-title>
               <v-list-item-subtitle>
-                <span class="text-caption black--text"
-                  >x {{ item.jumlah }}</span
-                >
+                <span class="text-caption black--text">x {{ item.jumlah }}</span>
               </v-list-item-subtitle>
-              <span class="text-caption black--text"
-                >Rp {{ formatedHarga(item.harga) }}</span
-              >
+              <span class="text-caption black--text">Rp {{ formatedHarga(item.harga) }}</span>
             </v-list-item-content>
           </v-list-item>
           <v-list-item class="mt-3">
             <v-list-item-title>
               <span class="float-left">Sub Total</span>
-              <span class="float-right">Rp {{ formatedHarga(produkPesanan[0].subtotal)}}</span>
+              <span class="float-right">Rp {{ formatedHarga(produkPesanan[0].subtotal) }}</span>
             </v-list-item-title>
           </v-list-item>
           <v-list-item>
@@ -94,7 +80,7 @@
           <v-list-item>
             <v-list-item-title>
               <span class="float-left">Total</span>
-              <span class="float-right">Rp {{ formatedHarga(produkPesanan[0].total ) }}</span>
+              <span class="float-right">Rp {{ formatedHarga(produkPesanan[0].total) }}</span>
             </v-list-item-title>
           </v-list-item>
         </v-list>

@@ -276,6 +276,7 @@
               :loading="loadingBottom"
               width="230"
               rounded
+              text
               height="40"
               @click="addKeranjang"
               >Tambah Keranjang</v-btn

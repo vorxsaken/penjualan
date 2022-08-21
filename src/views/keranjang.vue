@@ -13,8 +13,8 @@
     "
   >
     <div
-      v-if="showKeranjang"
-      class="d-flex flex-column justify-center fill-height align-center"
+      v-if="showKeranjang" style="height: 80vh"
+      class="d-flex flex-column justify-center align-center"
     >
       <v-icon size="80">mdi-delete-empty</v-icon>
       <h4 class="" style="font-weight: 300">Keranjang Kosong :(</h4>

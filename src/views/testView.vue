@@ -40,7 +40,7 @@
           </v-card-subtitle>
           <!-- tambah keranjang btn -->
           <v-card-actions class="d-flex justify-center">
-            <v-btn @click="bottomSheet = true" elevation="0" block height="45" color="primary">
+            <v-btn text outlined rounded @click="bottomSheet = true" elevation="0" block height="45" color="primary">
               Tambah Keranjang
             </v-btn>
           </v-card-actions>
@@ -118,7 +118,7 @@
             </v-row>
           </v-card-actions>
           <v-card-actions class="d-flex justify-center">
-            <v-btn color="primary" class="white--text" :loading="loadingBottom" rounded width="230"
+            <v-btn text outlined color="primary" class="white--text" :loading="loadingBottom" rounded width="230"
               @click="addKeranjang">Tambah Keranjang</v-btn>
           </v-card-actions>
         </v-card>
