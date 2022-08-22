@@ -12,31 +12,26 @@
               <v-img width="150" height="40" :src="require('../assets/eza.png')"></v-img>
             </div>
           </v-col>
-          <v-col class="px-0" :cols="this.$vuetify.breakpoint.xs ? 10 : 4">
-            <v-text-field
-              placeholder="Cari..."
-              filled
-              rounded
-              dense
-              background-color="grey lighten-4"
-              single-line
-              hide-details
-              :prepend-inner-icon="hideOnScroll ? 'mdi-magnify' : 'mdi-arrow-left'"
-              @focus="showKategori"
-              @click:prepend-inner="changeState"
-              ref="search"
-            >
+          <v-col class="px-0" :cols="this.$vuetify.breakpoint.xs ? 10 : 4" style="position: relative">
+            <v-text-field placeholder="Cari..." filled rounded dense background-color="grey lighten-4" single-line
+              hide-details :prepend-inner-icon="hideOnScroll ? 'mdi-magnify' : 'mdi-arrow-left'" v-model="search"
+              @focus="showKategori" @click:prepend-inner="changeState" ref="search">
             </v-text-field>
+            <v-card v-if="isSearch" style="position: absolute; top: 60px;width: 100%">
+              <v-list>
+                <v-list-item  v-for="(n, index) in recommendation" :key="index">
+                  <v-list-item-title class="text-left">
+                    {{ n.title }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-card>
           </v-col>
           <v-col :cols="this.$vuetify.breakpoint.xs ? 2 : 4">
             <menuButton v-if="!cart" />
             <v-btn v-else icon :to="{ name: 'Keranjang' }">
-              <v-badge
-                :content="this.$store.state.keranjang.length"
-                :value="this.$store.state.keranjang.length"
-                color="red darken-2"
-                overlap
-              >
+              <v-badge :content="this.$store.state.keranjang.length" :value="this.$store.state.keranjang.length"
+                color="red darken-2" overlap>
                 <v-icon color="black">$vuetify.icons.cart</v-icon>
               </v-badge>
             </v-btn>
@@ -49,6 +44,8 @@
 
 <script>
 import menuButton from "./menuButtonGroup.vue";
+import db from "../plugins/firebaseInit";
+
 export default {
   name: "PenjualanNavbar",
   components: {
@@ -60,10 +57,14 @@ export default {
       elevation: "0",
       hideOnScroll: true,
       cart: true,
+      search: '',
+      timer: null,
+      recommendation: [],
+      isSearch: false
     };
   },
 
-  mounted() {},
+  mounted() { },
   created() {
     this.watchNav();
   },
@@ -85,6 +86,7 @@ export default {
     },
     changeState() {
       this.$store.state.hideKategori = true;
+      this.isSearch = false;
       this.hideKategori();
     },
     hideKategori() {
@@ -98,6 +100,26 @@ export default {
         return;
       }
     },
+    getAnswer() {
+      clearTimeout(this.timer);
+
+      this.timer = setTimeout(async () => {
+        this.recommendation = [];
+        if (this.search.length != 0) {
+          this.isSearch = true
+          const database = await db.collection("produk")
+            .orderBy("title", 'asc').startAt(this.search.toUpperCase())
+            .endAt(`${this.search.toLowerCase()}\uf8ff`).limit(6).get();
+          database.forEach((n) => {
+            this.recommendation.push(n.data());
+          })
+        }else{
+          this.isSearch = false;
+        }
+        console.log(this.recommendation);
+      }, 1000)
+    },
+
     buttonHideKategori() {
       if (this.$store.state.hideKategori) {
         this.warnaNavbar = "white";
@@ -123,8 +145,12 @@ export default {
     "$vuetify.breakpoint.width": function () {
       this.watchNav();
     },
+    search() {
+      this.getAnswer();
+    }
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>

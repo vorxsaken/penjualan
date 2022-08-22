@@ -7,7 +7,8 @@
           :style="{ width: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? '' : caraouselWidth + 'px' }">
           <v-carousel style="border-radius: 10px" :height="height" delimiter-icon="mdi-minus" hide-delimiter-background
             show-arrows-on-hover>
-            <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index" :src="item.src">
+            <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index"
+            :src="item.src" :to="{name: 'imagePreview', params: {src: item.src}}">
             </v-carousel-item>
           </v-carousel>
         </div>
@@ -265,6 +266,9 @@ export default {
     },
   },
   methods: {
+    selImg(i){
+      console.log(i);
+    },
     dialogBeriRating() {
       if (this.$store.state.user) {
         this.ratingSheet = !this.ratingSheet;

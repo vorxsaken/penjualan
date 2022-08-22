@@ -7,13 +7,14 @@
             <v-col class="px-0">
               <v-carousel
                 :height="height"
-                delimiter-icon="mdi-minus"
+                delimiter-icon="mdi-circle"
                 hide-delimiter-background
                 show-arrows-on-hover
               >
                 <v-carousel-item
                   v-for="(item, index) in detailProduk[0].gambar"
                   :key="index"
+                  to=""
                   :src="item.src"
                 >
                 </v-carousel-item>
@@ -346,6 +347,9 @@ export default {
     },
   },
   methods: {
+    selImg(i){
+      console.log(i);
+    },
     async getReviews() {
       this.reviews = [];
       const database = await db
