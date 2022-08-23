@@ -13,17 +13,23 @@
             </div>
           </v-col>
           <v-col class="px-0" :cols="this.$vuetify.breakpoint.xs ? 10 : 4" style="position: relative">
-            <v-text-field placeholder="Cari..." filled rounded dense background-color="grey lighten-4" single-line
-              hide-details :prepend-inner-icon="hideOnScroll ? 'mdi-magnify' : 'mdi-arrow-left'" v-model="search"
-              @focus="showKategori" @click:prepend-inner="changeState" ref="search">
+            <v-text-field placeholder="# cari produk..." filled rounded dense background-color="grey lighten-4"
+              single-line hide-details :prepend-inner-icon="hideOnScroll ? 'mdi-magnify' : 'mdi-arrow-left'"
+              v-model="search" @focus="showKategori" @click:prepend-inner="changeState" ref="search"
+              @keyup.enter="cari">
             </v-text-field>
-            <v-card v-if="isSearch" style="position: absolute; top: 60px;width: 100%">
-              <v-list>
-                <v-list-item  v-for="(n, index) in recommendation" :key="index">
-                  <v-list-item-title class="text-left">
-                    {{ n.title }}
-                  </v-list-item-title>
-                </v-list-item>
+            <v-card v-if="this.$store.state.isSearch" style="position: absolute; top: 60px;width: 100%">
+              <v-card-title v-if="recommendation.length == 0" class="d-flex justify-center align-center">
+                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              </v-card-title>
+              <v-list v-else>
+                <div v-for="(n, index) in recommendation" :key="index">
+                  <v-list-item @click="toProduk(n.produkId)">
+                    <v-list-item-title class="text-left">
+                      {{ n.title }}
+                    </v-list-item-title>
+                  </v-list-item>
+                </div>
               </v-list>
             </v-card>
           </v-col>
@@ -63,12 +69,18 @@ export default {
       isSearch: false
     };
   },
-
   mounted() { },
   created() {
     this.watchNav();
   },
   methods: {
+    cari(){
+      this.$store.state.searchViewParams = this.search;
+      this.$router.push({name: 'searchView'});
+    },
+    toProduk(n){
+      this.$router.push({name: 'detailProduk', params: {id: n, isFromLike: 'true'}});
+    },
     getSource(filename, format) {
       var images = require.context("../assets", false, /\.png$/);
       return images("./" + filename + format);
@@ -106,18 +118,17 @@ export default {
       this.timer = setTimeout(async () => {
         this.recommendation = [];
         if (this.search.length != 0) {
-          this.isSearch = true
+          this.$store.state.isSearch = true
           const database = await db.collection("produk")
             .orderBy("title", 'asc').startAt(this.search.toUpperCase())
             .endAt(`${this.search.toLowerCase()}\uf8ff`).limit(6).get();
           database.forEach((n) => {
             this.recommendation.push(n.data());
           })
-        }else{
-          this.isSearch = false;
+        } else {
+          this.$store.state.isSearch = false;
         }
-        console.log(this.recommendation);
-      }, 1000)
+      }, 800)
     },
 
     buttonHideKategori() {

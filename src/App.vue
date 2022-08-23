@@ -11,16 +11,13 @@
       <foot v-if="foot" />
       <v-dialog width="400" v-model="firstVisit" persistent>
         <v-card elevation="0" class="pb-6 pt-2">
-          <v-card-title class="d-flex justify-center pb-8 font-weight-bold"
-            >Note</v-card-title
-          >
+          <v-card-title class="d-flex justify-center pb-8 font-weight-bold">Note</v-card-title>
           <v-card-subtitle class="d-flex justify-center">
             <v-img :src="require('./assets/cuteCat.webp')"></v-img>
           </v-card-subtitle>
           <v-card-text class="d-flex justify-center">
-            <span
-              class="text-subtitle-2 blue-grey--text text-center text--darken-1 font-weight-medium"
-            >
+            <span class="text-subtitle-2 blue-grey--text text-center text--darken-1 
+            font-weight-medium">
               Aplikasi ini masih dalam pengembangan. <br />
               <span class="font-weight-bold">Tech Stack</span> : <br />
               <div class="mt-3">
@@ -32,14 +29,8 @@
             </span>
           </v-card-text>
           <v-card-actions class="d-flex justify-center">
-            <v-btn
-              outlined
-              color="primary"
-              rounded
-              class="py-4 px-8"
-              @click="notFirstTime"
-              :disabled="okayDisbaled"
-            >
+            <v-btn outlined color="primary" rounded class="py-4 px-8" @click="notFirstTime" 
+            :disabled="okayDisbaled">
               Okay {{ okayDisbaled ? "(" + second + ")" : "" }}
             </v-btn>
           </v-card-actions>
@@ -102,7 +93,7 @@ export default {
       if (this.second == -1) {
         clear();
       }
-    }, 1000);
+    }, 500);
 
     const clear = () => {
       clearInterval(interval);
@@ -112,14 +103,14 @@ export default {
     var t = this;
     Keyboard.addListener("keyboardDidShow", () => {
       t.foot = false;
-    }).catch(() => {});
+    }).catch(() => { });
     Keyboard.addListener("keyboardDidHide", () => {
       if (this.$route.name == "Kategori") {
         t.foot = false;
       } else {
         t.foot = true;
       }
-    }).catch(() => {});
+    }).catch(() => { });
 
     CapacitorApp.addListener("backButton", ({ canGoBack }) => {
       if (!canGoBack) {
@@ -159,6 +150,7 @@ export default {
       }
       this.watchFoot();
       this.$store.state.hideKategori = true;
+      this.$store.state.isSearch = false;
     },
     checkPopRoute() {
       if (this.$route.name != "Kategori") {
@@ -201,6 +193,7 @@ export default {
 ::-webkit-scrollbar {
   width: 2px;
 }
+
 ::-webkit-scrollbar-track {
   background: #ededed;
 }

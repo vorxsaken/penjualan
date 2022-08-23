@@ -17,24 +17,15 @@
             <v-container>
                 <v-card class="mb-2" elevation="0">
                     <v-card-title class="py-1 pl-2 d-flex justify-start">
-                        <span class="text-body-1 pl-0 black--text font-weight-bold">
-                            Kategori: {{ this.$route.params.id }}
+                        <span class="text-body-1 pl-0 black--text font-weight-light">
+                            Pencarian Untuk: 
+                            <span class="font-weight-bold">{{ this.$store.state.searchViewParams }}</span> 
                         </span>
                     </v-card-title>
                 </v-card>
                 <v-row dense>
-                    <v-col v-for="(card, index) in selKategori" :key="index" cols="6" md="4" lg="2" xl="2">
+                    <v-col v-for="(card, index) in selSearch" :key="index" cols="6" md="4" lg="2" xl="2">
                         <produkCard @produkClick="detailProduk" @favoritClick="addFavorit" :produk="card" />
-                    </v-col>
-                </v-row>
-                <v-row v-if="isBottom">
-                    <v-col>
-                        <v-card elevation="0">
-                            <v-card-title class="d-flex justify-center pa-0">
-                                <v-progress-circular size="30" color="red" indeterminate v-intersect="appendProduk">
-                                </v-progress-circular>
-                            </v-card-title>
-                        </v-card>
                     </v-col>
                 </v-row>
             </v-container>
@@ -54,26 +45,23 @@ export default {
     data() {
         return {
             isLoad: true,
-            selKategori: [],
+            selSearch: [],
             totalLength: 0,
             lastVisible: null,
-            isBottom: true
+            isBottom: false
         }
     },
     created() {
-        this.getKategoriView();
+        this.getSearchView();
         setTimeout(() => {
             this.checkAutoLoad();
         }, 1500);
     },
     watch: {
-        selKategori() {
-            this.checkAutoLoad()
-        }
     },
     methods: {
         checkAutoLoad() {
-            if (this.selKategori.length >= this.totalLength) {
+            if (this.selSearch.length >= this.totalLength) {
                 this.isBottom = false;
             } else {
                 this.isBottom = true;
@@ -81,15 +69,17 @@ export default {
         },
         appendProduk(entries) {
             if (entries[0].isIntersecting) {
-                this.getNextKategori();
+                this.getNextSearch();
                 
             }
         },
-        async getKategoriView() {
-            const length = await db.collection("produk").where('kategori', '==', this.$route.params.id).get();
+        async getSearchView() {
+            const wordInit = this.$store.state.searchViewParams;
+            const length = await db.collection("produk").orderBy("title", "asc").startAt(wordInit.toUpperCase())
+            .endAt(`${wordInit.toLowerCase()}\uf8ff`).limit(20).get();
             this.totalLength = length.docs.length;
-            const dat = db.collection("produk")
-                .where('kategori', '==', this.$route.params.id).limit(5);
+            const dat = db.collection("produk").orderBy("title", "asc")
+                .startAt(wordInit.toUpperCase()).endAt(`${wordInit.toLowerCase()}`);
             const database = await dat.get();
             this.lastVisible = database.docs[database.docs.length - 1];
             database.forEach(async (n) => {
@@ -113,14 +103,15 @@ export default {
                     rating: n.data().rating,
                     gambar: arrSub
                 }
-                this.selKategori.push(dat);
+                this.selSearch.push(dat);
             });
 
             this.isLoad = false;
         },
-        async getNextKategori() {
+        async getNextSearch() {
+            const wordInit = this.$store.state.searchViewParams;
             const database = await db.collection("produk")
-                .where("kategori", '==', this.$route.params.id)
+                .startAt(wordInit.toUpperCase()).endAt(`${wordInit.toLowerCase()}\uf8ff`)
                 .startAfter(this.lastVisible).limit(5).get();
             this.lastVisible = database.docs[database.docs.length - 1]
             database.forEach(async (n) => {
@@ -144,7 +135,7 @@ export default {
                     rating: n.data().rating,
                     gambar: arrSub
                 }
-                this.selKategori.push(dat);
+                this.selSearch.push(dat);
             })
         },
         detailProduk(payload) {

@@ -24,7 +24,9 @@ export default new Vuex.Store({
     userAvatar: '',
     scrollY: 0,
     lastVisible: null,
-    totalLength: 0
+    totalLength: 0,
+    isSearch: false,
+    searchViewParams: ''
   },
   mutations: {
     updateUser(state, payload) {

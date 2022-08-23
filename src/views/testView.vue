@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="finishFetching">
     <v-row>
       <v-col cols="12" lg="6"
         :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? '' : 'd-flex justify-end'">
@@ -7,8 +7,8 @@
           :style="{ width: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? '' : caraouselWidth + 'px' }">
           <v-carousel style="border-radius: 10px" :height="height" delimiter-icon="mdi-minus" hide-delimiter-background
             show-arrows-on-hover>
-            <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index"
-            :src="item.src" :to="{name: 'imagePreview', params: {src: item.src}}">
+            <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index" :src="item.src"
+              :to="{ name: 'imagePreview', params: { src: item.src } }">
             </v-carousel-item>
           </v-carousel>
         </div>
@@ -78,7 +78,7 @@
           <v-card-title class="d-flex justify-center">
             <v-img src='../assets/what.png' max-width="300" max-height="250">
             </v-img>
-          </v-card-title> 
+          </v-card-title>
           <v-card-subtitle class="d-flex justify-center text-h6 font-weight-bold blue-grey--text text--darken-1">
             Login Untuk Memberi Review
           </v-card-subtitle>
@@ -245,6 +245,7 @@ export default {
       jumlahReview: 0,
       rating: null,
       reviews: [],
+      finishFetching: false
     };
   },
 
@@ -266,7 +267,7 @@ export default {
     },
   },
   methods: {
-    selImg(i){
+    selImg(i) {
       console.log(i);
     },
     dialogBeriRating() {
@@ -524,11 +525,13 @@ export default {
           gambar: arr,
         };
         this.detailProduk = [fin];
+        this.finishFetching = true;
       } else {
         let produk = this.$store.state.produk.filter((produk) => {
           return produk.produkId === id;
         });
         this.detailProduk = produk;
+        this.finishFetching = true;
       }
     },
     showButton() {

@@ -17,6 +17,7 @@ import test from "../views/testView.vue";
 import profileUser from "../views/profileUser.vue";
 import kategoriView from "../views/kategoriView.vue";
 import imagePreview from "../views/imagePreview.vue";
+import searchView from "../views/searchView.vue";
 import firebase from "firebase/app";
 import "firebase/auth";
 Vue.use(VueRouter)
@@ -96,6 +97,11 @@ const routes = [
     path: '/kategoriView/:id',
     name: 'kategoriView',
     component: kategoriView
+  },
+  {
+    path: '/searchView',
+    name: 'searchView',
+    component: searchView
   },
   {
     path: '/imagePreview/:src',
