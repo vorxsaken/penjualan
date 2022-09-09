@@ -8,19 +8,6 @@ export default {
     name: 'PenjualanHomeicon',
     components: {
         homeIcon
-    },
-    data() {
-        return {
-            
-        };
-    },
-
-    mounted() {
-        
-    },
-
-    methods: {
-        
-    },
+    }
 };
 </script>

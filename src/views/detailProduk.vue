@@ -5,18 +5,8 @@
         <v-container>
           <v-row>
             <v-col class="px-0">
-              <v-carousel
-                :height="height"
-                delimiter-icon="mdi-circle"
-                hide-delimiter-background
-                show-arrows-on-hover
-              >
-                <v-carousel-item
-                  v-for="(item, index) in detailProduk[0].gambar"
-                  :key="index"
-                  to=""
-                  :src="item.src"
-                >
+              <v-carousel :height="height" delimiter-icon="mdi-circle" hide-delimiter-background show-arrows-on-hover>
+                <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index" to="" :src="item.src">
                 </v-carousel-item>
               </v-carousel>
             </v-col>
@@ -25,14 +15,12 @@
         <v-card>
           <v-card-title>
             <v-row>
-              <v-col cols="10"
-                ><div>{{ detailProduk[0].title }}</div></v-col
-              >
-              <v-col cols="2"
-                ><v-icon @click="addLike" :color="liked ? 'red' : 'grey'" large
-                  >mdi-heart</v-icon
-                ></v-col
-              >
+              <v-col cols="10">
+                <div>{{ detailProduk[0].title }}</div>
+              </v-col>
+              <v-col cols="2">
+                <v-icon @click="addLike" :color="liked ? 'red' : 'grey'" large>mdi-heart</v-icon>
+              </v-col>
             </v-row>
           </v-card-title>
           <v-card-subtitle>
@@ -40,34 +28,20 @@
               <v-icon small left>mdi-label</v-icon>
               {{ detailProduk[0].kategori }}
             </v-chip> -->
-            <div
-              class="
+            <div class="
                 grey--text
                 text--darken-2
                 font-weight-medium
                 text-subtitle-1
-              "
-            >
+              ">
               Rp. {{ formatedHarga }}
             </div>
             <div>GRATIS Ongkir Di Sekitar Wilayah Toko Kami</div>
           </v-card-subtitle>
           <v-card-actions class="d-flex justify-center">
-            <v-btn
-              elevation="0"
-              @click="bottomSheet = true"
-              block
-              height="45"
-              color="primary"
-              >Tambah Keranjang</v-btn
-            >
+            <v-btn elevation="0" @click="bottomSheet = true" block height="45" color="primary">Tambah Keranjang</v-btn>
           </v-card-actions>
-          <v-card-title
-            v-ripple
-            style="cursor: pointer"
-            class="py-2"
-            @click="deskripsiSheet = !deskripsiSheet"
-          >
+          <v-card-title v-ripple style="cursor: pointer" class="py-2" @click="deskripsiSheet = !deskripsiSheet">
             <div class="text-button">Deskripsi</div>
             <v-spacer></v-spacer>
             <v-icon small>mdi-arrow-right</v-icon>
@@ -77,23 +51,13 @@
               <v-card-title class="font-weight-bold">Deskripsi</v-card-title>
               <v-card-text v-html="detailProduk[0].deskripsi"></v-card-text>
               <v-card-actions class="d-flex justify-center">
-                <v-btn
-                  text
-                  color="black"
-                  @click="deskripsiSheet = !deskripsiSheet"
-                  >Close</v-btn
-                >
+                <v-btn text color="black" @click="deskripsiSheet = !deskripsiSheet">Close</v-btn>
               </v-card-actions>
             </v-card>
           </v-bottom-sheet>
           <!-- <v-divider class="mx-4"></v-divider> -->
           <!-- beri rating -->
-          <v-card-title
-            v-ripple
-            style="cursor: pointer"
-            @click="ratingSheet = !ratingSheet"
-            class="py-2"
-          >
+          <v-card-title v-ripple style="cursor: pointer" @click="ratingSheet = !ratingSheet" class="py-2">
             <div class="text-button black--text">Beri Rating</div>
             <v-spacer></v-spacer>
             <v-icon small>mdi-arrow-right</v-icon>
@@ -106,53 +70,21 @@
               <v-card-text style="overflow: hidden">
                 <div class="d-flex justify-center pb-4">
                   <span @click="showBeriReview = true">
-                    <v-rating
-                      v-model="beriRating"
-                      :value="beriRating"
-                      size="45"
-                      color="blue lighten-1"
-                      background-color="grey"
-                      :readonly="!isFill"
-                    ></v-rating>
+                    <v-rating v-model="beriRating" :value="beriRating" size="45" color="blue lighten-1"
+                      background-color="grey" :readonly="!isFill"></v-rating>
                   </span>
                 </div>
               </v-card-text>
               <v-card-text v-show="showBeriReview">
-                <v-textarea
-                  no-resize
-                  auto-grow
-                  solo
-                  flat
-                  outlined
-                  clearable
-                  rows="4"
-                  color="black"
-                  label="beri review..."
-                  v-model="reviewText"
-                  :disabled="!isFill"
-                >
+                <v-textarea no-resize auto-grow solo flat outlined clearable rows="4" color="black"
+                  label="beri review..." v-model="reviewText" :disabled="!isFill">
                 </v-textarea>
                 <v-card-actions v-if="isFill">
-                  <v-btn
-                    :loading="isKirim"
-                    @click="kirimReview"
-                    color="black"
-                    outlined
-                    >Kirim</v-btn
-                  >
-                  <v-btn color="black" outlined @click="hideBeriReview"
-                    >Batal</v-btn
-                  >
+                  <v-btn :loading="isKirim" @click="kirimReview" color="black" outlined>Kirim</v-btn>
+                  <v-btn color="black" outlined @click="hideBeriReview">Batal</v-btn>
                 </v-card-actions>
                 <v-card-actions v-else class="d-flex justify-center">
-                  <v-btn
-                    outlined
-                    :loading="isKirim"
-                    width="200"
-                    color="black"
-                    @click="hapusSelfRating"
-                    >Hapus</v-btn
-                  >
+                  <v-btn outlined :loading="isKirim" width="200" color="black" @click="hapusSelfRating">Hapus</v-btn>
                 </v-card-actions>
               </v-card-text>
             </v-card>
@@ -182,16 +114,11 @@
                       </v-list-item-avatar>
                       <v-list-item-content>
                         <v-list-item-title>{{
-                          data.username
+                        data.username
                         }}</v-list-item-title>
-                        <v-list-item-subtitle
-                          ><v-rating
-                            readonly
-                            :value="data.rating"
-                            color="yellow darken-1"
-                            size="12"
-                          ></v-rating
-                        ></v-list-item-subtitle>
+                        <v-list-item-subtitle>
+                          <v-rating readonly :value="data.rating" color="yellow darken-1" size="12"></v-rating>
+                        </v-list-item-subtitle>
                         <div class="text-caption">
                           {{ data.text }}
                         </div>
@@ -204,11 +131,7 @@
           </v-dialog>
         </v-card>
         <!-- snackbar -->
-        <v-snackbar
-          v-model="snackbar"
-          outlined
-          :color="snackbarColor ? 'green' : 'pink'"
-        >
+        <v-snackbar v-model="snackbar" outlined :color="snackbarColor ? 'green' : 'pink'">
           {{ text }}
           <template v-slot:action="{ attrs }">
             <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
@@ -220,17 +143,8 @@
     </div>
     <!-- speed dial tambah keranjang dan favorit -->
     <transition name="float-but">
-      <v-speed-dial
-        v-model="fab"
-        right
-        direction="left"
-        fixed
-        class="float-but"
-        style="bottom: 68px"
-        transition="slide-x-reverse-transition"
-        v-if="offsetTop"
-        v-show="false"
-      >
+      <v-speed-dial v-model="fab" right direction="left" fixed class="float-but" style="bottom: 68px"
+        transition="slide-x-reverse-transition" v-if="offsetTop" v-show="false">
         <template v-slot:activator>
           <v-btn v-model="fab" class="grey darken-3" x-large icon>
             <v-icon color="white" x-large> mdi-plus </v-icon>
@@ -248,9 +162,9 @@
     <v-bottom-sheet v-model="bottomSheet">
       <v-sheet>
         <v-card elevation="0" class="py-4">
-          <v-card-subtitle
-            ><v-row justify="center">Quantity </v-row></v-card-subtitle
-          >
+          <v-card-subtitle>
+            <v-row justify="center">Quantity </v-row>
+          </v-card-subtitle>
           <v-card-actions>
             <v-row justify="center" align="center" class="mx-1 my-1">
               <div>
@@ -260,7 +174,7 @@
               </div>
               <div class="ml-2">
                 <v-btn elevation="0" color="white" v-ripple="false">{{
-                  jumlahProduk
+                jumlahProduk
                 }}</v-btn>
               </div>
               <div class="ml-2">
@@ -271,17 +185,8 @@
             </v-row>
           </v-card-actions>
           <v-card-actions class="d-flex justify-center">
-            <v-btn
-              color="grey darken-4"
-              class="white--text"
-              :loading="loadingBottom"
-              width="230"
-              rounded
-              text
-              height="40"
-              @click="addKeranjang"
-              >Tambah Keranjang</v-btn
-            >
+            <v-btn color="grey darken-4" class="white--text" :loading="loadingBottom" width="230" rounded text
+              height="40" @click="addKeranjang">Tambah Keranjang</v-btn>
           </v-card-actions>
         </v-card>
       </v-sheet>
@@ -326,13 +231,8 @@ export default {
       reviews: [],
     };
   },
-  async created() {
-    await this.filterToDetailProduk(this.$route.params.id);
-    this.currentHeight = this.$vuetify.breakpoint.height;
-    window.addEventListener("scroll", this.showButton);
-    this.isLiked();
-    this.checkReview();
-    this.getReviews();
+  created() {
+    this.initState();
   },
   mounted() {
     this.changeHeight();
@@ -347,7 +247,15 @@ export default {
     },
   },
   methods: {
-    selImg(i){
+    async initState() {
+      await this.filterToDetailProduk(this.$route.params.id);
+      this.currentHeight = this.$vuetify.breakpoint.height;
+      window.addEventListener("scroll", this.showButton);
+      this.isLiked();
+      this.checkReview();
+      this.getReviews();
+    },
+    selImg(i) {
       console.log(i);
     },
     async getReviews() {
@@ -578,7 +486,7 @@ export default {
           .get();
         const produk = database.docs.map((doc) => doc.data());
         const getGambar = await db.collection("produk/" + id + "/gambar").get();
-        var arr =  [];
+        var arr = [];
         getGambar.forEach((dat) => {
           let dd = {
             gambarId: dat.data().gambarId,
@@ -705,6 +613,9 @@ export default {
     "$vuetify.breakpoint.name": function () {
       this.changeHeight();
     },
+    '$route.params': function () {
+      this.initState();
+    }
   },
 };
 </script>
@@ -718,9 +629,11 @@ export default {
 .float-but-enter {
   transform: translateY(250px);
 }
+
 .float-but-enter-to {
   transform: translateY(0px);
 }
+
 .float-but-leave-to {
   transform: translateY(250px);
 }

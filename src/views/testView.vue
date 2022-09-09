@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="finishFetching">
+  <v-container v-if="finishFetching" :key="componentKey">
     <v-row>
       <v-col cols="12" lg="6"
         :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? '' : 'd-flex justify-end'">
@@ -67,6 +67,40 @@
         </v-card>
       </v-col>
     </v-row>
+    <div class="d-flex justify-center">
+      <div :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 'mt-12' : ''"
+        :style="{ width: this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 800 + 'px' : '100%'}">
+        <v-divider></v-divider>
+      </div>
+    </div>
+    <v-row>
+      <v-col>
+        <v-card elevation="0" class="py-0">
+          <v-card-text class="py-0 px-1">
+            <v-card-title v-intersect="getRecommendation" :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 
+            'px-0 pb-4 text-subtitle-1 font-weight-bold grey--text text--darken-1 d-flex justify-center' 
+            : 'px-0 pb-4 text-subtitle-1 font-weight-bold grey--text text--darken-1'">
+              Mungkin Anda Suka :
+            </v-card-title>
+            <!-- skeleton loader -->
+            <v-row v-if="recommendation.length == 0" dense
+              :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 'd-flex justify-center' : ''">
+              <v-col v-for="i in 4" :key="i" cols="6" md="4" lg="2" xl="2">
+                <v-skeleton-loader class="mx-auto" type="image">
+                </v-skeleton-loader>
+              </v-col>
+            </v-row>
+            <!-- produk rekomendasi -->
+            <v-row v-else dense
+              :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 'd-flex justify-center' : ''">
+              <v-col v-for="(rec, index) in recommendation" :key="index" cols="6" md="4" lg="2" xl="2">
+                <produkCard @produkClick="toProduk" @favoritClick="addFavorit" :produk="rec" />
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
     <!-- some dialog -->
     <!-- ----- -->
     <!-- ----- -->
@@ -108,7 +142,7 @@
               </div>
               <div class="ml-2">
                 <v-btn elevation="0" color="white" v-ripple="false">{{
-                    jumlahProduk
+                jumlahProduk
                 }}</v-btn>
               </div>
               <div class="ml-2">
@@ -126,7 +160,7 @@
       </v-sheet>
     </v-bottom-sheet>
     <!-- deskripsi bottom sheet -->
-    <v-bottom-sheet v-model="deskripsiSheet" inset>
+    <v-bottom-sheet v-model="deskripsiSheet" inset scrollable>
       <v-card elevation="0">
         <v-card-title class="font-weight-bold">Deskripsi</v-card-title>
         <v-card-text v-html="detailProduk[0].deskripsi"></v-card-text>
@@ -181,7 +215,7 @@
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>{{
-                      data.username
+                  data.username
                   }}</v-list-item-title>
                   <v-list-item-subtitle>
                     <v-rating color="yellow darken-2" readonly :value="data.rating" size="12"></v-rating>
@@ -212,10 +246,13 @@
 import db from "../plugins/firebaseInit";
 import firebase from "firebase/app";
 import "firebase/auth";
+import produkCard from "../components/produckCard.vue";
 
 export default {
   name: "PenjualanTestView",
-
+  components: {
+    produkCard
+  },
   data() {
     return {
       dialogBelumLogin: false,
@@ -245,7 +282,9 @@ export default {
       jumlahReview: 0,
       rating: null,
       reviews: [],
-      finishFetching: false
+      finishFetching: false,
+      recommendation: [],
+      componentKey: 0
     };
   },
 
@@ -254,10 +293,7 @@ export default {
     this.scrollTop();
   },
   created() {
-    this.filterToDetailProduk(this.$route.params.id);
-    this.isLiked();
-    this.checkReview();
-    this.getReviews();
+    this.initState();
   },
   computed: {
     formatedHarga() {
@@ -267,8 +303,104 @@ export default {
     },
   },
   methods: {
-    selImg(i) {
-      console.log(i);
+    initState() {
+      this.filterToDetailProduk(this.$route.params.id);
+      this.isLiked();
+      this.checkReview();
+      this.getReviews();
+    },
+    getRecommendation(entries) {
+      if (entries[0].isIntersecting) {
+        if (this.recommendation.length == 0) {
+          setTimeout(async () => {
+            const database = await db.collection("produk")
+              .where('kategori', '==', this.detailProduk[0].kategori).limit(5).get();
+            database.forEach(async (doc) => {
+              if (doc.data().title != this.detailProduk[0].title) {
+                const subCollection = await db.collection("produk/" + doc.data().produkId + "/gambar").get();
+                const arrSub = [];
+                subCollection.forEach((sub) => {
+                  const arrData = {
+                    gambarId: sub.data().gambarId,
+                    namaGambar: sub.data().namaGambar,
+                    src: sub.data().src
+                  };
+                  arrSub.push(arrData);
+                })
+                const dat = {
+                  produkId: doc.data().produkId,
+                  harga: doc.data().harga,
+                  deskripsi: doc.data().deskripsi,
+                  kategori: doc.data().kategori,
+                  title: doc.data().title,
+                  totalReview: doc.data().totalReview,
+                  rating: doc.data().rating,
+                  gambar: arrSub
+                }
+                this.recommendation.push(dat);
+              }
+            });
+          }, 1000)
+        }
+      }
+    },
+    toProduk(payload) {
+      this.$router.push({
+        name: "detailProduk",
+        params: { id: payload, isFromLike: "true" },
+      });
+    },
+    async addFavorit(produkID) {
+      const getLike = await db.collection("like").get();
+      const arr = getLike.docs.map((doc) => doc.data());
+      if (
+        arr.some((like) => {
+          return (
+            like.user == firebase.auth().currentUser.email &&
+            like.produkId == produkID
+          );
+        })
+      ) {
+        let del = db
+          .collection("like")
+          .where("produkId", "==", produkID)
+          .where("user", "==", firebase.auth().currentUser.email);
+        await del.get().then((some) => {
+          some.forEach((doc) => {
+            doc.ref
+              .delete()
+              .then(() => {
+                this.$store.commit("filterFavorit", doc.id);
+                console.log("Terhapus favorit");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        });
+      } else {
+        const database = db.collection("like").doc();
+        let like = {
+          likeId: database.id,
+          user: firebase.auth().currentUser.email,
+          produkId: produkID,
+          likedAt: this.getDate(),
+        };
+        this.$store.dispatch("pushFavorit", like);
+        await database
+          .set({
+            likeId: database.id,
+            user: firebase.auth().currentUser.email,
+            produkId: produkID,
+            likedAt: this.getDate(),
+          })
+          .then(() => {
+            console.log("Tambah Favorit");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
     dialogBeriRating() {
       if (this.$store.state.user) {
@@ -634,6 +766,14 @@ export default {
     "$vuetify.breakpoint.name": function () {
       this.changeHeight();
     },
+    '$route.params': async function () {
+      this.liked = false;
+      this.recommendation = [];
+      await this.initState();
+      document.documentElement.scrollTop = 0;
+      this.componentKey += 1;
+      this.$store.state.backCounter = 1;
+    }
   },
 };
 </script>

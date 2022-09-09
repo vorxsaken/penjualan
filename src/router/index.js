@@ -18,6 +18,7 @@ import profileUser from "../views/profileUser.vue";
 import kategoriView from "../views/kategoriView.vue";
 import imagePreview from "../views/imagePreview.vue";
 import searchView from "../views/searchView.vue";
+import about from "../views/about.vue";
 import firebase from "firebase/app";
 import "firebase/auth";
 Vue.use(VueRouter)
@@ -107,6 +108,11 @@ const routes = [
     path: '/imagePreview/:src',
     name: 'imagePreview',
     component: imagePreview
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: about
   }
 ]
 

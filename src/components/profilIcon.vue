@@ -10,19 +10,6 @@ export default {
     name: 'PenjualanProfilicon',
     components: {
         profilIcon
-    },
-    data() {
-        return {
-            
-        };
-    },
-
-    mounted() {
-        
-    },
-
-    methods: {
-        
-    },
+    }
 };
 </script>

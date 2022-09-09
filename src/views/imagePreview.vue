@@ -14,7 +14,15 @@ export default {
     mounted(){
     },
     methods: {
+    },
+    async beforeDestroy() {
+    if (this.$route.name == "Kategori") {
+      return true;
     }
+    this.$store.state.backCounter = 1;
+    // await this.$store.dispatch("getKeranjang");
+    return;
+  },
 }
 </script>
 

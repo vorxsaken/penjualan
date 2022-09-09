@@ -10,19 +10,6 @@ export default {
     name: 'PenjualanPesananicon',
     components: {
         pesananIcon
-    },
-    data() {
-        return {
-            
-        };
-    },
-
-    mounted() {
-        
-    },
-
-    methods: {
-        
-    },
+    }
 };
 </script>

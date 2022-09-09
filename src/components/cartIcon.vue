@@ -9,19 +9,6 @@ export default {
     name: 'PenjualanCarticon',
     components: {
         cartIcon
-    },
-    data() {
-        return {
-            
-        };
-    },
-
-    mounted() {
-        
-    },
-
-    methods: {
-        
-    },
+    }
 };
 </script>

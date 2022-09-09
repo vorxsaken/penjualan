@@ -104,6 +104,7 @@ export default {
     Keyboard.addListener("keyboardDidShow", () => {
       t.foot = false;
     }).catch(() => { });
+    
     Keyboard.addListener("keyboardDidHide", () => {
       if (this.$route.name == "Kategori") {
         t.foot = false;

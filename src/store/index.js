@@ -100,7 +100,7 @@ export default new Vuex.Store({
     async getProduk({ state }) {
       const totalLength = await db.collection("produk").get();
       state.totalLength = totalLength.docs.length;
-      const database = db.collection('produk').orderBy("title", "asc").limit(4);
+      const database = db.collection('produk').orderBy("title", "asc").limit(12);
       const get = await database.get();
       state.lastVisible = get.docs[get.docs.length - 1];
       get.forEach(async (doc) => {
@@ -130,7 +130,7 @@ export default new Vuex.Store({
       })
     },
     async getNextproduk({ state }) {
-      const database = db.collection("produk").orderBy("title", "asc").limit(4).startAfter(state.lastVisible);
+      const database = db.collection("produk").orderBy("title", "asc").limit(12).startAfter(state.lastVisible);
       const get = await database.get();
       state.lastVisible = get.docs[get.docs.length - 1];
       get.forEach(async (doc) => {

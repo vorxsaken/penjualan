@@ -46,6 +46,10 @@
             <v-list-item-icon><v-icon>mdi-lock-reset</v-icon></v-list-item-icon>
             <v-list-item-title>Ubah Password</v-list-item-title>
           </v-list-item>
+          <v-list-item link :to="{name: 'about'}">
+            <v-list-item-icon><v-icon>mdi-information</v-icon></v-list-item-icon>
+            <v-list-item-title>About</v-list-item-title>
+          </v-list-item>
           <v-list-item link @click="logout">
             <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
             <v-list-item-title>Log out</v-list-item-title>

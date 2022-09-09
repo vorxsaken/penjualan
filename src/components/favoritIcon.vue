@@ -10,19 +10,6 @@ export default {
     name: 'PenjualanFavoriticon',
     components: {
         favoritIcon
-    },
-    data() {
-        return {
-            
-        };
-    },
-
-    mounted() {
-        
-    },
-
-    methods: {
-        
-    },
+    }
 };
 </script>

@@ -36,8 +36,8 @@
       </v-card-title>
       <v-card-subtitle
         class="blue-grey--text text--lighten-5 text-caption font-weight-light"
-        >Rp. {{ formatedHarga }}</v-card-subtitle
-      >
+        >Rp. {{ formatedHarga }}
+      </v-card-subtitle>
     </v-img>
   </v-card>
 </template>
