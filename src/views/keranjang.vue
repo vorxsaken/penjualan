@@ -504,6 +504,7 @@ export default {
 
       const data = {
         subtotal: this.getSubTotal,
+        servis: this.$refs.servis.selectedItems[0].servis,
         ongkir: this.ongkir,
         total: this.total,
         pembayaran: this.pilihanPembayaran,

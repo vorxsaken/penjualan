@@ -19,6 +19,8 @@ import kategoriView from "../views/kategoriView.vue";
 import imagePreview from "../views/imagePreview.vue";
 import searchView from "../views/searchView.vue";
 import about from "../views/about.vue";
+import ubahPassword from "../views/ubahPassword.vue";
+import riwayatPesanan from "../views/riwayatPesanan.vue";
 import firebase from "firebase/app";
 import "firebase/auth";
 Vue.use(VueRouter)
@@ -70,7 +72,7 @@ const routes = [
     component: Keranjang
   },
   {
-    path: '/detailPesanan/:id',
+    path: '/detailPesanan/:id/:data',
     name: 'detailPesanan',
     component: detailPesanan
   },
@@ -113,6 +115,16 @@ const routes = [
     path: '/about',
     name: 'about',
     component: about
+  },
+  {
+    path: '/ubah_password',
+    name: 'ubah_password',
+    component: ubahPassword
+  },
+  {
+    path: '/riwayat_pesanan',
+    name: 'riwayat_pesanan',
+    component: riwayatPesanan
   }
 ]
 

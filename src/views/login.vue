@@ -143,7 +143,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 .title-login {
   font-family: "Pacifico" !important;
   font-size: 62px;

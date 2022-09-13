@@ -85,9 +85,13 @@
           </v-list-item>
         </v-list>
       </v-card-text>
-      <v-card-actions class="d-flex justify-center pb-4" v-if="produkPesanan[0].status == 'belum bayar'">
-        <v-btn class="px-8" color="primary" text large rounded>
-          Proses Ke Pembayaran
+      <v-card-actions class="d-flex justify-center pb-4">
+        <v-btn class="px-8" color="primary" large rounded outlined v-if="produkPesanan[0].status == 'belum bayar'">
+          <v-icon class="mr-2">mdi-cash</v-icon> Proses Ke Pembayaran
+        </v-btn>
+        <v-btn :loading="loadingDiterima" class="px-8" color="success" @click="diterima(produkPesanan[0].pemesananId)"
+         large rounded outlined v-else-if="produkPesanan[0].status == 'shipped'">
+          <v-icon class="mr-2">mdi-check-circle</v-icon> telah di terima
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -95,6 +99,8 @@
 </template>
 
 <script>
+import { changeAt } from '../composes/edit';
+
 export default {
   name: "PenjualanDetailpesanan",
 
@@ -107,10 +113,15 @@ export default {
         status: "Telah Dikirim",
         produkPesanan: [],
       },
+      loadingDiterima: false
     };
   },
   created() {
-    this.getDetailPesanan();
+    if(this.$route.params.data == 'riwayatPesanan'){
+      this.getDetailRiwayatPesanan();
+    }else {
+      this.getDetailPesanan();
+    }
   },
   mounted() {
     document.documentElement.scrollTop = 0;
@@ -123,10 +134,25 @@ export default {
     return;
   },
   methods: {
+    diterima(id){
+      this.loadingDiterima = true;
+      changeAt('pemesanan', id, {status: 'diterima'}).then(() => {
+        this.loadingDiterima = false;
+        this.$store.commit('filterPemesanan', id);
+        this.$router.replace({name: 'Pesanan'})
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
     getDetailPesanan() {
       this.produkPesanan = this.$store.state.pemesanan.filter((pesanan) => {
         return pesanan.pemesananId == this.$route.params.id;
       });
+    },
+    getDetailRiwayatPesanan(){
+      this.produkPesanan = this.$store.state.riwayatPesanan.filter((riwayat) => {
+        return riwayat.pemesananId == this.$route.params.id
+      })
     },
     formatedHarga(nilai) {
       let harga = Intl.NumberFormat("de-DE").format(nilai);

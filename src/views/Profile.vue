@@ -28,7 +28,7 @@
             </v-list-item-icon>
             <v-list-item-title> Profil </v-list-item-title>
           </v-list-item>
-          <v-list-item link>
+          <v-list-item :to="{ name: 'riwayat_pesanan'}" link>
             <v-list-item-icon><v-icon>mdi-history</v-icon></v-list-item-icon>
             <v-list-item-title>Riwayat Transaksi</v-list-item-title>
           </v-list-item>
@@ -42,13 +42,13 @@
             <v-list-item-icon><v-icon>mdi-bank</v-icon></v-list-item-icon>
             <v-list-item-title>Bank</v-list-item-title>
           </v-list-item> -->
-          <v-list-item link>
+          <v-list-item link :to="{name: 'ubah_password'}">
             <v-list-item-icon><v-icon>mdi-lock-reset</v-icon></v-list-item-icon>
             <v-list-item-title>Ubah Password</v-list-item-title>
           </v-list-item>
           <v-list-item link :to="{name: 'about'}">
             <v-list-item-icon><v-icon>mdi-information</v-icon></v-list-item-icon>
-            <v-list-item-title>About</v-list-item-title>
+            <v-list-item-title>Tentang</v-list-item-title>
           </v-list-item>
           <v-list-item link @click="logout">
             <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>

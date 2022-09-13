@@ -52,7 +52,8 @@
               block
               text
               color="primary"
-              :to="{ name: 'detailPesanan', params: {id: order.pemesananId} }"
+              @click="toDetail()"
+              :to="{ name: 'detailPesanan', params: {id: order.pemesananId, data: data} }"
               >Detail</v-btn
             >
           </v-list-item-subtitle>
@@ -65,7 +66,7 @@
 <script>
 export default {
   name: "PenjualanProducklist",
-  props: ["order"],
+  props: ["order", "data"],
   data() {
     return {};
   },

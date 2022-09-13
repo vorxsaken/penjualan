@@ -35,21 +35,9 @@
             >Pesanan</span
           >
           <v-spacer></v-spacer>
-          <v-menu offset-x>
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon v-bind="attrs" v-on="on">mdi-dots-horizontal</v-icon>
-            </template>
-            <v-list width="170">
-              <v-list-item-group v-model="selectedItem" color="primary">
-                <v-list-item link>
-                  <v-list-item-title>Diproses</v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                  <v-list-item-title>Selesai</v-list-item-title>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </v-menu>
+          <v-btn icon @click="reloadPesanan">
+            <v-icon>mdi-reload</v-icon>
+          </v-btn>
         </v-card-title>
         <v-card-text class="mb-n5">
           <v-row dense>
@@ -59,7 +47,7 @@
               v-for="(items, index) in this.$store.state.pemesanan"
               :key="index"
             >
-              <produckList :order="items" />
+              <produckList :order="items" data="pesanan" />
             </v-col>
           </v-row>
         </v-card-text>
@@ -88,6 +76,10 @@ export default {
   mounted() {},
 
   methods: {
+    reloadPesanan(){
+      this.$store.state.pemesanan = [];
+      this.$store.dispatch('getPemesanan');
+    },
     async getPesanan() {
       if (this.$store.state.pemesanan.length == 0) {
         await this.$store.dispatch("getPemesanan");

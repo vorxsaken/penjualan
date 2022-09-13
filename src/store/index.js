@@ -12,6 +12,7 @@ export default new Vuex.Store({
     hideKategori: null,
     pop: true,
     pemesanan: [],
+    riwayatPesanan: [],
     backCounter: 0,
     produk: [],
     keranjang: [],
@@ -43,6 +44,9 @@ export default new Vuex.Store({
     filterFavorit(state, payload) {
       state.favorit = state.favorit.filter((fav) => { return fav.likeId !== payload });
     },
+    filterPemesanan(state, payload) {
+      state.pemesanan = state.pemesanan.filter((pem) => { return pem.pemesananId !== payload });
+    },
     filterAlamat(state, payload) {
       state.alamat = state.alamat.filter((address) => {
         return address.alamatId !== payload
@@ -66,8 +70,48 @@ export default new Vuex.Store({
         state.kategori.push(kategori.data());
       })
     },
+    async getRiwayatPesanan({state}){
+      const getDiterimaStatus = db.collection('pemesanan')
+      .where("userEmail", '==', state.userEmail).where('status', '==', 'diterima').get();
+      const getDeclineStatus = db.collection('pemesanan')
+      .where("userEmail", '==', state.userEmail).where('status', '==', 'declined').get();
+
+      const [diterima, declined] = await Promise.all([
+        getDiterimaStatus,
+        getDeclineStatus
+      ])
+
+      const diterimaArray = diterima.docs;
+      const declinedArray = declined.docs;
+
+      const riwayatPesanan = diterimaArray.concat(declinedArray)
+
+      riwayatPesanan.forEach((document) => {
+        if (!state.riwayatPesanan.some((doc) => { return doc.pemesananId == document.data().pemesananId })) {
+          var subCollection = [];
+          document.ref.collection("pesanan").get().then((querySnapshot) => {
+            querySnapshot.forEach((query) => {
+              subCollection.push(query.data());
+            })
+          })
+
+          var pemesanan = {
+            ...document.data(),
+            pesanan: subCollection
+          }
+          state.riwayatPesanan.push(pemesanan);
+        }
+      })
+    },
     async getPemesanan({ state }) {
-      const database = await db.collection("pemesanan").where("userEmail", '==', state.userEmail).get();
+      const diterima = await db.collection("pemesanan").where("userEmail", '==', state.userEmail)
+      .where("status", '!=', 'diterima').get();
+
+      const diterimaArray = diterima.docs;
+      const declinedArray = diterima.docs.filter((dec) => {dec.data().status != 'declined'});
+
+      const database = diterimaArray.concat(declinedArray);
+
       database.forEach((document) => {
         if (!state.pemesanan.some((doc) => { return doc.pemesananId == document.data().pemesananId })) {
           var subCollection = [];

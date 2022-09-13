@@ -2,10 +2,16 @@
   <div class="d-flex justify-center">
     <v-card elevation="0" width="700">
       <v-card-title class="d-flex justify-center mb-8">
-        <input @change="stateChange" type="file" ref="foto" class="d-none" />
-        <v-avatar size="180" class="grey lighten-1" style="cursor: pointer" @click="updateAvatar">
-          <v-img :src="getImageUrl"> </v-img>
-        </v-avatar>
+        <div style="position: relative">
+          <input @change="stateChange" type="file" ref="foto" class="d-none" />
+          <v-avatar size="210" class="grey lighten-1" style="cursor: pointer" @click="updateAvatar">
+            <v-img :src="getImageUrl"> </v-img>
+          </v-avatar>
+          <span class="grey darken-1 d-flex justify-center align-center"
+            style="position: absolute; bottom: 6px; right: 10px;width: auto; height: auto; padding: 12px; border-radius: 100%">
+            <v-icon color="white">mdi-file-image-plus-outline</v-icon>
+          </span>
+        </div>
       </v-card-title>
       <v-card-text>
         <v-row class="">
@@ -29,13 +35,29 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <!-- dialog -->
+    <v-dialog persistent v-model="dialog" width="350">
+      <v-card elevation="0">
+        <v-card-title class="d-flex justify-center">
+          <video ref="myvideo" width="200" height="200" src="../assets/order-success.mp4"></video>
+        </v-card-title>
+        <v-card-subtitle class="d-flex justify-center text-caption blue-grey--text text--darken-1">
+          Data User Berhasil Diupdate
+        </v-card-subtitle>
+        <v-card-actions class="d-flex flex-column">
+          <v-btn color="error" text @click="dialog = false">Kembali</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { changeAt, updateWithAFile } from "../composes/edit.js";
+import { deleteFileFromStorageWithUrl } from "../composes/delete.js"
 import firebase from "firebase/app";
 import "firebase/auth";
+import Compressor from 'compressorjs';
 
 export default {
   name: "profilUser",
@@ -44,6 +66,7 @@ export default {
       avatar: null,
       username: "",
       upLoad: false,
+      dialog: false
     };
   },
   mounted() { },
@@ -73,7 +96,19 @@ export default {
       this.$refs.foto.click();
     },
     stateChange(e) {
-      this.avatar = e.target.files[0];
+      const file = e.target.files[0];
+      const data = this;
+
+      new Compressor(file, {
+        quality: 0.8,
+        width: 600,
+        success(result){
+          data.avatar = result   
+        },
+        error(err){
+          console.log(err);
+        }
+      })
     },
     updateUser() {
       const { uid } = firebase.auth().currentUser;
@@ -85,6 +120,10 @@ export default {
             username: this.username,
           }).then((res) => {
             console.log(res);
+            this.dialog = true;
+            setTimeout(() => {
+              this.$refs.myvideo.play();
+            },300)
             this.upLoad = false;
             this.$store.state.userName = this.username;
           });
@@ -96,8 +135,13 @@ export default {
             { username: this.username },
             foto,
             "avatar"
-          ).then((ref) => {
+          ).then(async (ref) => {
+            await deleteFileFromStorageWithUrl(this.$store.state.userAvatar)
             this.upLoad = false;
+            this.dialog = true;
+            setTimeout(() => {
+              this.$refs.myvideo.play();
+            },300)
             this.$store.state.userName = this.username;
             this.$store.state.userAvatar = ref;
           });

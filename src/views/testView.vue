@@ -7,8 +7,7 @@
           :style="{ width: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? '' : caraouselWidth + 'px' }">
           <v-carousel style="border-radius: 10px" :height="height" delimiter-icon="mdi-minus" hide-delimiter-background
             show-arrows-on-hover>
-            <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index" :src="item.src"
-              :to="{ name: 'imagePreview', params: { src: item.src } }">
+            <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index" :src="item.src">
             </v-carousel-item>
           </v-carousel>
         </div>
@@ -69,7 +68,7 @@
     </v-row>
     <div class="d-flex justify-center">
       <div :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 'mt-12' : ''"
-        :style="{ width: this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 800 + 'px' : '100%'}">
+        :style="{ width: this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 800 + 'px' : '80%'}">
         <v-divider></v-divider>
       </div>
     </div>
