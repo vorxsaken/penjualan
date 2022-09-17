@@ -27,7 +27,7 @@
         v-else-if="isLoad == false && isEmpty == true"
         class="d-flex justify-center"
       >
-        <v-card-text class="mt-2 d-flex align-center justify-center">
+        <v-card-text style="height: 65vh;" class="d-flex align-center justify-center">
           <v-card elevation="0">
             <v-card-title class="d-flex justify-center">
               <v-icon size="60">mdi-delete-empty</v-icon>

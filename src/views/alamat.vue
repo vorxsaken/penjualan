@@ -19,7 +19,7 @@
     </v-dialog>
     <v-container>
       <v-card elevation="0" class="pb-6">
-        <v-card-title class="pb-4"> Daftar Alamat </v-card-title>
+        <v-card-title class="pb-4 font-weight-bold text-h4 blue-grey--text text--darken-1"> Daftar Alamat </v-card-title>
         <v-card-text>
           <v-row>
             <v-col v-for="(data, index) in this.$store.state.alamat" :key="index" cols="12" md="4">

@@ -1,42 +1,22 @@
 <template>
   <v-card max-width="375" elevation="0">
-    <v-icon
-      style="position: absolute; z-index: 1"
-      class="ms-2 mt-2"
-      @click="favoritClick"
-      v-ripple
-      :color="isFavorit ? 'red' : 'white'"
-      >mdi-heart</v-icon
-    >
+    <v-icon style="position: absolute; z-index: 1" class="ms-2 mt-2" @click="favoritClick" v-ripple
+      :color="isFavorit ? 'red' : 'white'">mdi-heart</v-icon>
     <div class="rating">
-      <v-icon color="white" x-small>mdi-star</v-icon
-      ><span class="ml-1 text-overline white--text font-weight-bold">{{
-        isNaN(produk.rating) ? "0" : produk.rating
+      <v-icon color="white" x-small>mdi-star</v-icon><span class="ml-1 text-overline white--text font-weight-bold">{{
+      isNaN(produk.rating) ? "0" : produk.rating
       }}</span>
     </div>
-    <v-img
-      style="cursor: pointer"
-      @click="produkClick"
-      height="220"
-      class="align-end"
-      :src="produk.gambar[0]"
-      gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)"
-    >
+    <v-img style="cursor: pointer" @click="produkClick" height="220" class="align-end" :src="produk.gambar[0].src"
+      gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)">
       <template v-slot:placeholder>
-        <v-row
-          class="grey lighten-2 fill-height ma-0"
-          align="center"
-          justify="center"
-        >
+        <v-row class="grey lighten-2 fill-height ma-0" align="center" justify="center">
         </v-row>
       </template>
-      <v-card-title style="word-break: break-word;" 
-      class="text-subtitle-2 white--text font-weight-medium">
-      {{ title }}
+      <v-card-title style="word-break: break-word;" class="text-subtitle-2 white--text font-weight-medium">
+        {{ title }}
       </v-card-title>
-      <v-card-subtitle
-        class="blue-grey--text text--lighten-5 text-caption font-weight-light"
-        >Rp. {{ formatedHarga }}
+      <v-card-subtitle class="blue-grey--text text--lighten-5 text-caption font-weight-light">Rp. {{ formatedHarga }}
       </v-card-subtitle>
     </v-img>
   </v-card>
@@ -46,12 +26,16 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import db from "../plugins/firebaseInit.js";
+// import Compressor from "compressorjs";
+import { compressImage } from "../composes/composes";
+
 export default {
   name: "PenjualanProduckcard",
   props: ["produk"],
   data() {
     return {
       isFavorit: false,
+      image: ''
     };
   },
   computed: {
@@ -75,7 +59,7 @@ export default {
       this.formatedHarga();
     },
   },
-  mounted() {},
+  mounted() { },
   created() {
     this.isLiked();
   },
@@ -87,26 +71,67 @@ export default {
     produkClick() {
       this.$emit("produkClick", this.produk.produkId);
     },
-    async isLiked() {
-      const database = await db.collection("like").get();
-      const arr = database.docs.map((doc) => doc.data());
-      if (
-        arr.some((data) => {
-          return (
-            data.user == firebase.auth().currentUser.email &&
-            data.produkId == this.produk.produkId
-          );
-        })
-      ) {
-        this.isFavorit = !this.isFavorit;
+    async compress(gambar){
+      // fetch(gambar).then(result => result.blob()).then((blob) => {
+      //   new Compressor(blob, {
+      //     quality: 0.8,
+      //     width: 300,
+      //     success(res){
+      //       const con = URL.createObjectURL(res);
+      //       return con;
+      //     }
+      //   })
+      // })
+
+      // const image = new Image();
+      // image.src = gambar;
+      
+      // image.onload = () => {
+      //   new Compressor(this, {
+      //     quality: 0.8,
+      //     width: 300,
+      //     success(result){
+      //       const img = URL.createObjectURL(result);
+      //       console.log(img)
+      //     }
+      //   })
+      // }
+
+      const image = new Image();
+      image.src = gambar;
+
+      var width = 0;
+      var height = 0;
+      image.onload = function(){
+        width = this.width;
+        height = this.height;
       }
+
+      const s = await compressImage(gambar, 300 / width, width, height);
+      const img = URL.createObjectURL(s);
+      return img;
+      
     },
-  },
-};
+    async isLiked() {
+        const database = await db.collection("like").get();
+        const arr = database.docs.map((doc) => doc.data());
+        if (
+          arr.some((data) => {
+            return (
+              data.user == firebase.auth().currentUser.email &&
+              data.produkId == this.produk.produkId
+            );
+          })
+        ) {
+          this.isFavorit = !this.isFavorit;
+        }
+      },
+    },
+  };
 </script>
 
 <style lang="scss" scoped>
-.rating{
+.rating {
   position: absolute;
   z-index: 1;
   right: 6px;

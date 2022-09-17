@@ -6,7 +6,8 @@
     <div v-else>
       <navbar />
       <v-main>
-        <router-view></router-view>
+        <router-view>
+        </router-view>
       </v-main>
       <foot v-if="foot" />
       <v-dialog width="400" v-model="firstVisit" persistent>
@@ -16,11 +17,15 @@
             <v-img :src="require('./assets/cuteCat.webp')"></v-img>
           </v-card-subtitle>
           <v-card-text class="d-flex justify-center">
-            <span class="text-subtitle-2 blue-grey--text text-center text--darken-1 
-            font-weight-medium">
+            <span class="text-subtitle-2 blue-grey--text text--darken-1 
+            font-weight-medium text-start">
               Aplikasi ini masih dalam pengembangan. <br />
-              <span class="font-weight-bold">Tech Stack</span> : <br />
-              <div class="mt-3">
+              <span v-if="this.$store.state.userEmail.length == 0">
+                <span class="font-weight-thin text-caption">email: vorxsaken@vorxsaken.com</span><br />
+                <span class="font-weight-thin text-caption">password: adminadmin</span><br />
+              </span>
+              <div class="mt-3 text-center">
+                <span class="font-weight-bold">Tech Stack</span> : <br />
                 <v-icon color="yellow darken-1" class="mr-2">mdi-firebase</v-icon>
                 <v-icon class="mr-2">$vuetify.icons.express</v-icon>
                 <v-icon color="green darken-1" class="mr-2">mdi-vuejs</v-icon>
@@ -29,8 +34,7 @@
             </span>
           </v-card-text>
           <v-card-actions class="d-flex justify-center">
-            <v-btn outlined color="primary" rounded class="py-4 px-8" @click="notFirstTime" 
-            :disabled="okayDisbaled">
+            <v-btn outlined color="primary" rounded class="py-4 px-8" @click="notFirstTime" :disabled="okayDisbaled">
               Okay {{ okayDisbaled ? "(" + second + ")" : "" }}
             </v-btn>
           </v-card-actions>
@@ -47,6 +51,7 @@ import { App as CapacitorApp } from "@capacitor/app";
 import { Keyboard } from "@capacitor/keyboard";
 import store from "./store";
 import firebase from "firebase/app";
+
 import "firebase/auth";
 export default {
   name: "App",
@@ -104,7 +109,7 @@ export default {
     Keyboard.addListener("keyboardDidShow", () => {
       t.foot = false;
     }).catch(() => { });
-    
+
     Keyboard.addListener("keyboardDidHide", () => {
       if (this.$route.name == "Kategori") {
         t.foot = false;
@@ -186,6 +191,7 @@ export default {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Amita&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 * {
   margin: 0;
   padding: 0;

@@ -2,7 +2,7 @@
     <div class="d-flex justify-center py-4 px-4">
         <v-card elevation="0" max-width="600">
             <v-card-title class="title-login sm:text-h6 font-weight-bold sm d-flex justify-center mb-2">
-                E-commerce App
+                EZA Electronik
             </v-card-title>
             <v-card-subtitle class="d-flex justify-center">
                 versi: 1.0.0

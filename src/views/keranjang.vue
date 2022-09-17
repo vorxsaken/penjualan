@@ -1,82 +1,48 @@
 <template>
-  <div
-    :style="{
-      height:
-        this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-          ? this.$vuetify.breakpoint.height - 140 + 'px'
-          : '',
-    }"
-    :class="
+  <div :style="{
+    height:
       this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-        ? 'overflow-y-auto'
-        : ''
-    "
-  >
-    <div
-      v-if="showKeranjang" style="height: 80vh"
-      class="d-flex flex-column justify-center align-center"
-    >
+        ? this.$vuetify.breakpoint.height - 140 + 'px'
+        : '',
+  }" :class="
+    this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+      ? 'overflow-y-auto'
+      : ''
+  ">
+    <div v-if="showKeranjang" style="height: 80vh" class="d-flex flex-column justify-center align-center">
       <v-icon size="80">mdi-delete-empty</v-icon>
       <h4 class="" style="font-weight: 300">Keranjang Kosong :(</h4>
     </div>
-    <v-card
-      v-else
-      elevation="0"
-      :class="
-        this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-          ? ''
-          : 'px-12'
-      "
-    >
-      <v-card-title class="font-weight-bold text-body-1 ml-4"
-        >Keranjang</v-card-title
-      >
+    <v-card v-else elevation="0" :class="
+      this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+        ? ''
+        : 'px-12'
+    ">
+      <v-card-title class="font-weight-bold text-body-1 ml-4">Keranjang</v-card-title>
       <v-card-text style="max-height: 360px" class="overflow-y-auto pt-4">
-        <v-skeleton-loader
-          v-if="isKeranjang"
-          class="mx-auto"
-          max-width="320"
-          type="list-item-avatar-three-line"
-        >
+        <v-skeleton-loader v-if="isKeranjang" class="mx-auto" max-width="320" type="list-item-avatar-three-line">
         </v-skeleton-loader>
         <v-list dense v-else>
-          <v-list-item
-            v-for="(list, index) in keranjang"
-            :key="index"
-            style="
-              box-shadow: 0px 0px 15 px -5px rgba(0, 0, 0, 0.2);
-              border-radius: 10px;
-            "
-            class="mb-2"
-          >
+          <v-list-item v-for="(list, index) in keranjang" :key="index" 
+          style="box-shadow: 0px 0px 15 px -5px rgba(0, 0, 0, 0.2);border-radius: 10px;" class="mb-2">
             <v-list-item-avatar size="80" rounded="" color="grey">
               <v-img :src="list.src"> </v-img>
             </v-list-item-avatar>
             <v-list-item-content class="pt-0 mt-n6">
               <v-list-item-title class="text-body-1 font-weight-bold">{{
-                list.title
+              list.title
               }}</v-list-item-title>
-              <v-list-item-subtitle
-                >Rp
-                {{ formatHarga(list.harga, list.jumlah) }}</v-list-item-subtitle
-              >
+              <v-list-item-subtitle>Rp
+                {{ formatHarga(list.harga, list.jumlah) }}</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn small icon :disabled="disabledButton">
-                <v-icon
-                  class="black--text font-weight-bold"
-                  @click="add(index, list.keranjangId)"
-                  small
-                  >mdi-plus
+                <v-icon class="black--text font-weight-bold" @click="add(index, list.keranjangId)" small>mdi-plus
                 </v-icon>
               </v-btn>
               <v-btn small text icon>{{ list.jumlah }}</v-btn>
               <v-btn small icon :disabled="disabledButton">
-                <v-icon
-                  @click="kurangi(index, list.keranjangId)"
-                  class="black--text font-weight-bold"
-                  small
-                  >mdi-minus
+                <v-icon @click="kurangi(index, list.keranjangId)" class="black--text font-weight-bold" small>mdi-minus
                 </v-icon>
               </v-btn>
             </v-list-item-action>
@@ -90,18 +56,8 @@
         <v-list dense>
           <v-list-item>
             <v-list-item-content>
-              <v-select
-                v-model="pilihAlamat"
-                hide-details="auto"
-                single-line
-                outlined
-                flat
-                :items="userAlamat"
-                item-text="title"
-                item-value="alamatId"
-                label="pilih alamat mu"
-                :messages="detailAlamat"
-              >
+              <v-select v-model="pilihAlamat" hide-details="auto" single-line outlined flat :items="userAlamat"
+                item-text="title" item-value="alamatId" label="pilih alamat mu" :messages="detailAlamat">
               </v-select>
             </v-list-item-content>
           </v-list-item>
@@ -170,20 +126,9 @@
           </v-list-item> -->
           <v-list-item v-if="showAlamatLengkap">
             <v-list-item-content>
-              <v-select
-                v-model="pilihKurir"
-                hide-details="auto"
-                single-line
-                outlined
-                flat
-                :rules="[(v) => !!v || 'kurir tidak boleh kosong']"
-                :items="kurir"
-                item-text="title"
-                item-value="value"
-                :loading="kurirLoader"
-                loader-height="3"
-                label="Kurir"
-              >
+              <v-select v-model="pilihKurir" hide-details="auto" single-line outlined flat
+                :rules="[(v) => !!v || 'kurir tidak boleh kosong']" :items="kurir" item-text="title" item-value="value"
+                :loading="kurirLoader" loader-height="3" label="Kurir">
               </v-select>
               <v-list-item-subtitle>
                 <span class="text-caption grey--text text--darken-1">
@@ -195,47 +140,27 @@
           </v-list-item>
           <v-list-item v-if="showServis">
             <v-list-item-content>
-              <v-select
-                v-model="pilihServis"
-                hide-details="auto"
-                single-line
-                outlined
-                flat
-                :rules="[(v) => !!v || 'servis tidak boleh kosong']"
-                :items="servis"
-                ref="servis"
-                item-text="servis"
-                item-value="ongkir"
-                label="servis"
-              >
+              <v-select v-model="pilihServis" hide-details="auto" single-line outlined flat
+                :rules="[(v) => !!v || 'servis tidak boleh kosong']" :items="servis" ref="servis" item-text="servis"
+                item-value="ongkir" label="servis">
               </v-select>
             </v-list-item-content>
           </v-list-item>
         </v-list>
       </v-card-text>
       <v-card-text>
-        <span class="text-body-2 font-weight-bold black--text ml-4"
-          >Metode pembayaran</span
-        >
+        <span class="text-body-2 font-weight-bold black--text ml-4">Metode pembayaran</span>
         <v-expansion-panels flat accordion class="mt-4">
           <v-expansion-panel v-for="(item, index) in pembayaran" :key="index">
             <v-expansion-panel-header class="px-4">{{
-              item.title
+            item.title
             }}</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-radio-group v-model="pilihanPembayaran">
-                <v-radio
-                  v-for="(bayar, i) in item.pilihan"
-                  :key="i"
-                  :value="bayar.title"
-                >
+                <v-radio v-for="(bayar, i) in item.pilihan" :key="i" :value="bayar.title">
                   <template v-slot:label>
                     <v-avatar size="80" tile class="mr-2">
-                      <v-img
-                        :alt="bayar.title"
-                        contain
-                        :src="getSource(bayar.img, '.png')"
-                      ></v-img>
+                      <v-img :alt="bayar.title" contain :src="getSource(bayar.img, '.png')"></v-img>
                     </v-avatar>
                   </template>
                 </v-radio>
@@ -248,62 +173,57 @@
         <v-card-title class="black--text">
           <span class="text-body-2 font-weight-bold">Sub Total</span>
           <v-spacer></v-spacer>
-          <span class="text-body-1 font-weight-bold"
-            >Rp {{ formatHarga(getSubTotal, 1) }}</span
-          >
+          <span class="text-body-1 font-weight-bold">Rp {{ formatHarga(getSubTotal, 1) }}</span>
         </v-card-title>
         <v-card-title class="black--text">
           <span class="text-body-2 font-weight-bold">Ongkir</span>
           <v-spacer></v-spacer>
-          <span class="text-body-1 font-weight-bold"
-            >Rp {{ this.formatHarga(this.ongkir, 1) }}</span
-          >
+          <span class="text-body-1 font-weight-bold">Rp {{ this.formatHarga(this.ongkir, 1) }}</span>
         </v-card-title>
         <v-card-title class="black--text">
           <span class="text-body-2 font-weight-bold">Total</span>
           <v-spacer></v-spacer>
-          <span class="text-body-1 font-weight-bold"
-            >Rp {{ formatHarga(total, 1) }}</span
-          >
+          <span class="text-body-1 font-weight-bold">Rp {{ formatHarga(total, 1) }}</span>
         </v-card-title>
       </v-card-text>
       <v-card-actions class="d-flex justify-center pb-4">
-        <v-btn
-          width="300"
-          @click="prosesPesanan"
-          rounded
-          color="grey darken-4"
-          class="white--text"
-          :disabled="disPesan"
-          x-large
-          :loading="loadPesanan"
-          >Proses Ke Pemesanan
+        <v-btn width="300" @click="prosesPesanan" rounded color="grey darken-4" class="white--text" :disabled="disPesan"
+          x-large :loading="loadPesanan">Proses Ke Pemesanan
         </v-btn>
       </v-card-actions>
     </v-card>
     <v-dialog persistent v-model="pemesananDialog" width="350">
       <v-card elevation="0">
         <v-card-title class="d-flex justify-center">
-          <video
-            ref="myvideo"
-            width="200"
-            height="200"
-            src="../assets/order-success.mp4"
-          ></video>
+          <video ref="myvideo" width="200" height="200" src="../assets/order-success.mp4"></video>
         </v-card-title>
-        <v-card-subtitle
-          class="d-flex justify-center text-caption blue-grey--text text--darken-1"
-        >
+        <v-card-subtitle class="d-flex justify-center text-caption blue-grey--text text--darken-1">
           Pembuatan Pesanan Anda Berhasil
         </v-card-subtitle>
         <v-card-actions class="d-flex flex-column">
-          <v-btn color="primary" text class="mb-2">Proses Ke Pembayaran</v-btn>
-          <v-btn ref="buttom" color="error" text @click="pemesananKembali"
-            >Kembali</v-btn
-          >
+          <v-btn color="primary" @click="proses_ke_pembayaran" :loading="loading_proses_pembayaran" text class="mb-2">
+            Proses Ke Pembayaran</v-btn>
+          <v-btn ref="buttom" color="error" text @click="pemesananKembali">Kembali</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- redirect to payment -->
+    <v-dialog v-model="redirectPayment" width="350" persistent>
+      <v-card elevation="0">
+        <v-card-title class="d-flex justify-center mb-4">
+          <v-icon size="100" color="success">mdi-check-circle</v-icon>
+        </v-card-title>
+        <v-card-subtitle class="d-flex justify-center text-center">
+          {{ pesan_bayar }}
+        </v-card-subtitle>
+        <v-card-actions class="d-flex justify-center pb-8">
+          <v-btn color="primary" @click="proses_ke_bayar" class="px-4" outlined>{{ tombol_pesan }}</v-btn>
+          <v-btn color="error" outlined @click="pemesananKembali">Kembali</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- dialog penduan -->
+    <panduanPembayaran :show="panduan_toggle" :vbn="virtual_number" />
   </div>
 </template>
 
@@ -313,12 +233,24 @@ import axios from "axios";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { getDate } from "../composes/composes.js";
+import panduanPembayaran from "../components/dialogPanduan.vue";
 
 export default {
   name: "PenjualanKeranjang",
-
+  components: {
+    panduanPembayaran
+  },
   data() {
     return {
+      pemesananId: null,
+      bayar: null,
+      pesan_bayar: null,
+      panduan_toggle: false,
+      virtual_number: null,
+      tombol_pesan: '',
+      redirectPayment: false,
+      linkBayar: null,
+      loading_proses_pembayaran: false,
       pemesananDialog: false,
       kurirLoader: false,
       loadPesanan: false,
@@ -367,24 +299,8 @@ export default {
           title: "Virtual Banking",
           pilihan: [
             {
-              title: "Bri",
+              title: "BRI",
               img: "bri",
-            },
-            {
-              title: "Bni",
-              img: "bni",
-            },
-            {
-              title: "Bca",
-              img: "bca",
-            },
-            {
-              title: "Mandiri",
-              img: "mandiri",
-            },
-            {
-              title: "Bsi syariah",
-              img: "bsi",
             },
           ],
         },
@@ -392,8 +308,8 @@ export default {
           title: "E wallet",
           pilihan: [
             {
-              title: "ID_OVO",
-              img: "ovo",
+              title: "ID_LINKAJA",
+              img: "linkaja",
             },
             {
               title: "ID_DANA",
@@ -402,16 +318,7 @@ export default {
             {
               title: "ID_SHOPEEPAY",
               img: "shopee",
-            },
-          ],
-        },
-        {
-          title: "QR Code",
-          pilihan: [
-            {
-              title: "QRcode",
-              img: "qrcode",
-            },
+            }
           ],
         },
       ],
@@ -472,6 +379,58 @@ export default {
     },
   },
   methods: {
+    proses_ke_bayar() {
+      if (this.tombol_pesan == 'Bayar') {
+        window.open(this.linkBayar, "Bayar", "width=700, height=700");
+        this.pemesananKembali();
+      }else{
+        this.panduan_toggle = true;
+      }
+    },
+    proses_ke_pembayaran() {
+      this.loading_proses_pembayaran = true;
+      var metode = this.pembayaran.forEach((payment) => {
+        payment.pilihan.forEach((tit) => {
+          if (tit.title == this.pilihanPembayaran) {
+            return payment.title;
+          }
+        });
+      });
+
+      if (metode == "Virtual Banking") {
+        axios.post('http://localhost:3001/user/create_virtual_banking_charge', {
+          id: this.pemesananId,
+          bank_code: this.pilihanPembayaran,
+          name: this.$store.state.userName
+        }).then((result) => {
+          this.pemesananDialog = false;
+          setTimeout(() => {
+            this.pesan_bayar = 'pemrosesan berhasil, tekan tombol panduan untuk melihat cara pembayaran'
+            this.tombol_pesan = 'Panduan'
+            this.virtual_number = result;
+            this.redirectPayment = true;
+          }, 200)
+        })
+      } else if (metode == 'E wallet') {
+        axios.post('http://localhost:3001/user/create_ewallet_charge', {
+          id: this.pemesananId,
+          total: this.total,
+          metode: this.pilihanPembayaran
+        }).then((result) => {
+          this.pemesananDialog = false;
+          setTimeout(() => {
+            this.pesan_bayar = 'pemrosesan berhasil, klik tombol bayar dibawah untuk pembayaran'
+            this.tombol_pesan = 'Bayar';
+            this.redirectPayment = true;
+            this.linkBayar = result.data.actions.desktop_web_checkout_url;
+            console.log(this.linkBayar);
+          }, 200)
+        }).catch((err) => {
+          console.log('err', err);
+          this.loading_proses_pembayaran = false;
+        })
+      }
+    },
     pemesananKembali() {
       this.keranjang.forEach((keranjang) => {
         db.collection("keranjang").doc(keranjang.keranjangId).delete();
@@ -539,6 +498,7 @@ export default {
           }
           this.loadPesanan = false;
           this.pemesananDialog = true;
+          this.pemesananId = collection.id;
           this.$store.dispatch("getPemesanan");
           setTimeout(() => {
             this.$refs.myvideo.play();
@@ -609,7 +569,7 @@ export default {
           this.showServis = true;
           this.kurirLoader = false;
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     showCart() {
       if (this.$store.state.keranjang.length < 1) {

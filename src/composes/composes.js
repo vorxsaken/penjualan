@@ -13,3 +13,28 @@ export function getDate(){
     return date;
 
 }
+
+export function compressImage(image, scale, initialWidth, initialHeight){
+    return new Promise((resolve, reject) => {
+        var img = new Image();
+        img.src = image;
+
+        const canvas = document.createElement("canvas");
+
+        canvas.width = scale * initialWidth;
+        canvas.height = scale * initialHeight;
+        const ctx = canvas.getContext("2d");
+        
+        if(image == null) {
+            return reject("no image input");
+        }
+
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            ctx.canvas.toBlob((blob) => {
+                resolve(blob)
+            }, "image/png");
+        }
+    })
+}

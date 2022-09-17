@@ -30,7 +30,7 @@
           </v-list-item>
           <v-list-item :to="{ name: 'riwayat_pesanan'}" link>
             <v-list-item-icon><v-icon>mdi-history</v-icon></v-list-item-icon>
-            <v-list-item-title>Riwayat Transaksi</v-list-item-title>
+            <v-list-item-title>Riwayat Pesanan</v-list-item-title>
           </v-list-item>
           <v-list-item link :to="{ name: 'alamat' }">
             <v-list-item-icon

@@ -86,7 +86,8 @@
         </v-list>
       </v-card-text>
       <v-card-actions class="d-flex justify-center pb-4">
-        <v-btn class="px-8" color="primary" large rounded outlined v-if="produkPesanan[0].status == 'belum bayar'">
+        <v-btn @click="proses_ke_pembayaran" :loading="loading_proses_pembayaran" class="px-8" color="primary" large rounded outlined 
+        v-if="produkPesanan[0].status == 'belum bayar'">
           <v-icon class="mr-2">mdi-cash</v-icon> Proses Ke Pembayaran
         </v-btn>
         <v-btn :loading="loadingDiterima" class="px-8" color="success" @click="diterima(produkPesanan[0].pemesananId)"
@@ -95,11 +96,27 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <!-- proses ke bayar -->
+    <v-dialog v-model="redirectPayment" width="350" persistent>
+      <v-card elevation="0">
+        <v-card-title class="d-flex justify-center mb-4">
+          <v-icon size="100" color="success">mdi-check-circle</v-icon>
+        </v-card-title>
+        <v-card-subtitle class="d-flex justify-center text-center">
+          pemrosesan berhasil, klik tombol bayar dibawah untuk pembayaran
+        </v-card-subtitle>
+        <v-card-actions class="d-flex justify-center pb-8">
+          <v-btn color="primary" @click="proses_ke_bayar" class="px-4" outlined>Bayar</v-btn>
+          <v-btn color="error" outlined @click="pemesananKembali">Kembali</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { changeAt } from '../composes/edit';
+import axios from 'axios';
 
 export default {
   name: "PenjualanDetailpesanan",
@@ -112,6 +129,9 @@ export default {
         total: 150000,
         status: "Telah Dikirim",
         produkPesanan: [],
+        redirectPayment: false,
+        linkBayar: null,
+        loading_proses_pembayaran: false
       },
       loadingDiterima: false
     };
@@ -134,6 +154,28 @@ export default {
     return;
   },
   methods: {
+    proses_ke_bayar() {
+      window.open(this.linkBayar, "Bayar", "width=700, height=700");
+    },
+    proses_ke_pembayaran() {
+      this.loading_proses_pembayaran = true;
+      axios.post('http://localhost:3001/user/create_ewallet_charge', {
+        id: this.pemesananId,
+        total: this.total,
+        metode: this.pilihanPembayaran
+      }).then((result) => {
+        this.loading_proses_pembayaran = false;
+        setTimeout(() => {
+          this.redirectPayment = true;
+          this.linkBayar = result.data.actions.desktop_web_checkout_url;
+          console.log(this.linkBayar);
+          console.log(JSON.stringify(result));
+        }, 200)
+      }).catch((err) => {
+        console.log('err', err);
+        this.loading_proses_pembayaran = false;
+      })
+    },
     diterima(id){
       this.loadingDiterima = true;
       changeAt('pemesanan', id, {status: 'diterima'}).then(() => {

@@ -17,7 +17,7 @@
         <v-row class="">
           <v-col class="py-0">
             <v-text-field outlined flat single-line hide-details="auto"
-              :rules="[(v) => !!v || 'Username tidak boleh kosong']" label="Username" v-model="username">
+              :rules="[(v) => !!v || 'Username tidak boleh kosong']" label="Username" hint="pastikan merupakan nama asli anda" v-model="username">
             </v-text-field>
           </v-col>
         </v-row>
