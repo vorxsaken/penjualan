@@ -1,17 +1,32 @@
 <template>
-    <v-dialog v-model="show" width="450" persistent>
-        <v-card elevation="0">
+    <v-dialog v-model="show" width="500" persistent>
+        <v-card elevation="0" :key="key">
             <v-card-title class="d-flex justify-center text-h5 font-weight-bold blue-grey--text text--darken-2">Panduan
                 Pembayaran</v-card-title>
             <v-card-text>
-                <v-expansion-panels>
+                <v-expansion-panels flat>
                     <v-expansion-panel v-for="(method, index) in pembayaran" :key="index">
-                        <v-expansion-panel-header>{{ method.media.nama }}</v-expansion-panel-header>
+                        <v-expansion-panel-header class="font-weight-black">{{ method.media.nama }}
+                        </v-expansion-panel-header>
                         <v-expansion-panel-content>
+                            <div class="d-flex flex-column" v-for="(steps, index) in method.media.steps" :key="index">
+                                <div class="font-weight-black text-subtitle-1">{{
+                                steps.title}}</div>
+                                <div>
+                                    <ol>
+                                        <li v-for="(langkah, index) in steps.langkah" :key="index">{{ langkah }}</li>
+                                    </ol>
+                                </div>
+                            </div>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
             </v-card-text>
+            <v-card-actions class="d-flex justify-center pb-6">
+                <v-btn class="px-6" color="error" outlined @click="kembali">
+                    Kembali
+                </v-btn>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
@@ -21,6 +36,8 @@ export default {
     props: ["show", "vbn"],
     data() {
         return {
+            key: 2,
+            interval: null,
             pembayaran: [
                 {
                     media: {
@@ -37,7 +54,7 @@ export default {
                             {
                                 title: 'Langkah 2: Detail Pembayaran',
                                 langkah: [
-                                    'Masukkan Nomor Virtual Account 92001988572642231 dan jumlah yang ingin andabayarkan',
+                                    `Masukkan Nomor Virtual Account ${this.vbn} dan jumlah yang ingin anda bayarkan`,
                                     'Periksa data transaksi dan tekan "YA"'
                                 ]
                             },
@@ -64,7 +81,7 @@ export default {
                             {
                                 title: 'Langkah 2: Detail Pembayaran',
                                 langkah: [
-                                    'Masukkan Nomor Virtual Account 92001988572642231 dan jumlah yang ingin anda bayarkan',
+                                    `Masukkan Nomor Virtual Account ${this.vbn} dan jumlah yang ingin anda bayarkan`,
                                     'Masukkan password anda kemudian masukkan mToken internet banking'
                                 ]
                             },
@@ -91,7 +108,7 @@ export default {
                             {
                                 title: 'Langkah 2: Detail Pembayaran',
                                 langkah: [
-                                    'Masukkan Nomor Virtual Account anda 92001988572642231 dan jumlah yang ingin anda bayarkan',
+                                    `Masukkan Nomor Virtual Account anda ${this.vbn} dan jumlah yang ingin anda bayarkan`,
                                     'Masukkan PIN Mobile Banking BRI'
                                 ]
                             },
@@ -105,6 +122,17 @@ export default {
                     }
                 },
             ]
+        }
+    },
+    watch: {
+        show() {
+           this.key++;
+        },
+    },
+    methods: {
+        kembali() {
+            this.$emit('kembali');
+
         }
     }
 

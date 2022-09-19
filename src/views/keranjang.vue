@@ -23,8 +23,8 @@
         <v-skeleton-loader v-if="isKeranjang" class="mx-auto" max-width="320" type="list-item-avatar-three-line">
         </v-skeleton-loader>
         <v-list dense v-else>
-          <v-list-item v-for="(list, index) in keranjang" :key="index" 
-          style="box-shadow: 0px 0px 15 px -5px rgba(0, 0, 0, 0.2);border-radius: 10px;" class="mb-2">
+          <v-list-item v-for="(list, index) in keranjang" :key="index"
+            style="box-shadow: 0px 0px 15 px -5px rgba(0, 0, 0, 0.2);border-radius: 10px;" class="mb-2">
             <v-list-item-avatar size="80" rounded="" color="grey">
               <v-img :src="list.src"> </v-img>
             </v-list-item-avatar>
@@ -223,7 +223,8 @@
       </v-card>
     </v-dialog>
     <!-- dialog penduan -->
-    <panduanPembayaran :show="panduan_toggle" :vbn="virtual_number" />
+    <panduanPembayaran v-if="virtual_number != null" :show="panduan_toggle" @kembali="pemesananKembali"
+      :vbn="virtual_number" />
   </div>
 </template>
 
@@ -383,52 +384,74 @@ export default {
       if (this.tombol_pesan == 'Bayar') {
         window.open(this.linkBayar, "Bayar", "width=700, height=700");
         this.pemesananKembali();
-      }else{
+      } else {
         this.panduan_toggle = true;
       }
     },
     proses_ke_pembayaran() {
+      var metode;
       this.loading_proses_pembayaran = true;
-      var metode = this.pembayaran.forEach((payment) => {
+      this.pembayaran.forEach((payment) => {
         payment.pilihan.forEach((tit) => {
           if (tit.title == this.pilihanPembayaran) {
-            return payment.title;
+            metode = payment.title;
           }
         });
       });
 
       if (metode == "Virtual Banking") {
-        axios.post('http://localhost:3001/user/create_virtual_banking_charge', {
-          id: this.pemesananId,
-          bank_code: this.pilihanPembayaran,
-          name: this.$store.state.userName
-        }).then((result) => {
-          this.pemesananDialog = false;
-          setTimeout(() => {
-            this.pesan_bayar = 'pemrosesan berhasil, tekan tombol panduan untuk melihat cara pembayaran'
-            this.tombol_pesan = 'Panduan'
-            this.virtual_number = result;
-            this.redirectPayment = true;
-          }, 200)
-        })
+        setTimeout(() => {
+          axios.post('http://localhost:3001/user/create_virtual_banking_charge', {
+            id: this.pemesananId,
+            bank_code: this.pilihanPembayaran,
+            name: this.$store.state.userName
+          }).then((result) => {
+            const database = db.collection("pemesanan").doc(this.pemesananId);
+            database.update({ status: 'Pending', virtual_number: result.data.account_number }).then(() => {
+              this.virtual_number = result.data.account_number;
+              this.$store.commit("filterPemesanan", this.pemesananId);
+              this.$store.dispatch("getPemesanan");
+              this.pemesananDialog = false;
+              setTimeout(() => {
+                this.pesan_bayar = 'pemrosesan berhasil, tekan tombol panduan untuk melihat cara pembayaran'
+                this.tombol_pesan = 'Panduan'
+                this.redirectPayment = true;
+              }, 200)
+            }).catch((err) => {
+              console.log(err);
+            })
+
+          }).catch((err) => {
+            console.log(err)
+          })
+        }, 2000)
       } else if (metode == 'E wallet') {
-        axios.post('http://localhost:3001/user/create_ewallet_charge', {
-          id: this.pemesananId,
-          total: this.total,
-          metode: this.pilihanPembayaran
-        }).then((result) => {
-          this.pemesananDialog = false;
-          setTimeout(() => {
-            this.pesan_bayar = 'pemrosesan berhasil, klik tombol bayar dibawah untuk pembayaran'
-            this.tombol_pesan = 'Bayar';
-            this.redirectPayment = true;
-            this.linkBayar = result.data.actions.desktop_web_checkout_url;
-            console.log(this.linkBayar);
-          }, 200)
-        }).catch((err) => {
-          console.log('err', err);
-          this.loading_proses_pembayaran = false;
-        })
+        setTimeout(() => {
+          axios.post('http://localhost:3001/user/create_ewallet_charge', {
+            id: this.pemesananId,
+            total: this.total,
+            metode: this.pilihanPembayaran
+          }).then((result) => {
+            const database = db.collection('pemesanan').doc(this.pemesananId);
+            database.update({ status: 'Pending', linkBayar: result.data.actions.desktop_web_checkout_url }).then(() => {
+              this.$store.commit("filterPemesanan", this.pemesananId);
+              this.$store.dispatch("getPemesanan");
+              this.pemesananDialog = false;
+              setTimeout(() => {
+                this.pesan_bayar = 'pemrosesan berhasil, klik tombol bayar dibawah untuk pembayaran';
+                this.tombol_pesan = 'Bayar';
+                this.redirectPayment = true;
+                this.linkBayar = result.data.actions.desktop_web_checkout_url;
+                console.log(this.linkBayar);
+              }, 200)
+            }).catch((err) => {
+              console.log(err);
+            })
+          }).catch((err) => {
+            console.log('err', err);
+            this.loading_proses_pembayaran = false;
+          })
+        }, 2000)
       }
     },
     pemesananKembali() {
