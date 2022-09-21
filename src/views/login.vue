@@ -53,12 +53,7 @@
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title class="d-flex justify-center">
-                    <v-btn
-                      color="primary"
-                      :loading="loading"
-                      @click="signIn"
-                      large
-                      block
+                    <v-btn color="primary" :loading="loading" @click="signIn" large block
                       >Masuk</v-btn
                     >
                   </v-list-item-title>
@@ -97,6 +92,8 @@
 <script>
 import firebase from "firebase/app";
 import "firebase/auth";
+import db from "../plugins/firebaseInit";
+
 export default {
   name: "PenjualanLogin",
 
@@ -115,35 +112,51 @@ export default {
   methods: {
     async signIn() {
       this.loading = true;
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => {
+      const database = await db
+        .collection("client")
+        .where("email", "==", this.email)
+        .get();
+      const enable = database.docs.map((i) => i.data());
+      if (enable.length > 0) {
+        if (enable[0].enable) {
+          firebase
+            .auth()
+            .signInWithEmailAndPassword(this.email, this.password)
+            .then(() => {
+              this.loading = false;
+              this.error = "";
+              this.isError = false;
+              this.$router.replace({ name: "Home" });
+              document.location.reload();
+            })
+            .catch((err) => {
+              this.loading = false;
+              if (err.code == "auth/user-not-found") {
+                this.error = "user tidak di temukan";
+              } else if (err.code == "auth/wrong-password") {
+                this.error = "password salah";
+              } else {
+                this.error = err.message;
+              }
+              console.log(err);
+              this.isError = true;
+            });
+        } else {
           this.loading = false;
-          this.error = "";
-          this.isError = false;
-          this.$router.replace({ name: "Home" });
-          document.location.reload();
-        })
-        .catch((err) => {
-          this.loading = false;
-          if (err.code == "auth/user-not-found") {
-            this.error = "user tidak di temukan";
-          } else if (err.code == "auth/wrong-password") {
-            this.error = "password salah";
-          } else {
-            this.error = err.message;
-          }
-          console.log(err);
           this.isError = true;
-        });
+          this.error = "Akun Anda Di Nonaktifkan";
+        }
+      } else {
+        this.loading = false;
+        this.isError = true;
+        this.error = "Akun Tidak Ditemukan";
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .title-login {
   font-family: "Pacifico" !important;
   font-size: 62px;

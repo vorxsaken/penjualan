@@ -6,23 +6,28 @@
     <div v-else>
       <navbar />
       <v-main>
-        <router-view>
-        </router-view>
+        <router-view> </router-view>
       </v-main>
       <foot v-if="foot" />
       <v-dialog width="400" v-model="firstVisit" persistent>
         <v-card elevation="0" class="pb-6 pt-2">
-          <v-card-title class="d-flex justify-center pb-8 font-weight-bold">Note</v-card-title>
+          <v-card-title class="d-flex justify-center pb-8 font-weight-bold"
+            >Note</v-card-title
+          >
           <v-card-subtitle class="d-flex justify-center">
             <v-img :src="require('./assets/cuteCat.webp')"></v-img>
           </v-card-subtitle>
           <v-card-text class="d-flex justify-center">
-            <span class="text-subtitle-2 blue-grey--text text--darken-1 
-            font-weight-medium text-start">
+            <span
+              class="text-subtitle-2 blue-grey--text text--darken-1 font-weight-medium text-start"
+            >
               Aplikasi ini masih dalam pengembangan. <br />
               <span v-if="this.$store.state.userEmail.length == 0">
-                <span class="font-weight-thin text-caption">email: vorxsaken@vorxsaken.com</span><br />
-                <span class="font-weight-thin text-caption">password: adminadmin</span><br />
+                <span class="font-weight-thin text-caption"
+                  >email: vorxsaken@vorxsaken.com</span
+                ><br />
+                <span class="font-weight-thin text-caption">password: adminadmin</span
+                ><br />
               </span>
               <div class="mt-3 text-center">
                 <span class="font-weight-bold">Tech Stack</span> : <br />
@@ -34,7 +39,14 @@
             </span>
           </v-card-text>
           <v-card-actions class="d-flex justify-center">
-            <v-btn outlined color="primary" rounded class="py-4 px-8" @click="notFirstTime" :disabled="okayDisbaled">
+            <v-btn
+              outlined
+              color="primary"
+              rounded
+              class="py-4 px-8"
+              @click="notFirstTime"
+              :disabled="okayDisbaled"
+            >
               Okay {{ okayDisbaled ? "(" + second + ")" : "" }}
             </v-btn>
           </v-card-actions>
@@ -51,6 +63,8 @@ import { App as CapacitorApp } from "@capacitor/app";
 import { Keyboard } from "@capacitor/keyboard";
 import store from "./store";
 import firebase from "firebase/app";
+import "firebase/auth";
+import db from "./plugins/firebaseInit";
 
 import "firebase/auth";
 export default {
@@ -77,10 +91,23 @@ export default {
     await this.$store.dispatch("getFavorit");
     await this.$store.dispatch("getKategori");
     this.isMounted = false;
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       this.$store.commit("updateUser", user);
       if (user) {
-        this.$store.dispatch("getCurrentUser");
+        await this.$store.dispatch("getCurrentUser");
+        db.collection("client")
+          .where("email", "==", this.$store.state.userEmail)
+          .onSnapshot((snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+              if (change.type == "modified") {
+                this.logout(change.doc.data().enable);
+                console.log("change");
+              }
+              if (change.type == "removed") {
+                this.logout();
+              }
+            });
+          });
       }
     });
 
@@ -108,7 +135,7 @@ export default {
     var t = this;
     Keyboard.addListener("keyboardDidShow", () => {
       t.foot = false;
-    }).catch(() => { });
+    }).catch(() => {});
 
     Keyboard.addListener("keyboardDidHide", () => {
       if (this.$route.name == "Kategori") {
@@ -116,7 +143,7 @@ export default {
       } else {
         t.foot = true;
       }
-    }).catch(() => { });
+    }).catch(() => {});
 
     CapacitorApp.addListener("backButton", ({ canGoBack }) => {
       if (!canGoBack) {
@@ -137,6 +164,7 @@ export default {
     // setTimeout(() => {
     //   this.isMounted = false;
     // }, 2000);
+
     window.onpopstate = function () {
       if (store.state.backCounter > 1) {
         store.dispatch("setCurrentFootbarValue");
@@ -173,6 +201,14 @@ export default {
         this.foot = false;
       } else {
         this.foot = true;
+      }
+    },
+    async logout(isLogout) {
+      if (!isLogout) {
+        await firebase.auth().signOut();
+        this.$router.replace({ name: "Home" });
+        document.location.reload();
+        console.log("sign out");
       }
     },
   },
