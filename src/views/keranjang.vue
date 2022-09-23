@@ -663,7 +663,7 @@ export default {
         const pref = [];
         gambar.forEach((col) => {
           const sr = {
-            src: col.data().src,
+            src: col.data().picUrl,
           };
           pref.push(sr);
         });

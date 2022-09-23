@@ -155,7 +155,8 @@ export default new Vuex.Store({
             const arrData = {
               gambarId: sub.data().gambarId,
               namaGambar: sub.data().namaGambar,
-              src: sub.data().src
+              src: sub.data().src,
+              pic: sub.data().picUrl
             };
             arrSub.push(arrData);
           })
@@ -185,7 +186,8 @@ export default new Vuex.Store({
             const arrData = {
               gambarId: sub.data().gambarId,
               namaGambar: sub.data().namaGambar,
-              src: sub.data().src
+              src: sub.data().src,
+              pic: sub.data().picUrl
             };
             arrSub.push(arrData);
           })
@@ -228,7 +230,7 @@ export default new Vuex.Store({
               produkId: arrayOfLiked[0].produkId,
               title: arrayOfLiked[0].title,
               harga: arrayOfLiked[0].harga,
-              src: mapSrc[0].src,
+              src: mapSrc[0].picUrl,
               rating: 4,
             };
             state.favorit.push(fin);
@@ -252,7 +254,7 @@ export default new Vuex.Store({
         produkId: arrayOfLiked[0].produkId,
         title: arrayOfLiked[0].title,
         harga: arrayOfLiked[0].harga,
-        src: mapSrc[0].src,
+        src: mapSrc[0].picUrl,
         rating: 4,
       };
       state.favorit.push(fin);

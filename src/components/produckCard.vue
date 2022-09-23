@@ -7,7 +7,7 @@
       isNaN(produk.rating) ? "0" : produk.rating
       }}</span>
     </div>
-    <v-img style="cursor: pointer" @click="produkClick" height="220" class="align-end" :src="produk.gambar[0].src"
+    <v-img style="cursor: pointer" @click="produkClick" height="220" class="align-end" :src="produk.gambar[0].pic"
       gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)">
       <template v-slot:placeholder>
         <v-row class="grey lighten-2 fill-height ma-0" align="center" justify="center">

@@ -13,12 +13,14 @@
               >
             </v-card-title>
             <v-list>
-              <v-list-item v-if="isError">
-                <v-list-item-subtitle
-                  class="d-flex justify-center red--text pt-6 pb-2 text-overline"
-                >
-                  {{ error }}
-                </v-list-item-subtitle>
+              <v-list-item v-if="isError" class="pt-0">
+                <v-list-item-content class="py-0">
+                  <div
+                    class="d-flex justify-center red--text pt-6 pb-2 text-subtitle-2 text-center"
+                  >
+                    {{ error }}
+                  </div>
+                </v-list-item-content>
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
@@ -140,16 +142,26 @@ export default {
               }
               console.log(err);
               this.isError = true;
+              setTimeout(() => {
+                this.isError = false;
+              }, 10000);
             });
         } else {
           this.loading = false;
           this.isError = true;
-          this.error = "Akun Anda Di Nonaktifkan";
+          this.error =
+            "Akun anda di nonaktifkan, harap hubungi admin untuk info lebih lanjut";
+          setTimeout(() => {
+            this.isError = false;
+          }, 10000);
         }
       } else {
         this.loading = false;
         this.isError = true;
         this.error = "Akun Tidak Ditemukan";
+        setTimeout(() => {
+          this.isError = false;
+        }, 10000);
       }
     },
   },

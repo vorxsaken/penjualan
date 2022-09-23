@@ -89,7 +89,8 @@ export default {
                     const arrData = {
                         gambarId: sub.data().gambarId,
                         namaGambar: sub.data().namaGambar,
-                        src: sub.data().src
+                        src: sub.data().src,
+                        pic: sub.data().picUrl
                     };
                     arrSub.push(arrData);
                 })
@@ -121,7 +122,8 @@ export default {
                     const arrData = {
                         gambarId: sub.data().gambarId,
                         namaGambar: sub.data().namaGambar,
-                        src: sub.data().src
+                        src: sub.data().src,
+                        pic: sub.data().picUrl
                     };
                     arrSub.push(arrData);
                 })
