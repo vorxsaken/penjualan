@@ -669,6 +669,7 @@ export default {
         });
         const data = {
           keranjangId: doc.keranjangId,
+          produkId: doc.produkId,
           title: dbRef.data().title,
           harga: dbRef.data().harga,
           jumlah: doc.jumlah,

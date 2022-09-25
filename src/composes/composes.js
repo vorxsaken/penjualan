@@ -1,6 +1,6 @@
 export function getDate(){
     var dt = new Date();
-    var bulanArr = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sept", "Okt", "Nov", "Des"];
+    var bulanArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
     var getTahun = dt.getFullYear();
     var getBulan = bulanArr[dt.getMonth()];
     var getTanggal = dt.getDate();
@@ -8,7 +8,7 @@ export function getDate(){
     var getMenit = dt.getMinutes().toString().length < 2 ? "0" + dt.getMinutes().toString() : dt.getMinutes().toString();
     var getSecond = dt.getSeconds().toString().length < 2 ? "0" + dt.getSeconds().toString() : dt.getSeconds().toString();
 
-    var date = `${getTanggal} ${getBulan} ${getTahun}, ${getJam}.${getMenit}.${getSecond}`;
+    var date = `${getBulan}.${getTanggal}.${getTahun}, ${getJam}.${getMenit}.${getSecond}`;
 
     return date;
 
