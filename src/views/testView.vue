@@ -205,7 +205,7 @@
           <v-spacer></v-spacer>
           <v-icon large @click="dialog = false">mdi-close</v-icon>
         </v-card-title>
-        <v-card-text>
+        <v-card-text v-if="reviews.length != 0">
           <v-list v-for="(data, index) in reviews" :key="index">
             <template>
               <v-list-item three-line>
@@ -221,6 +221,9 @@
                   </v-list-item-subtitle>
                   <div class="text-caption">
                     {{ data.text }}
+                  </div>
+                  <div class="mt-2" v-if="data.balasan != null">
+                    <span class="font-weight-bold">balasan dari admin</span> - {{ data.balasan}}
                   </div>
                 </v-list-item-content>
               </v-list-item>
@@ -246,6 +249,7 @@ import db from "../plugins/firebaseInit";
 import firebase from "firebase/app";
 import "firebase/auth";
 import produkCard from "../components/produckCard.vue";
+import { getDate } from "../composes/composes";
 
 export default {
   name: "PenjualanTestView",
@@ -306,7 +310,7 @@ export default {
       this.filterToDetailProduk(this.$route.params.id);
       this.isLiked();
       this.checkReview();
-      this.getReviews();
+      // this.getReviews();
     },
     getRecommendation(entries) {
       if (entries[0].isIntersecting) {
@@ -427,6 +431,7 @@ export default {
           username: reData[0].username,
           rating: dat.rating,
           text: dat.text,
+          balasan: dat.balasan
         };
         this.reviews.push(review);
       });
@@ -447,12 +452,13 @@ export default {
               this.reviewText = "";
               this.beriRating = 0;
               this.isKirim = false;
-              this.getReviews();
+              // this.getReviews();
             })
             .catch((err) => {
-              console.log(err);
+              console.log(err)
             });
         });
+      }).catch(() => {
       });
       await this.getRating();
       console.log(this.jumlahReview + "/" + this.rating);
@@ -465,6 +471,11 @@ export default {
         .then(() => {
           console.log("review updated");
         });
+        this.showBeriReview = false;
+        this.isFill = true;
+        this.reviewText = "";
+        this.beriRating = 0;
+        this.isKirim = false;
     },
     async checkReview() {
       const database = await db.collection("review").get();
@@ -517,17 +528,23 @@ export default {
       const database = db.collection("review").doc();
       await database
         .set({
+          id: database.id,
+          isRead: true,
+          balasan: null,
           user: firebase.auth().currentUser.email,
+          namaUser: this.$store.state.userName,
           produkId: this.$route.params.id,
+          namaProduk: this.detailProduk[0].title,
+          produkAvatar: this.detailProduk[0].gambar[0].pic,
           text: this.reviewText,
           rating: this.beriRating,
-          reviewAt: this.getDate(),
+          reviewAt: getDate(),
         })
         .then(() => {
           console.log("Beri Review");
           this.checkReview();
           this.isKirim = false;
-          this.getReviews();
+          // this.getReviews();
         })
         .catch((err) => {
           console.log(err);
@@ -642,7 +659,8 @@ export default {
           let dd = {
             gambarId: dat.data().gambarId,
             namaGambar: dat.data().namaGambar,
-            src: dat.data().src
+            src: dat.data().src,
+            pic: dat.data().picUrl
           }
           arr.push(dd);
         });
@@ -765,6 +783,11 @@ export default {
   watch: {
     "$vuetify.breakpoint.name": function () {
       this.changeHeight();
+    },
+    dialog(){
+      if(this.dialog == true){
+        this.getReviews();
+      }
     },
     '$route.params': async function () {
       this.liked = false;
