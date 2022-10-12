@@ -29,82 +29,130 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      title: "Home"
+    }
   },
   {
     path: '/pesanan',
     name: 'Pesanan',
-    component: Pesanan
+    component: Pesanan,
+    meta: {
+      title: "Pesanan"
+    }
   },
   {
     path: '/favorit',
     name: 'Favorit',
-    component: Favorit
+    component: Favorit,
+    meta: {
+      title: "Favorit"
+    }
   },
   {
     path: '/profile',
     name: 'Profile',
-    component: Login
+    component: Login,
+    meta: {
+      title: "Login"
+    }
   },
   {
     path: '/kategori',
     name: 'Kategori',
-    component: Kategori
+    component: Kategori,
+    meta: {
+      title: "Kategori"
+    }
   },
   {
     path: '/detailProduk/:id/:isFromLike',
     name: 'detailProduk',
-    component: test
+    component: test,
+    meta: {
+      title: "Detail Produk "
+    }
   },
   {
     path: '/buatAkun',
     name: 'buatAkun',
-    component: buatAkun
+    component: buatAkun,
+    meta: {
+      title: "Buat Akun"
+    }
   },
   {
     path: '/user',
     name: 'User',
-    component: Profile
+    component: Profile,
+    meta: {
+      title: "Profile"
+    }
   },
   {
     path: '/keranjang',
     name: 'Keranjang',
-    component: Keranjang
+    component: Keranjang,
+    meta: {
+      title: "Keranjang"
+    }
   },
   {
     path: '/detailPesanan/:id/:data',
     name: 'detailPesanan',
-    component: detailPesanan
+    component: detailPesanan,
+    meta: {
+      title: "Detail Pesanan"
+    }
   },
   {
     path: '/alamat',
     name:'alamat',
-    component: Alamat
+    component: Alamat,
+    meta: {
+      title: "Alamat"
+    }
   },
   {
     path: '/inputAlamat',
     name:'inputAlamat',
-    component: inputAlamat
+    component: inputAlamat,
+    meta: {
+      title: "Tambah Alamat"
+    }
   },
   {
     path: '/editAlamat/:id',
     name:'editAlamat',
-    component: editAlamat
+    component: editAlamat,
+    meta: {
+      title: "Edit Alamat"
+    }
   },
   {
     path: '/profileUser',
     name: 'profileUser',
-    component: profileUser
+    component: profileUser,
+    meta: {
+      title: "Profile User"
+    }
   },
   {
     path: '/kategoriView/:id',
     name: 'kategoriView',
-    component: kategoriView
+    component: kategoriView,
+    meta: {
+      title: "Kategori"
+    }
   },
   {
     path: '/searchView',
     name: 'searchView',
-    component: searchView
+    component: searchView,
+    meta: {
+      title: "Search"
+    }
   },
   {
     path: '/imagePreview/:src',
@@ -114,17 +162,26 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    component: about
+    component: about,
+    meta: {
+      title: "About"
+    }
   },
   {
     path: '/ubah_password',
     name: 'ubah_password',
-    component: ubahPassword
+    component: ubahPassword,
+    meta: {
+      title: "Ubah Password"
+    }
   },
   {
     path: '/riwayat_pesanan',
     name: 'riwayat_pesanan',
-    component: riwayatPesanan
+    component: riwayatPesanan,
+    meta: {
+      title: "Riwayat Pesanan"
+    }
   }
 ]
 
@@ -133,6 +190,11 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 });
+
+router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title} | Eza Elektronik`
+  next();
+})
 
 router.beforeEach(async (to, from, next) => {
   let user = firebase.auth().currentUser;

@@ -6,18 +6,12 @@
         <v-col cols="12" md="4">
           <v-card elevation="0" class="px-2 py-2">
             <v-card-title class="d-flex justify-center">
-              <span
-                style="user-select: none"
-                class="title-login pb-4 grey--text text--darken-3"
-                >Login</span
-              >
+              <span style="user-select: none" class="title-login pb-4 grey--text text--darken-3">Login</span>
             </v-card-title>
             <v-list>
               <v-list-item v-if="isError" class="pt-0">
                 <v-list-item-content class="py-0">
-                  <div
-                    class="d-flex justify-center red--text pt-6 pb-2 text-subtitle-2 text-center"
-                  >
+                  <div class="d-flex justify-center red--text pt-6 pb-2 text-subtitle-2 text-center">
                     {{ error }}
                   </div>
                 </v-list-item-content>
@@ -25,29 +19,14 @@
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-subtitle class="pb-4">
-                    <v-text-field
-                      outlined
-                      v-model="email"
-                      type="email"
-                      flat
-                      placeholder="Email"
-                      prepend-inner-icon="mdi-email"
-                      hide-details
-                    >
+                    <v-text-field outlined v-model="email" type="email" flat placeholder="Email"
+                      prepend-inner-icon="mdi-email" hide-details>
                     </v-text-field>
                   </v-list-item-subtitle>
                   <v-list-item-subtitle>
-                    <v-text-field
-                      outlined
-                      flat
-                      v-model="password"
-                      :type="isSeen ? 'text' : 'password'"
-                      placeholder="Password"
-                      prepend-inner-icon="mdi-lock"
-                      :append-icon="isSeen ? 'mdi-eye' : 'mdi-eye-off'"
-                      hide-details
-                      @click:append="isSeen = !isSeen"
-                    >
+                    <v-text-field outlined flat v-model="password" :type="isSeen ? 'text' : 'password'"
+                      placeholder="Password" prepend-inner-icon="mdi-lock"
+                      :append-icon="isSeen ? 'mdi-eye' : 'mdi-eye-off'" hide-details @click:append="isSeen = !isSeen">
                     </v-text-field>
                   </v-list-item-subtitle>
                 </v-list-item-content>
@@ -55,39 +34,44 @@
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title class="d-flex justify-center">
-                    <v-btn color="primary" :loading="loading" @click="signIn" large block
-                      >Masuk</v-btn
-                    >
+                    <v-btn color="primary" :loading="loading" @click="signIn" large block>Masuk</v-btn>
                   </v-list-item-title>
                   <v-list-item-subtitle class="pt-2">
-                    lupa detail login anda?<v-btn
-                      class="px-2"
-                      dense
-                      small
-                      color="primary"
-                      text
-                      >Dapatkan Bantuan</v-btn
-                    >
+                    <v-row>
+                      <v-col cols="5">
+                        <span class="text-caption">lupa detail login anda ?</span>
+                      </v-col>
+                      <v-col cols="7">
+                        <v-btn class="px-2" dense x-small color="primary" text>Dapatkan Bantuan
+                        </v-btn>
+                      </v-col>
+                    </v-row>
                   </v-list-item-subtitle>
                   <v-list-item-subtitle>
-                    tidak punya akun?<v-btn
-                      class="px-2"
-                      :to="{ name: 'buatAkun' }"
-                      dense
-                      small
-                      color="primary"
-                      text
-                      >Buat Akun</v-btn
-                    >
+                    <v-row>
+                      <v-col cols="5">
+                        <span class="text-caption mr-6">tidak punya akun ?</span>
+                      </v-col>
+                      <v-col cols="7">
+                        <v-btn class="px-2" :to="{ name: 'buatAkun' }" dense x-small color="primary" text>Buat Akun
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-list-item-subtitle>
+                  <v-list-item-subtitle>
+                    <v-row>
+                      <v-col cols="5">
+                        <span class="text-caption mr-6">tentang aplikasi ini ?</span>
+                      </v-col>
+                      <v-col cols="7">
+                        <v-btn class="px-2" :to="{name: 'about'}" dense x-small color="primary" text>Info
+                        </v-btn>
+                      </v-col>
+                    </v-row>
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
-            <v-card-actions class="d-flex justify-center">
-              <v-btn :to="{name: 'about'}" small text color="primary">
-                info
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
@@ -115,7 +99,7 @@ export default {
     };
   },
 
-  mounted() {},
+  mounted() { },
   methods: {
     async signIn() {
       this.loading = true;
