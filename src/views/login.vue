@@ -83,6 +83,11 @@
                 </v-list-item-content>
               </v-list-item>
             </v-list>
+            <v-card-actions class="d-flex justify-center">
+              <v-btn :to="{name: 'about'}" small text color="primary">
+                info
+              </v-btn>
+            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
