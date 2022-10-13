@@ -22,13 +22,13 @@
               class="text-subtitle-2 blue-grey--text text--darken-1 font-weight-medium text-start"
             >
               Aplikasi ini masih dalam pengembangan. <br />
-              <span v-if="this.$store.state.userEmail.length == 0">
+              <!-- <span v-if="this.$store.state.userEmail.length == 0">
                 <span class="font-weight-thin text-caption"
                   >email: vorxsaken@vorxsaken.com</span
                 ><br />
                 <span class="font-weight-thin text-caption">password: adminadmin</span
                 ><br />
-              </span>
+              </span> -->
               <div class="mt-3 text-center">
                 <span class="font-weight-bold">Tech Stack</span> : <br />
                 <v-icon color="yellow darken-1" class="mr-2">mdi-firebase</v-icon>
