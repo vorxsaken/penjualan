@@ -10,7 +10,7 @@
       </v-main>
       <foot v-if="foot" />
       <v-dialog width="400" v-model="firstVisit" persistent>
-        <v-card elevation="0" class="pb-6 pt-2">
+        <!-- <v-card elevation="0" class="pb-6 pt-2">
           <v-card-title class="d-flex justify-center pb-8 font-weight-bold"
             >Note</v-card-title
           >
@@ -22,13 +22,13 @@
               class="text-subtitle-2 blue-grey--text text--darken-1 font-weight-medium text-start"
             >
               Aplikasi ini masih dalam pengembangan. <br />
-              <!-- <span v-if="this.$store.state.userEmail.length == 0">
+              <span v-if="this.$store.state.userEmail.length == 0">
                 <span class="font-weight-thin text-caption"
                   >email: vorxsaken@vorxsaken.com</span
                 ><br />
                 <span class="font-weight-thin text-caption">password: adminadmin</span
                 ><br />
-              </span> -->
+              </span>
               <div class="mt-3 text-center">
                 <span class="font-weight-bold">Tech Stack</span> : <br />
                 <v-icon color="yellow darken-1" class="mr-2">mdi-firebase</v-icon>
@@ -47,6 +47,85 @@
               @click="notFirstTime"
               :disabled="okayDisbaled"
             >
+              Okay {{ okayDisbaled ? "(" + second + ")" : "" }}
+            </v-btn>
+          </v-card-actions>
+        </v-card> -->
+        <v-card elevation="0" class="pb-6 pt-2">
+          <v-card-title class="title-login sm:text-h6 font-weight-bold sm d-flex justify-center mb-2">
+            EZA Electronik
+          </v-card-title>
+          <v-card-subtitle class="d-flex justify-center">
+            versi: 1.0.0
+          </v-card-subtitle>
+          <v-card-text class="d-flex justify-center">
+            <v-list>
+              <v-list-item dense class="pr-0">
+                <v-list-item-icon>
+                  <v-icon>
+                    mdi-account
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="font-weight-bold">
+                    Developer
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    Moh Basyarudin Alfahmi
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item dense class="pr-0">
+                <v-list-item-icon>
+                  <v-icon>
+                    mdi-whatsapp
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="font-weight-bold">
+                    Whatsapp
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    (+62) 81952207090
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item dense class="pr-0">
+                <v-list-item-icon>
+                  <v-icon >
+                    mdi-github
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="font-weight-bold">
+                    github
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    vorxsaken
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item dense class="pr-0">
+                <v-list-item-icon>
+                  <v-icon >
+                    mdi-map-marker
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="font-weight-bold">
+                    Address
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    5VCX+2CV, Jalan Suryo Kusumo,
+                    <br> Mejabo Wetan, Kesambi, Kec. Mejobo,
+                    <br> Kabupaten Kudus, Jawa Tengah 59381
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn outlined color="primary" rounded class="py-4 px-8" @click="notFirstTime" :disabled="okayDisbaled">
               Okay {{ okayDisbaled ? "(" + second + ")" : "" }}
             </v-btn>
           </v-card-actions>
@@ -79,7 +158,7 @@ export default {
       isMounted: true,
       transitionName: null,
       firstVisit: true,
-      second: 10,
+      second: 3,
       okayDisbaled: true,
     };
   },
@@ -125,7 +204,7 @@ export default {
       if (this.second == -1) {
         clear();
       }
-    }, 500);
+    }, 1000);
 
     const clear = () => {
       clearInterval(interval);
@@ -135,7 +214,7 @@ export default {
     var t = this;
     Keyboard.addListener("keyboardDidShow", () => {
       t.foot = false;
-    }).catch(() => {});
+    }).catch(() => { });
 
     Keyboard.addListener("keyboardDidHide", () => {
       if (this.$route.name == "Kategori") {
@@ -143,7 +222,7 @@ export default {
       } else {
         t.foot = true;
       }
-    }).catch(() => {});
+    }).catch(() => { });
 
     CapacitorApp.addListener("backButton", ({ canGoBack }) => {
       if (!canGoBack) {
@@ -250,5 +329,11 @@ export default {
   &:hover {
     background: #9c9adb;
   }
+}
+
+.title-login {
+  font-family: "Amita" !important;
+  font-size: 38px;
+  font-weight: 200;
 }
 </style>

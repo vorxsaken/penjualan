@@ -47,7 +47,7 @@
                       </v-col>
                     </v-row>
                   </v-list-item-subtitle>
-                  <v-list-item-subtitle>
+                  <!-- <v-list-item-subtitle>
                     <v-row>
                       <v-col cols="5">
                         <span class="text-caption mr-6">tentang aplikasi ini ?</span>
@@ -57,7 +57,7 @@
                         </v-btn>
                       </v-col>
                     </v-row>
-                  </v-list-item-subtitle>
+                  </v-list-item-subtitle> -->
                 </v-list-item-content>
               </v-list-item>
             </v-list>
