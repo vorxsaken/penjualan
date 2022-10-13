@@ -1,23 +1,36 @@
 <template>
-  <v-card max-width="375" elevation="0">
-    <v-icon style="position: absolute; z-index: 1" class="ms-2 mt-2" @click="favoritClick" v-ripple
-      :color="isFavorit ? 'red' : 'white'">mdi-heart</v-icon>
-    <div class="rating">
-      <v-icon color="white" x-small>mdi-star</v-icon><span class="ml-1 text-overline white--text font-weight-bold">{{
-      isNaN(produk.rating) ? "0" : produk.rating
-      }}</span>
-    </div>
-    <v-img style="cursor: pointer" @click="produkClick" height="220" class="align-end" :src="produk.gambar[0].pic"
-      gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)">
+  <v-card max-width="375" elevation="0" flat rounded="lg">
+    <v-img style="cursor: pointer" height="240" :src="produk.gambar[0].pic"
+      gradient="to bottom, rgba(0,0,0,.1), rgba(12, 11, 41,0.5)">
       <template v-slot:placeholder>
         <v-row class="grey lighten-2 fill-height ma-0" align="center" justify="center">
         </v-row>
       </template>
-      <v-card-title style="word-break: break-word;" class="text-subtitle-2 white--text font-weight-medium">
-        {{ title }}
-      </v-card-title>
-      <v-card-subtitle class="blue-grey--text text--lighten-5 text-caption font-weight-light">Rp. {{ formatedHarga }}
-      </v-card-subtitle>
+      <div class="d-flex flex-column align-start fill-height " @click.self="produkClick">
+        <div class="d-flex flex-row justify-space-between mb-auto px-2 py-1" style="z-index: 2; width: 100%;">
+          <v-icon class="" @click.self="favoritClick" :color="isFavorit ? 'red' : 'white'">
+            mdi-heart
+          </v-icon>
+          <div class="d-flex flex-row align-center">
+            <v-icon color="white" small>
+              mdi-star
+            </v-icon>
+            <span class="ml-1 text-overline white--text font-weight-bold">
+              {{ isNaN(produk.rating) ? "0" : produk.rating }}
+            </span>
+          </div>
+        </div>
+        <div class="d-flex flex-column" @click="produkClick">
+          <v-card-title style="word-break: break-word;"
+            class="text-subtitle-2 white--text font-weight-medium pt-0 pr-0">
+            {{ title }}
+          </v-card-title>
+          <v-card-subtitle class="blue-grey--text text--lighten-5 text-caption font-weight-light">Rp. {{ formatedHarga
+          }}
+          </v-card-subtitle>
+        </div>
+      </div>
+
     </v-img>
   </v-card>
 </template>
@@ -71,7 +84,7 @@ export default {
     produkClick() {
       this.$emit("produkClick", this.produk.produkId);
     },
-    async compress(gambar){
+    async compress(gambar) {
       // fetch(gambar).then(result => result.blob()).then((blob) => {
       //   new Compressor(blob, {
       //     quality: 0.8,
@@ -85,7 +98,7 @@ export default {
 
       // const image = new Image();
       // image.src = gambar;
-      
+
       // image.onload = () => {
       //   new Compressor(this, {
       //     quality: 0.8,
@@ -102,7 +115,7 @@ export default {
 
       var width = 0;
       var height = 0;
-      image.onload = function(){
+      image.onload = function () {
         width = this.width;
         height = this.height;
       }
@@ -110,24 +123,24 @@ export default {
       const s = await compressImage(gambar, 300 / width, width, height);
       const img = URL.createObjectURL(s);
       return img;
-      
+
     },
     async isLiked() {
-        const database = await db.collection("like").get();
-        const arr = database.docs.map((doc) => doc.data());
-        if (
-          arr.some((data) => {
-            return (
-              data.user == firebase.auth().currentUser.email &&
-              data.produkId == this.produk.produkId
-            );
-          })
-        ) {
-          this.isFavorit = !this.isFavorit;
-        }
-      },
+      const database = await db.collection("like").get();
+      const arr = database.docs.map((doc) => doc.data());
+      if (
+        arr.some((data) => {
+          return (
+            data.user == firebase.auth().currentUser.email &&
+            data.produkId == this.produk.produkId
+          );
+        })
+      ) {
+        this.isFavorit = !this.isFavorit;
+      }
     },
-  };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

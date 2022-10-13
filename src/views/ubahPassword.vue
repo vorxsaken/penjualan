@@ -92,6 +92,11 @@ export default {
     methods: {
         updatePassword() {
             this.isLoading = true;
+            if(this.$store.state.userEmail == "vorxsaken@vorxsaken.com"){
+                this.loading = false;
+                return;
+            }
+
             const user = firebase.auth().currentUser;
             const credential = firebase.auth.EmailAuthProvider.credential(
                 this.$store.state.userEmail,

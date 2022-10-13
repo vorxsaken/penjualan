@@ -47,19 +47,19 @@
           <!-- tombol deskripsi produk -->
           <v-card-title v-ripple style="cursor: pointer; height: 50px" class="py-2"
             @click="deskripsiSheet = !deskripsiSheet">
-            <div class="text-button black--text">Deskripsi</div>
+            <div class="text-subtitle-2 blue-grey--text font-weight-medium">Deskripsi</div>
             <v-spacer></v-spacer>
-            <v-icon small>mdi-chevron-right</v-icon>
+            <v-icon small >mdi-chevron-right</v-icon>
           </v-card-title>
           <!-- tombol beri rating -->
           <v-card-title v-ripple style="cursor: pointer; height: 50px" @click="dialogBeriRating" class="py-2">
-            <div class="text-button black--text">Beri Rating</div>
+            <div class="text-subtitle-2 blue-grey--text font-weight-medium">Beri Rating</div>
             <v-spacer></v-spacer>
             <v-icon small>mdi-chevron-right</v-icon>
           </v-card-title>
           <!-- tombol kumpulan review -->
           <v-card-title class="py-2" @click="dialog = !dialog" style="cursor: pointer; height: 50px" v-ripple>
-            <div class="text-button black--text">Reviews</div>
+            <div class="text-subtitle-2 blue-grey--text font-weight-medium">Reviews</div>
             <v-spacer></v-spacer>
             <v-icon small>mdi-chevron-right</v-icon>
           </v-card-title>

@@ -36,18 +36,7 @@
                   <v-list-item-title class="d-flex justify-center">
                     <v-btn color="primary" :loading="loading" @click="signIn" large block>Masuk</v-btn>
                   </v-list-item-title>
-                  <v-list-item-subtitle class="pt-2">
-                    <v-row>
-                      <v-col cols="5">
-                        <span class="text-caption">lupa detail login anda ?</span>
-                      </v-col>
-                      <v-col cols="7">
-                        <v-btn class="px-2" dense x-small color="primary" text>Dapatkan Bantuan
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle>
+                  <v-list-item-subtitle class="mt-2">
                     <v-row>
                       <v-col cols="5">
                         <span class="text-caption mr-6">tidak punya akun ?</span>

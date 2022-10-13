@@ -12,7 +12,7 @@
     <v-container v-scroll:#home="rememberScroll">
       <v-card class="mb-2" elevation="0">
         <v-card-title class="py-1 pl-2 d-flex justify-start">
-          <span class="text-body-1 pl-0 black--text font-weight-bold">Semua Produk</span>
+          <span class="text-body-1 pl-0 blue-grey--text text--lighten-1 font-weight-bold">Semua Produk</span>
         </v-card-title>
       </v-card>
       <v-row dense>
