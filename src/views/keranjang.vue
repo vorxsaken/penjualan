@@ -309,17 +309,13 @@ export default {
           title: "E wallet",
           pilihan: [
             {
-              title: "ID_LINKAJA",
-              img: "linkaja",
-            },
-            {
               title: "ID_DANA",
               img: "dana",
             },
             {
-              title: "ID_SHOPEEPAY",
-              img: "shopee",
-            }
+              title: "ID_ASTRAPAY",
+              img: "astrapay",
+            },
           ],
         },
       ],
@@ -401,7 +397,7 @@ export default {
 
       if (metode == "Virtual Banking") {
         setTimeout(() => {
-          axios.post('https://insearchingofeza.herokuapp.com/user/create_virtual_banking_charge', {
+          axios.post('http://localhost:3001/user/create_virtual_banking_charge', {
             id: this.pemesananId,
             bank_code: this.pilihanPembayaran,
             name: this.$store.state.userName
@@ -427,7 +423,7 @@ export default {
         }, 2000)
       } else if (metode == 'E wallet') {
         setTimeout(() => {
-          axios.post('https://insearchingofeza.herokuapp.com/user/create_ewallet_charge', {
+          axios.post('http://localhost:3001/user/create_ewallet_charge', {
             id: this.pemesananId,
             total: this.total,
             metode: this.pilihanPembayaran
@@ -578,7 +574,7 @@ export default {
       this.pilihServis = "";
       axios
         .get(
-          `https://insearchingofeza.herokuapp.com/user/getCost/209/${this.pilihKota}/${this.getWeight}/${this.pilihKurir}`
+          `http://localhost:3001/user/getCost/209/${this.pilihKota}/${this.getWeight}/${this.pilihKurir}`
         )
         .then((res) => {
           var servis = res.data.rajaongkir.results[0].costs;
@@ -604,7 +600,7 @@ export default {
     },
     getProvinsi() {
       this.provinsi = [];
-      axios.get("https://insearchingofeza.herokuapp.com/user/getProvinsi").then((res) => {
+      axios.get("http://localhost:3001/user/getProvinsi").then((res) => {
         res.data.rajaongkir.results.forEach((i) => {
           this.provinsi.push(i);
         });
@@ -614,7 +610,7 @@ export default {
       this.kota = [];
       this.pilihServis = "";
       axios
-        .get(`https://insearchingofeza.herokuapp.com/user/getKota/${this.pilihProvinsi}`)
+        .get(`http://localhost:3001/user/getKota/${this.pilihProvinsi}`)
         .then((res) => {
           res.data.rajaongkir.results.forEach((i) => {
             this.kota.push(i);

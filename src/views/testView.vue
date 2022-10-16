@@ -2,9 +2,9 @@
   <v-container v-if="finishFetching" :key="componentKey">
     <v-row>
       <v-col cols="12" lg="6"
-        :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? '' : 'd-flex justify-end'">
-        <div
-          :style="{ width: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? '' : caraouselWidth + 'px' }">
+        :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md  ? 'd-flex justify-center' : 'd-flex justify-end'">
+        <div :style="{ width: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md ? 
+        '' : caraouselWidth + 'px' }">
           <v-carousel style="border-radius: 10px" :height="height" delimiter-icon="mdi-minus" hide-delimiter-background
             show-arrows-on-hover>
             <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index" :src="item.src">
@@ -12,8 +12,9 @@
           </v-carousel>
         </div>
       </v-col>
-      <v-col cols="12" lg="6" :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm ? 'pa-0 pb-4' : ''">
-        <v-card elevation="0" width="400">
+      <v-col cols="12" lg="6" :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md ? 
+      'pa-0 pb-4 d-flex justify-center' : '' ">
+        <v-card elevation="0" :width="this.$vuetify.breakpoint.md ? '100%' : '400'">
           <v-card-title>
             <v-row>
               <v-col cols="10" class="text-h6 blue-grey--text text--darken-2 font-weight-bold">
@@ -49,7 +50,7 @@
             @click="deskripsiSheet = !deskripsiSheet">
             <div class="text-subtitle-2 blue-grey--text font-weight-medium">Deskripsi</div>
             <v-spacer></v-spacer>
-            <v-icon small >mdi-chevron-right</v-icon>
+            <v-icon small>mdi-chevron-right</v-icon>
           </v-card-title>
           <!-- tombol beri rating -->
           <v-card-title v-ripple style="cursor: pointer; height: 50px" @click="dialogBeriRating" class="py-2">
@@ -84,7 +85,7 @@
             <!-- skeleton loader -->
             <v-row v-if="recommendation.length == 0" dense
               :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 'd-flex justify-center' : ''">
-              <v-col v-for="i in 4" :key="i" cols="6" md="4" lg="2" xl="2">
+              <v-col v-for="i in 4" :key="i" cols="6" md="6" lg="2" xl="2">
                 <v-skeleton-loader class="mx-auto" type="image">
                 </v-skeleton-loader>
               </v-col>
@@ -92,7 +93,7 @@
             <!-- produk rekomendasi -->
             <v-row v-else dense
               :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 'd-flex justify-center' : ''">
-              <v-col v-for="(rec, index) in recommendation" :key="index" cols="6" md="4" lg="2" xl="2">
+              <v-col v-for="(rec, index) in recommendation" :key="index" cols="6" md="6" lg="2" xl="2">
                 <produkCard @produkClick="toProduk" @favoritClick="addFavorit" :produk="rec" />
               </v-col>
             </v-row>
@@ -471,11 +472,11 @@ export default {
         .then(() => {
           console.log("review updated");
         });
-        this.showBeriReview = false;
-        this.isFill = true;
-        this.reviewText = "";
-        this.beriRating = 0;
-        this.isKirim = false;
+      this.showBeriReview = false;
+      this.isFill = true;
+      this.reviewText = "";
+      this.beriRating = 0;
+      this.isKirim = false;
     },
     async checkReview() {
       const database = await db.collection("review").get();
@@ -784,8 +785,8 @@ export default {
     "$vuetify.breakpoint.name": function () {
       this.changeHeight();
     },
-    dialog(){
-      if(this.dialog == true){
+    dialog() {
+      if (this.dialog == true) {
         this.getReviews();
       }
     },

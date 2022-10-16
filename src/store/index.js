@@ -64,6 +64,13 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    changeOrderStatus({state}, payload){
+      for(let i = 0; i < state.pemesanan.length; i++){
+        if(state.pemesanan[i].pemesananId == payload.id){
+          state.pemesanan[i].status = payload.status;
+        }
+      }
+    },
     async getKategori({state}){
       const database = await db.collection("kategori").get();
       database.forEach((kategori) => {

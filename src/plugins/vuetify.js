@@ -13,14 +13,24 @@ export default new Vuetify({
     theme: {
         dark: false,
         themes: {
-            primary: '#1976D2',
-            secondary: '#424242',
-            accent: '#82B1FF',
-            error: '#FF5252',
-            info: '#2196F3',
-            success: '#4CAF50',
-            warning: '#FFC107',
-            base: '#6c7178'
+            light: {
+                baseText: '#1b1d3b',
+                background : '#ffffff',
+                textfieldBackground: '#ededed',
+                whiteTheme: '#000000',
+                blueGrayTheme: "#23243d",
+                imagePlaceHolder: '#23243d',
+                cardBackground: '#ffffff'
+              },
+              dark: {
+                baseText: '#d9dbff',
+                background : '#121212',
+                textfieldBackground: '#404040',
+                whiteTheme: '#ffffff',
+                blueGrayTheme: "#dedfff",
+                imagePlaceHolder: '#404040',
+                cardBackground: '#1e1e1e'
+              }
         }
     },
     icons: {

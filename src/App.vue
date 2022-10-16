@@ -187,6 +187,27 @@ export default {
               }
             });
           });
+        
+        db.collection("pemesanan").where('userEmail', '==', this.$store.state.userEmail).onSnapshot((snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if(change.type == "modified"){
+              if(change.doc.data().status == 'bayar'){
+                let payload = {
+                  id: change.doc.data().pemesananId,
+                  status: 'bayar'
+                }
+                this.$store.dispatch("changeOrderStatus", payload );
+              } else if(change.doc.data().status == 'shipped'){
+                let payload = {
+                  id: change.doc.data().pemesananId,
+                  status: 'shipped'
+                }
+                this.$store.dispatch("changeOrderStatus", payload)
+              }
+            }
+          })
+        })
+
       }
     });
 
