@@ -3,16 +3,16 @@
     <!-- <v-main> -->
     <v-container>
       <v-row class="d-flex justify-center">
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="6">
           <v-card elevation="0" class="px-2 py-2">
             <v-card-title class="d-flex justify-center">
               <span style="user-select: none" class="title-login pb-4 grey--text text--darken-3">Login</span>
             </v-card-title>
             <v-list>
-              <v-list-item v-if="isError" class="pt-0">
+              <v-list-item v-if="this.$store.state.isLoginError" class="pt-0">
                 <v-list-item-content class="py-0">
                   <div class="d-flex justify-center red--text pt-6 pb-2 text-subtitle-2 text-center">
-                    {{ error }}
+                    {{ this.$store.state.loginErrorMessage }}
                   </div>
                 </v-list-item-content>
               </v-list-item>
@@ -102,43 +102,45 @@ export default {
           firebase
             .auth()
             .signInWithEmailAndPassword(this.email, this.password)
-            .then(() => {
+            .then((user) => {
               this.loading = false;
-              this.error = "";
-              this.isError = false;
-              this.$router.replace({ name: "Home" });
-              document.location.reload();
+              if (user.user.emailVerified) {
+                this.$store.dispatch("deleteLoginError")
+                this.$router.replace({ name: "Home" });
+                document.location.reload();
+              } else {
+                firebase.auth().signOut();
+                this.$store.dispatch("loginError", "Email belum terverifikasi, mohon cek email anda")
+                setTimeout(() => {
+                  this.$store.dispatch("deleteLoginError")
+                }, 10000);
+              }
             })
             .catch((err) => {
               this.loading = false;
               if (err.code == "auth/user-not-found") {
-                this.error = "user tidak di temukan";
+                this.$store.dispatch("loginError", "user tidak ditemukan")
               } else if (err.code == "auth/wrong-password") {
-                this.error = "password salah";
+                this.$store.dispatch("loginError", "password salah")
               } else {
-                this.error = err.message;
+                this.$store.dispatch("loginError", err.message)
               }
-              console.log(err);
-              this.isError = true;
               setTimeout(() => {
-                this.isError = false;
+                this.$store.dispatch("deleteLoginError")
               }, 10000);
             });
         } else {
           this.loading = false;
-          this.isError = true;
-          this.error =
-            "Akun anda di nonaktifkan, harap hubungi admin untuk info lebih lanjut";
+          this.$store.dispatch('loginError', "Akun anda di nonaktifkan, harap hubungi admin untuk info lebih lanjut")
           setTimeout(() => {
-            this.isError = false;
+            this.$store.dispatch('deleteLoginError');
           }, 10000);
         }
       } else {
         this.loading = false;
-        this.isError = true;
-        this.error = "Akun Tidak Ditemukan";
+        this.$store.dispatch('loginError', 'akun tidak ditemukan');
         setTimeout(() => {
-          this.isError = false;
+          this.$store.dispatch('deleteLoginError');
         }, 10000);
       }
     },

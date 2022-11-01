@@ -157,7 +157,7 @@ export default {
       foot: null,
       isMounted: true,
       transitionName: null,
-      firstVisit: true,
+      firstVisit: false,
       second: 3,
       okayDisbaled: true,
     };
@@ -171,8 +171,8 @@ export default {
     await this.$store.dispatch("getKategori");
     this.isMounted = false;
     firebase.auth().onAuthStateChanged(async (user) => {
-      this.$store.commit("updateUser", user);
-      if (user) {
+      if (user.emailVerified) {
+        this.$store.commit("updateUser", user);
         await this.$store.dispatch("getCurrentUser");
         db.collection("client")
           .where("email", "==", this.$store.state.userEmail)
@@ -207,7 +207,6 @@ export default {
             }
           })
         })
-
       }
     });
 

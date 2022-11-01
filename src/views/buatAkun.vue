@@ -75,7 +75,7 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
-    <v-dialog hide-overlay persistent v-model="suksesBuatAkun" max-width="250">
+    <v-dialog persistent v-model="suksesBuatAkun" max-width="250">
       <v-card elevation="0" class="pb-4">
         <v-card-title class="d-flex justify-center">
           <v-icon color="success" size="90">mdi-account-check</v-icon>
@@ -138,22 +138,30 @@ export default {
     },
     async docUser(profil) {
       //membuat akun user dengan email dan password
+      console.log('111');
       const firebaseAuth = firebase.auth();
-      const createUser = await firebaseAuth.createUserWithEmailAndPassword(
+      await firebaseAuth.createUserWithEmailAndPassword(
         this.email,
         this.password
-      );
-      //membuat collection user
-      const database = db.collection("client").doc(createUser.user.uid);
-      await database.set({
-        id: createUser.user.uid,
-        username: this.username,
-        email: this.email,
-        access: "user",
-        avatar: profil,
+      ).then(async (user) => {
+        // send email verification
+        await user.user.sendEmailVerification();
+        //membuat collection user
+        const database = db.collection("client").doc(user.user.uid);
+        await database.set({
+          id: user.user.uid,
+          username: this.username,
+          email: this.email,
+          enable: true,
+          access: "user",
+          avatar: profil,
+        });
+        this.loading = false;
+        this.suksesBuatAkun = true;
+      }).catch((err) => {
+        this.loading = false;
+        console.log(err);
       });
-      this.loading = false;
-      this.suksesBuatAkun = true;
     },
     async buatAkun() {
       this.loading = true;

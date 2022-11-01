@@ -200,7 +200,7 @@ router.beforeEach(async (to, from, next) => {
   let user = firebase.auth().currentUser;
   if(from.name != 'Profile' && to.name == 'Profile' && user == null){
     next();
-  }else if(from.name != 'Profile' && to.name == 'Profile' && user != null){
+  }else if(from.name != 'Profile' && to.name == 'Profile' && user != null && user.emailVerified){
     next({name: 'User'});
   }else{
     next();

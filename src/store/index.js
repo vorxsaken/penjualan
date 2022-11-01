@@ -27,7 +27,9 @@ export default new Vuex.Store({
     lastVisible: null,
     totalLength: 0,
     isSearch: false,
-    searchViewParams: ''
+    searchViewParams: '',
+    isLoginError: false,
+    loginErrorMessage: '',
   },
   mutations: {
     updateUser(state, payload) {
@@ -64,6 +66,14 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    deleteLoginError({state}){
+      state.isLoginError = false;
+      state.loginErrorMessage = '';
+    },
+    loginError({state}, payload){
+      state.isLoginError = true;
+      state.loginErrorMessage = payload;
+    },
     changeOrderStatus({state}, payload){
       for(let i = 0; i < state.pemesanan.length; i++){
         if(state.pemesanan[i].pemesananId == payload.id){
