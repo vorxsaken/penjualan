@@ -326,6 +326,7 @@ export default {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Amita&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap');
 
 * {
   margin: 0;

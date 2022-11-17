@@ -2,9 +2,11 @@
   <v-container v-if="finishFetching" :key="componentKey">
     <v-row>
       <v-col cols="12" lg="6"
-        :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md  ? 'd-flex justify-center' : 'd-flex justify-end'">
-        <div :style="{ width: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md ? 
-        '' : caraouselWidth + 'px' }">
+        :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md ? 'd-flex justify-center' : 'd-flex justify-end'">
+        <div :style="{
+          width: this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md ?
+            '100%' : caraouselWidth + 'px'
+        }">
           <v-carousel style="border-radius: 10px" :height="height" delimiter-icon="mdi-minus" hide-delimiter-background
             show-arrows-on-hover>
             <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index" :src="item.src">
@@ -12,8 +14,8 @@
           </v-carousel>
         </div>
       </v-col>
-      <v-col cols="12" lg="6" :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md ? 
-      'pa-0 pb-4 d-flex justify-center' : '' ">
+      <v-col cols="12" lg="6" :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md ?
+      'pa-0 pb-4 d-flex justify-center' : ''">
         <v-card elevation="0" :width="this.$vuetify.breakpoint.md ? '100%' : '400'">
           <v-card-title>
             <v-row>
@@ -69,7 +71,7 @@
     </v-row>
     <div class="d-flex justify-center">
       <div :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 'mt-12' : ''"
-        :style="{ width: this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 800 + 'px' : '80%'}">
+        :style="{ width: this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 800 + 'px' : '80%' }">
         <v-divider></v-divider>
       </div>
     </div>
@@ -77,8 +79,8 @@
       <v-col>
         <v-card elevation="0" class="py-0">
           <v-card-text class="py-0 px-1">
-            <v-card-title v-intersect="getRecommendation" :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ? 
-            'px-0 pb-4 text-subtitle-1 font-weight-bold grey--text text--darken-1 d-flex justify-center' 
+            <v-card-title v-intersect="getRecommendation" :class="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl ?
+            'px-0 pb-4 text-subtitle-1 font-weight-bold grey--text text--darken-1 d-flex justify-center'
             : 'px-0 pb-4 text-subtitle-1 font-weight-bold grey--text text--darken-1'">
               Mungkin Anda Suka :
             </v-card-title>
@@ -142,7 +144,7 @@
               </div>
               <div class="ml-2">
                 <v-btn elevation="0" color="white" v-ripple="false">{{
-                jumlahProduk
+                    jumlahProduk
                 }}</v-btn>
               </div>
               <div class="ml-2">
@@ -184,9 +186,11 @@
           </div>
         </v-card-text>
         <v-card-text v-show="showBeriReview">
-          <v-textarea no-resize auto-grow solo flat outlined clearable rows="4" color="black" label="beri review..."
-            v-model="reviewText" :disabled="!isFill">
-          </v-textarea>
+          <v-card-text>
+            <v-textarea no-resize auto-grow solo flat outlined clearable rows="4" color="black" label="beri review..."
+              v-model="reviewText" :disabled="!isFill">
+            </v-textarea>
+          </v-card-text>
           <v-card-actions v-if="isFill" class="d-flex justify-center">
             <v-btn :loading="isKirim" @click="kirimReview" color="black" outlined>Kirim</v-btn>
             <v-btn color="black" outlined @click="hideBeriReview">Batal</v-btn>
@@ -215,7 +219,7 @@
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>{{
-                  data.username
+                      data.username
                   }}</v-list-item-title>
                   <v-list-item-subtitle>
                     <v-rating color="yellow darken-2" readonly :value="data.rating" size="12"></v-rating>
@@ -224,7 +228,7 @@
                     {{ data.text }}
                   </div>
                   <div class="mt-2" v-if="data.balasan != null">
-                    <span class="font-weight-bold">balasan dari admin</span> - {{ data.balasan}}
+                    <span class="font-weight-bold">balasan dari admin</span> - {{ data.balasan }}
                   </div>
                 </v-list-item-content>
               </v-list-item>
@@ -234,7 +238,7 @@
       </v-card>
     </v-dialog>
     <!-- snackbar ingfo -->
-    <v-snackbar v-model="snackbar" outlined :color="snackbarColor ? 'green' : 'pink'">
+    <v-snackbar v-model="snackbar" outlined color="grey darken-1">
       {{ text }}
       <template v-slot:action="{ attrs }">
         <v-btn color="red" text v-bind="attrs" @click="snackbar = false">

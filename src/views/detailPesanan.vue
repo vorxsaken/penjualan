@@ -180,7 +180,7 @@ export default {
     proses_ke_pembayaran() {
       this.loading_proses_pembayaran = true;
       if (this.produkPesanan[0].metodePembayaran == 'Virtual Banking') {
-        axios.post('http://localhost:3001/user/create_virtual_banking_charge', {
+        axios.post('https://insearchingofeza.herokuapp.com/user/create_virtual_banking_charge', {
           id: this.produkPesanan[0].pemesananId,
           bank_code: this.produkPesanan[0].pembayaran,
           name: this.$store.state.userName
@@ -200,7 +200,7 @@ export default {
           console.log(err)
         })
       } else if (this.produkPesanan[0].metodePembayaran == 'E wallet') {
-        axios.post('http://localhost:3001/user/create_ewallet_charge', {
+        axios.post('https://insearchingofeza.herokuapp.com/user/create_ewallet_charge', {
           id: this.produkPesanan[0].pemesananId,
           total: this.produkPesanan[0].total,
           metode: this.produkPesanan[0].pembayaran

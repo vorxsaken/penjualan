@@ -41,7 +41,7 @@
         <v-card-title class="d-flex justify-center">
           <video ref="myvideo" width="200" height="200" src="../assets/order-success.mp4"></video>
         </v-card-title>
-        <v-card-subtitle class="d-flex justify-center text-caption blue-grey--text text--darken-1">
+        <v-card-subtitle class="d-flex justify-center text-caption blue-grey--text text--darken-1 mt-2">
           Data User Berhasil Diupdate
         </v-card-subtitle>
         <v-card-actions class="d-flex flex-column">
@@ -66,7 +66,7 @@ export default {
       avatar: null,
       username: "",
       upLoad: false,
-      dialog: false
+      dialog: false,
     };
   },
   mounted() { },
@@ -122,8 +122,8 @@ export default {
             console.log(res);
             this.dialog = true;
             setTimeout(() => {
-              this.$refs.myvideo.play();
-            },300)
+              this.$refs.myvideo.play()
+            },10)
             this.upLoad = false;
             this.$store.state.userName = this.username;
           });
@@ -140,8 +140,8 @@ export default {
             this.upLoad = false;
             this.dialog = true;
             setTimeout(() => {
-              this.$refs.myvideo.play();
-            },300)
+              this.$refs.myvideo.play()
+            },10)
             this.$store.state.userName = this.username;
             this.$store.state.userAvatar = ref;
           });

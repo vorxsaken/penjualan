@@ -46,7 +46,7 @@
         <v-card-actions class="d-flex justify-center">
           <v-btn class="primary" :to="{ name: 'inputAlamat' }" :width="
             this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-              ? 320
+              ? 220
               : 200
           " height="45">
             <v-icon small class="mr-1">mdi-plus-thick</v-icon>Tambah Alamat

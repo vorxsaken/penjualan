@@ -3,7 +3,7 @@
     <!-- <v-main> -->
     <v-container>
       <v-row class="d-flex justify-center">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6" lg="5">
           <v-card elevation="0" class="px-2 py-2">
             <v-card-title class="d-flex justify-center">
               <span style="user-select: none" class="title-login pb-4 grey--text text--darken-3">Login</span>
@@ -18,17 +18,17 @@
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
-                  <v-list-item-subtitle class="pb-4">
+                  <v-list-item-content>
                     <v-text-field outlined v-model="email" type="email" flat placeholder="Email"
                       prepend-inner-icon="mdi-email" hide-details>
                     </v-text-field>
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-content>
                     <v-text-field outlined flat v-model="password" :type="isSeen ? 'text' : 'password'"
                       placeholder="Password" prepend-inner-icon="mdi-lock"
                       :append-icon="isSeen ? 'mdi-eye' : 'mdi-eye-off'" hide-details @click:append="isSeen = !isSeen">
                     </v-text-field>
-                  </v-list-item-subtitle>
+                  </v-list-item-content>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>

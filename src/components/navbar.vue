@@ -1,10 +1,10 @@
 <template>
   <span>
     <v-system-bar v-if="cart" class="d-flex justify-center" app color="white">
-      <v-icon>mdi-chart-donut-variant</v-icon>
-      <span class="text-overline black--text">Eza Elektronik</span>
+      <span class="text-overline black--text styled">Eza Elektronik</span>
     </v-system-bar>
-    <v-app-bar id="nab" :class="warnaNavbar" app :elevation="elevation">
+    <v-app-bar id="nab" :class="this.$vuetify.breakpoint.name == 'xs' || this.$vuetify.breakpoint.name == 'sm' ? 'mt-5 white' : 'white'" app 
+    :elevation="elevation">
       <v-container>
         <v-row>
           <v-col v-if="!cart" class="d-flex justify-center">
@@ -164,4 +164,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.styled {
+  font-family: "Bungee Hairline" !important;
+  font-weight: 600 !important;
+}
+
 </style>
