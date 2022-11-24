@@ -185,6 +185,7 @@ export default new Vuex.Store({
             title: doc.data().title,
             totalReview: doc.data().totalReview,
             rating: doc.data().rating,
+            stok: doc.data().stokProduk,
             gambar: arrSub
           }
           state.produk.push(dat);
@@ -216,6 +217,7 @@ export default new Vuex.Store({
             title: doc.data().title,
             totalReview: doc.data().totalReview,
             rating: doc.data().rating,
+            stok: doc.data().stokProduk,
             gambar: arrSub
           }
           state.produk.push(dat);

@@ -148,12 +148,15 @@
                 }}</v-btn>
               </div>
               <div class="ml-2">
-                <v-btn icon @click="jumlahProduk++">
+                <v-btn icon @click="penambahanJumlahProduk">
                   <v-icon color="grey darken-4">mdi-plus</v-icon>
                 </v-btn>
               </div>
             </v-row>
           </v-card-actions>
+          <v-card-text class="d-flex justify-center text-subtitle-2">
+            Stok Produk : {{ detailProduk[0].stok }}
+          </v-card-text>
           <v-card-actions class="d-flex justify-center">
             <v-btn text outlined color="primary" class="white--text" :loading="loadingBottom" rounded width="230"
               @click="addKeranjang">Tambah Keranjang</v-btn>
@@ -677,6 +680,7 @@ export default {
           title: produk[0].title,
           totalReview: produk[0].totalReview,
           rating: produk[0].rating,
+          stok: produk[0].stokProduk,
           gambar: arr,
         };
         this.detailProduk = [fin];
@@ -728,25 +732,32 @@ export default {
       this.snackbarColor = false;
     },
     async addKeranjang() {
-      this.loadingBottom = true;
       if (firebase.auth().currentUser != null) {
-        const database = db.collection("keranjang").doc();
-        await database
-          .set({
-            keranjangId: database.id,
-            userId: firebase.auth().currentUser.uid,
-            produkId: this.$route.params.id,
-            jumlah: this.jumlahProduk,
-            status: "keranjang",
-          })
-          .then(() => {
-            this.loadingBottom = false;
-            this.bottomSheet = false;
-            this.snackbar = true;
-            this.text = "Ditambahkan Ke Keranjang";
-            this.snackbarColor = true;
-            this.$store.dispatch("getKeranjang");
-          });
+        if (this.detailProduk[0].stok > 0) {
+          this.loadingBottom = true;
+          const database = db.collection("keranjang").doc();
+          await database
+            .set({
+              keranjangId: database.id,
+              userId: firebase.auth().currentUser.uid,
+              produkId: this.$route.params.id,
+              jumlah: this.jumlahProduk,
+              status: "keranjang",
+            })
+            .then(() => {
+              this.loadingBottom = false;
+              this.bottomSheet = false;
+              this.snackbar = true;
+              this.text = "Ditambahkan Ke Keranjang";
+              this.snackbarColor = true;
+              this.$store.dispatch("getKeranjang");
+            });
+        } else {
+          this.bottomSheet = false;
+          this.snackbar = true;
+          this.text = "Stok Kosong !!!";
+          this.snackbarColor = true;
+        }
       } else {
         this.$router.push({ name: "Profile" });
         this.$store.commit("changeFootbarValue", 3);
@@ -769,6 +780,12 @@ export default {
         case "xl":
           this.height = 700;
           return;
+      }
+    },
+    penambahanJumlahProduk() {
+      if (this.jumlahProduk < this.detailProduk[0].stok) {
+        this.jumlahProduk++;
+        return;
       }
     },
     kurangiJumlahProduk() {

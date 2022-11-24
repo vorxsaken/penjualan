@@ -5,10 +5,10 @@
         ? this.$vuetify.breakpoint.height - 140 + 'px'
         : '',
   }" :class="
-    this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-      ? 'overflow-y-auto'
-      : ''
-  ">
+  this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+    ? 'overflow-y-auto'
+    : ''
+">
     <v-card elevation="0" :key="key">
       <v-card-text class="py-0">
         <v-card-title class="font-weight-medium text-h5 black--text">
@@ -19,11 +19,11 @@
             {{ produkPesanan[0].namaPemesan }}
           </div>
           {{
-          produkPesanan[0].alamatLengkap +
-          ". " +
-          produkPesanan[0].kotaTujuan +
-          ", " +
-          produkPesanan[0].provinsiTujuan
+              produkPesanan[0].alamatLengkap +
+              ". " +
+              produkPesanan[0].kotaTujuan +
+              ", " +
+              produkPesanan[0].provinsiTujuan
           }}
         </v-card-text>
         <v-card-title class="pb-0 text-body-2 font-weight-medium black--text">
@@ -48,7 +48,7 @@
             <v-list-item-title>
               <span class="text-caption float-left">Pesanan: {{ produkPesanan[0].created_at }}</span>
               <span class="text-caption font-weight-medium float-right">{{
-              produkPesanan[0].status
+                  produkPesanan[0].status
               }}</span>
             </v-list-item-title>
           </v-list-item>
@@ -85,10 +85,18 @@
           </v-list-item>
         </v-list>
       </v-card-text>
+      <v-card-text v-if="produkPesanan[0].status == 'declined'"
+        class="d-flex justify-center text-subtitle-1 font-weight-bold red--text">
+        Pesanan Kamu ditolak !!
+      </v-card-text>
       <v-card-actions class="d-flex justify-center pb-4">
         <v-btn @click="proses_ke_pembayaran" :loading="loading_proses_pembayaran" class="px-8" color="primary" large
           rounded outlined v-if="produkPesanan[0].status == 'belum bayar'">
           <v-icon class="mr-2">mdi-cash</v-icon> Proses Ke Pembayaran
+        </v-btn>
+        <v-btn @click="ditolak(produkPesanan[0].pemesananId)" :loading="loadingDiterima" class="px-8" color="primary"
+          large rounded outlined v-if="produkPesanan[0].status == 'declined'">
+          <v-icon class="mr-2">mdi-delete</v-icon> Hapus Pesanan
         </v-btn>
         <v-btn :loading="loadingDiterima" class="px-8" color="success" @click="diterima(produkPesanan[0].pemesananId)"
           large rounded outlined v-else-if="produkPesanan[0].status == 'shipped'">
@@ -102,6 +110,10 @@
           <v-btn v-else-if="produkPesanan[0].metodePembayaran == 'E wallet'" class="px-8" color="success"
             @click="proses_ke_bayar" large rounded outlined>
             <v-icon class="mr-2">mdi-cash</v-icon> Bayar
+          </v-btn>
+          <v-btn v-else-if="produkPesanan[0].metodePembayaran == 'QR Code'" class="px-8" color="success"
+            @click="scanQrcode" large rounded outlined>
+            <v-icon class="mr-2">mdi-qrcode</v-icon> Qrcode Untuk Bayar
           </v-btn>
         </div>
       </v-card-actions>
@@ -121,7 +133,20 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+    <!-- show qrcode -->
+    <v-dialog v-model="qrcode" width="400" persistant>
+      <v-card elevation="0">
+        <div class="d-flex justify-center text-center text-subtitle-1 font-weight-bold py-4 px-4">
+          Scan Qr code dibawah untuk pembayaran
+        </div>
+        <v-card-text class="d-flex justify-center">
+          <canvas id="qrcode"></canvas>
+        </v-card-text>
+        <v-card-actions class="d-flex justify-center pb-4">
+          <v-btn outlined @click="qrcode = false" color="error">Kembali</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <!-- panduan pembayaran -->
     <panduanPembayaran :show="toggle_panduan" :vbn="produkPesanan[0].virtual_number"
       @kembali="toggle_panduan = false" />
@@ -130,17 +155,21 @@
 
 <script>
 import { changeAt } from '../composes/edit';
+import { remove } from '../composes/delete';
 import axios from 'axios';
 import panduanPembayaran from "../components/dialogPanduan.vue";
 import db from '../plugins/firebaseInit'
+import QRCode from "qrcode";
 
 export default {
   name: "PenjualanDetailpesanan",
   components: {
-    panduanPembayaran
+    panduanPembayaran,
   },
   data() {
     return {
+      qrcode: false,
+      qrstring: 'this is null',
       order: {
         pesananId: 12345,
         title: "21 okt 2022, 14.45",
@@ -175,7 +204,7 @@ export default {
   },
   methods: {
     proses_ke_bayar() {
-      window.open(this.produkPesanan[0].linkBayar, "Bayar", "width=700, height=700");
+      window.open(this.produkPesanan[0].linkBayar, "Bayar");
     },
     proses_ke_pembayaran() {
       this.loading_proses_pembayaran = true;
@@ -206,7 +235,7 @@ export default {
           metode: this.produkPesanan[0].pembayaran
         }).then((result) => {
           const database = db.collection('pemesanan').doc(this.produkPesanan[0].pemesananId);
-          database.update({ status: 'Pending', linkBayar: result.data.actions.desktop_web_checkout_url }).then(async () => {
+          database.update({ status: 'Pending', linkBayar: result.data.actions.mobile_web_checkout_url }).then(async () => {
             this.$store.commit('filterPemesanan', this.produkPesanan[0].pemesananId);
             await this.$store.dispatch("getPemesanan");
             this.produkPesanan = [];
@@ -217,11 +246,54 @@ export default {
           console.log('err', err);
           this.loading_proses_pembayaran = false;
         })
+      } else if (this.produkPesanan[0].metodePembayaran == 'QR Code') {
+        axios.post('http://localhost:3001/user/create_qrcode', {
+          id: this.produkPesanan[0].pemesananId,
+          total: this.produkPesanan[0].total
+        }).then((result) => {
+          const database = db.collection('pemesanan').doc(this.produkPesanan[0].pemesananId);
+          console.log(result.data);
+          database.update({ status: 'Pending', qr_string: result.data.qr_string }).then(async () => {
+            this.$store.commit('filterPemesanan', this.produkPesanan[0].pemesananId);
+            await this.$store.dispatch("getPemesanan");
+            this.produkPesanan = [];
+            this.getDetailPesanan();
+            this.key++
+          }).catch((err) => {
+            console.log('err', err);
+            this.loading_proses_pembayaran = false;
+          })
+        })
       }
+    },
+    scanQrcode() {
+      // this.qrstring = this.produkPesanan[0].qr_string;
+      this.qrcode = true;
+      setTimeout(() => {
+        QRCode.toCanvas(document.getElementById("qrcode"), this.produkPesanan[0].qr_string, {
+          width: 300
+        }, (error) => {
+          if (error) console.log(error);
+        })
+      }, 300)
+
+    },
+    onQrCodeChange(qrstring) {
+      this.qrstring = qrstring
     },
     diterima(id) {
       this.loadingDiterima = true;
       changeAt('pemesanan', id, { status: 'diterima' }).then(() => {
+        this.loadingDiterima = false;
+        this.$store.commit('filterPemesanan', id);
+        this.$router.replace({ name: 'Pesanan' })
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
+    ditolak(id) {
+      this.loadingDiterima = true;
+      remove("pemesanan", id).then(() => {
         this.loadingDiterima = false;
         this.$store.commit('filterPemesanan', id);
         this.$router.replace({ name: 'Pesanan' })

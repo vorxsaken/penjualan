@@ -1,7 +1,7 @@
 <template>
   <span>
     <v-system-bar v-if="cart" class="d-flex justify-center" app color="white">
-      <span class="text-overline black--text styled">Eza Elektronik</span>
+      <span class="text-subtitle-1 black--text styled">Eza Elektronik</span>
     </v-system-bar>
     <v-app-bar id="nab" :class="this.$vuetify.breakpoint.name == 'xs' || this.$vuetify.breakpoint.name == 'sm' ? 'mt-5 white' : 'white'" app 
     :elevation="elevation">

@@ -3,11 +3,13 @@ import firebase from "firebase/app";
 import "firebase/storage";
 
 export function remove(target, id) {
-    const database = db.collection(target).doc(id);
-    database.delete().then(() => {
-        console.log("data deleted at " + target);
-    }).catch((err) => {
-        console.log(err);
+    return new Promise((resolve, reject) => {
+        const database = db.collection(target).doc(id);
+        database.delete().then(() => {
+            resolve("data deleted at " + target);
+        }).catch((err) => {
+            reject(err);
+        })
     })
 }
 

@@ -5,10 +5,10 @@
         ? this.$vuetify.breakpoint.height - 140 + 'px'
         : '',
   }" :class="
-    this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
-      ? 'overflow-y-auto'
-      : ''
-  ">
+  this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm
+    ? 'overflow-y-auto'
+    : ''
+">
     <div v-if="showKeranjang" style="height: 80vh" class="d-flex flex-column justify-center align-center">
       <v-icon size="80">mdi-delete-empty</v-icon>
       <h4 class="" style="font-weight: 300">Keranjang Kosong :(</h4>
@@ -30,7 +30,7 @@
             </v-list-item-avatar>
             <v-list-item-content class="pt-0 mt-n6">
               <v-list-item-title class="text-body-1 font-weight-bold">{{
-              list.title
+                  list.title
               }}</v-list-item-title>
               <v-list-item-subtitle>Rp
                 {{ formatHarga(list.harga, list.jumlah) }}</v-list-item-subtitle>
@@ -153,7 +153,7 @@
         <v-expansion-panels flat accordion class="mt-4">
           <v-expansion-panel v-for="(item, index) in pembayaran" :key="index">
             <v-expansion-panel-header class="px-4">{{
-            item.title
+                item.title
             }}</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-radio-group v-model="pilihanPembayaran">
@@ -195,9 +195,10 @@
     <v-dialog persistent v-model="pemesananDialog" width="350">
       <v-card elevation="0">
         <v-card-title class="d-flex justify-center">
-          <video ref="myvideo" width="200" height="200" src="../assets/order-success.mp4"></video>
+          <!-- <video ref="myvideo" width="200" height="200" src="../assets/order-success.mp4"></video> -->
+          <v-icon color="success" size="90">mdi-check-circle</v-icon>
         </v-card-title>
-        <v-card-subtitle class="d-flex justify-center text-caption blue-grey--text text--darken-1">
+        <v-card-subtitle class="d-flex justify-center text-caption blue-grey--text text--darken-1 mt-4">
           Pembuatan Pesanan Anda Berhasil
         </v-card-subtitle>
         <v-card-actions class="d-flex flex-column">
@@ -222,6 +223,20 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- show qrcode -->
+    <v-dialog v-model="qrcode" width="400" persistant>
+      <v-card elevation="0">
+        <div class="d-flex justify-center mb-4 text-subtitle-1 px-4 py-2 text-center">
+          Scan Qr code dibawah untuk pembayaran
+        </div>
+        <v-card-text class="d-flex justify-center mb-2">
+          <canvas id="qrcode"></canvas>
+        </v-card-text>
+        <v-card-actions class="d-flex justify-center pb-4">
+          <v-btn color="error" outlined @click="pemesananKembali">Kembali</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <!-- dialog penduan -->
     <panduanPembayaran v-if="virtual_number != null" :show="panduan_toggle" @kembali="pemesananKembali"
       :vbn="virtual_number" />
@@ -235,14 +250,17 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { getDate } from "../composes/composes.js";
 import panduanPembayaran from "../components/dialogPanduan.vue";
+import QRCode from "qrcode"
 
 export default {
   name: "PenjualanKeranjang",
   components: {
-    panduanPembayaran
+    panduanPembayaran,
   },
   data() {
     return {
+      qrcode: false,
+      qrstring: 'this is null',
       pemesananId: null,
       bayar: null,
       pesan_bayar: null,
@@ -318,6 +336,15 @@ export default {
             },
           ],
         },
+        {
+          title: "QR Code",
+          pilihan: [
+            {
+              title: "QR Code",
+              img: "qrcode"
+            }
+          ]
+        }
       ],
     };
   },
@@ -385,6 +412,15 @@ export default {
         this.panduan_toggle = true;
       }
     },
+    webToDeepLink(link) {
+      if (/\bastrapay\b/.test(link)) {
+        return link;
+      }
+
+      let protocol = link.slice(0, 8);
+      let siteLink = link.slice(9);
+      return protocol + "link" + siteLink;
+    },
     proses_ke_pembayaran() {
       var metode;
       this.loading_proses_pembayaran = true;
@@ -430,7 +466,7 @@ export default {
             metode: this.pilihanPembayaran
           }).then((result) => {
             const database = db.collection('pemesanan').doc(this.pemesananId);
-            database.update({ status: 'Pending', linkBayar: result.data.actions.desktop_web_checkout_url }).then(() => {
+            database.update({ status: 'Pending', linkBayar: result.data.actions.mobile_web_checkout_url }).then(() => {
               this.$store.commit("filterPemesanan", this.pemesananId);
               this.$store.dispatch("getPemesanan");
               this.pemesananDialog = false;
@@ -438,8 +474,8 @@ export default {
                 this.pesan_bayar = 'pemrosesan berhasil, klik tombol bayar dibawah untuk pembayaran';
                 this.tombol_pesan = 'Bayar';
                 this.redirectPayment = true;
-                this.linkBayar = result.data.actions.desktop_web_checkout_url;
-                console.log(this.linkBayar);
+                this.linkBayar = result.data.actions.mobile_web_checkout_url;
+                console.log(result.data.actions.mobile_web_checkout_url);
               }, 200)
             }).catch((err) => {
               console.log(err);
@@ -449,7 +485,31 @@ export default {
             this.loading_proses_pembayaran = false;
           })
         }, 2000)
+      } else if (metode == 'QR Code') {
+        axios.post('http://localhost:3001/user/create_qrcode', {
+          id: this.pemesananId,
+          total: this.total
+        }).then((result) => {
+          const database = db.collection('pemesanan').doc(this.pemesananId);
+          database.update({ status: 'Pending', qr_string: result.data.qr_string }).then(() => {
+            this.$store.commit("filterPemesanan", this.pemesananId);
+            this.$store.dispatch("getPemesanan");
+            this.pemesananDialog = false;
+            this.qrcode = true;
+            setTimeout(() => {
+              QRCode.toCanvas(document.getElementById('qrcode'), result.data.qr_string, {
+                width: 300
+              }, (error) => {
+                if (error) console.log(error);
+                console.log('success generate qrcode');
+              })
+            }, 300)
+          })
+        })
       }
+    },
+    onQrCodeChange(qrstring) {
+      this.qrstring = qrstring
     },
     pemesananKembali() {
       this.keranjang.forEach((keranjang) => {
@@ -457,7 +517,7 @@ export default {
       });
       this.$store.state.keranjang = [];
       this.pemesananDialog = false;
-      this.$refs.myvideo.load();
+      // this.$refs.myvideo.load();
       this.$store.dispatch("getPemesanan");
       this.$router.back();
     },
@@ -520,9 +580,9 @@ export default {
           this.pemesananDialog = true;
           this.pemesananId = collection.id;
           this.$store.dispatch("getPemesanan");
-          setTimeout(() => {
-            this.$refs.myvideo.play();
-          }, 10);
+          // setTimeout(() => {
+          //   this.$refs.myvideo.play();
+          // }, 10);
 
         })
         .catch((err) => {
