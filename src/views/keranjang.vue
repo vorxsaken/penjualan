@@ -486,7 +486,7 @@ export default {
           })
         }, 2000)
       } else if (metode == 'QR Code') {
-        axios.post('http://localhost:3001/user/create_qrcode', {
+        axios.post('https://insearchingofeza.herokuapp.com/user/create_qrcode', {
           id: this.pemesananId,
           total: this.total
         }).then((result) => {

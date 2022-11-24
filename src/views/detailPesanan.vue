@@ -247,7 +247,7 @@ export default {
           this.loading_proses_pembayaran = false;
         })
       } else if (this.produkPesanan[0].metodePembayaran == 'QR Code') {
-        axios.post('http://localhost:3001/user/create_qrcode', {
+        axios.post('https://insearchingofeza.herokuapp.com/user/create_qrcode', {
           id: this.produkPesanan[0].pemesananId,
           total: this.produkPesanan[0].total
         }).then((result) => {
