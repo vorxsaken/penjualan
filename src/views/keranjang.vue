@@ -400,7 +400,7 @@ export default {
     total() {
       const totl = this.getSubTotal + this.pilihServis;
       return totl;
-      // return 2000;
+      // return 1000;
     },
   },
   methods: {

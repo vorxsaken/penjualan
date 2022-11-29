@@ -8,7 +8,7 @@
           <v-card @click="toKategori(card.namaKategori)">
             <v-img :src="card.coverURL" height="150px" class="align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)">
-              <v-card-title class="white--text text-h6 font-weight-bold" v-text="card.namaKategori"></v-card-title>
+              <div class="white--text text-h6 font-weight-bold px-3 py-2" v-text="card.namaKategori"></div>
             </v-img>
           </v-card>
         </v-col>

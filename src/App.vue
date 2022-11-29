@@ -1,11 +1,17 @@
 <template>
   <v-app style="user-select: none">
     <div v-if="isMounted" class="fill-height d-flex justify-center align-center">
-      <v-img src="@/assets/Circles-menu-3.gif" max-height="25" max-width="50"></v-img>
+      <!-- <v-img src="@/assets/Circles-menu-3.gif" max-height="25" max-width="40"></v-img> -->
+      <v-progress-circular size="40" color="red" indeterminate>
+      </v-progress-circular>
+      <div id="animation"></div>
     </div>
     <div v-else>
       <navbar />
       <v-main>
+        <!-- <keep-alive include="Home">
+          <router-view :key="$route.fullPath"></router-view>
+        </keep-alive> -->
         <router-view> </router-view>
       </v-main>
       <foot v-if="foot" />
