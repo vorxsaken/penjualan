@@ -209,7 +209,7 @@ export default {
     proses_ke_pembayaran() {
       this.loading_proses_pembayaran = true;
       if (this.produkPesanan[0].metodePembayaran == 'Virtual Banking') {
-        axios.post('https://insearchingofeza.herokuapp.com/user/create_virtual_banking_charge', {
+        axios.post('https://thisisezabackend.vercel.app/user/create_virtual_banking_charge', {
           id: this.produkPesanan[0].pemesananId,
           bank_code: this.produkPesanan[0].pembayaran,
           name: this.$store.state.userName
@@ -229,7 +229,7 @@ export default {
           console.log(err)
         })
       } else if (this.produkPesanan[0].metodePembayaran == 'E wallet') {
-        axios.post('https://insearchingofeza.herokuapp.com/user/create_ewallet_charge', {
+        axios.post('https://thisisezabackend.vercel.app/user/create_ewallet_charge', {
           id: this.produkPesanan[0].pemesananId,
           total: this.produkPesanan[0].total,
           metode: this.produkPesanan[0].pembayaran
@@ -247,7 +247,7 @@ export default {
           this.loading_proses_pembayaran = false;
         })
       } else if (this.produkPesanan[0].metodePembayaran == 'QR Code') {
-        axios.post('https://insearchingofeza.herokuapp.com/user/create_qrcode', {
+        axios.post('https://thisisezabackend.vercel.app/user/create_qrcode', {
           id: this.produkPesanan[0].pemesananId,
           total: this.produkPesanan[0].total
         }).then((result) => {

@@ -434,7 +434,7 @@ export default {
 
       if (metode == "Virtual Banking") {
         setTimeout(() => {
-          axios.post('https://insearchingofeza.herokuapp.com/user/create_virtual_banking_charge', {
+          axios.post('https://thisisezabackend.vercel.app/user/create_virtual_banking_charge', {
             id: this.pemesananId,
             bank_code: this.pilihanPembayaran,
             name: this.$store.state.userName
@@ -460,7 +460,7 @@ export default {
         }, 2000)
       } else if (metode == 'E wallet') {
         setTimeout(() => {
-          axios.post('https://insearchingofeza.herokuapp.com/user/create_ewallet_charge', {
+          axios.post('https://thisisezabackend.vercel.app/user/create_ewallet_charge', {
             id: this.pemesananId,
             total: this.total,
             metode: this.pilihanPembayaran
@@ -486,7 +486,7 @@ export default {
           })
         }, 2000)
       } else if (metode == 'QR Code') {
-        axios.post('https://insearchingofeza.herokuapp.com/user/create_qrcode', {
+        axios.post('https://thisisezabackend.vercel.app/user/create_qrcode', {
           id: this.pemesananId,
           total: this.total
         }).then((result) => {
@@ -635,7 +635,7 @@ export default {
       this.pilihServis = "";
       axios
         .get(
-          `https://insearchingofeza.herokuapp.com/user/getCost/209/${this.pilihKota}/${this.getWeight}/${this.pilihKurir}`
+          `https://thisisezabackend.vercel.app/user/getCost/209/${this.pilihKota}/${this.getWeight}/${this.pilihKurir}`
         )
         .then((res) => {
           var servis = res.data.rajaongkir.results[0].costs;
@@ -661,7 +661,7 @@ export default {
     },
     getProvinsi() {
       this.provinsi = [];
-      axios.get("https://insearchingofeza.herokuapp.com/user/getProvinsi").then((res) => {
+      axios.get("https://thisisezabackend.vercel.app/user/getProvinsi").then((res) => {
         res.data.rajaongkir.results.forEach((i) => {
           this.provinsi.push(i);
         });
@@ -671,7 +671,7 @@ export default {
       this.kota = [];
       this.pilihServis = "";
       axios
-        .get(`https://insearchingofeza.herokuapp.com/user/getKota/${this.pilihProvinsi}`)
+        .get(`https://thisisezabackend.vercel.app/user/getKota/${this.pilihProvinsi}`)
         .then((res) => {
           res.data.rajaongkir.results.forEach((i) => {
             this.kota.push(i);

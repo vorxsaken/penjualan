@@ -144,7 +144,7 @@ export default {
     },
     getProvinsi() {
       this.provinsi = [];
-      axios.get("https://insearchingofeza.herokuapp.com/user/getProvinsi").then((res) => {
+      axios.get("https://thisisezabackend.vercel.app/user/getProvinsi").then((res) => {
         res.data.rajaongkir.results.forEach((i) => {
           this.provinsi.push(i);
         });
@@ -153,7 +153,7 @@ export default {
     getKabupaten() {
       this.kabupaten = [];
       axios
-        .get(`https://insearchingofeza.herokuapp.com/user/getKota/${this.pilihProvinsi}`)
+        .get(`https://thisisezabackend.vercel.app/user/getKota/${this.pilihProvinsi}`)
         .then((res) => {
           res.data.rajaongkir.results.forEach((i) => {
             this.kabupaten.push(i);

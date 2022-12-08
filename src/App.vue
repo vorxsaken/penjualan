@@ -10,7 +10,7 @@
       <navbar />
       <v-main>
         <!-- <keep-alive include="Home">
-          <router-view :key="$route.fullPath"></router-view>
+          <router-view :key="$route.fullPath" v-keep-scroll-position></router-view>
         </keep-alive> -->
         <router-view> </router-view>
       </v-main>
