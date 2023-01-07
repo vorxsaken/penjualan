@@ -613,8 +613,7 @@ export default {
       this.namaProvinsi = currentAlamat[0].nama_provinsi;
       this.pilihKota = currentAlamat[0].kabupaten;
       this.namaKota = currentAlamat[0].nama_kota;
-      this.detailAlamat =
-        currentAlamat[0].telp + ", " + currentAlamat[0].detailAlamat;
+      this.detailAlamat = `${currentAlamat[0].telp}, ${currentAlamat[0].detailAlamat} (${currentAlamat[0].nama_kota}, ${currentAlamat[0].nama_provinsi})`
     },
     async getAlamat() {
       const database = await db

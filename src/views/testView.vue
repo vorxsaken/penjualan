@@ -9,7 +9,8 @@
         }">
           <v-carousel style="border-radius: 10px" :height="height" delimiter-icon="mdi-minus" hide-delimiter-background
             show-arrows-on-hover>
-            <v-carousel-item v-for="(item, index) in detailProduk[0].gambar" :key="index" :src="item.src">
+            <v-carousel-item @click="initImageViewer(item.src)" v-for="(item, index) in detailProduk[0].gambar"
+              :key="index" :src="item.src">
             </v-carousel-item>
           </v-carousel>
         </div>
@@ -213,7 +214,7 @@
           <v-spacer></v-spacer>
           <v-icon large @click="dialog = false">mdi-close</v-icon>
         </v-card-title>
-        <v-card-text v-if="reviews.length != 0">
+        <v-card-text v-if="reviewStatus == 'notNull'">
           <v-list v-for="(data, index) in reviews" :key="index">
             <template>
               <v-list-item three-line>
@@ -238,6 +239,16 @@
             </template>
           </v-list>
         </v-card-text>
+        <v-card-text v-else-if="reviewStatus == 'null'">
+          <div class="fill-height d-flex justify-center align-center">
+            <p class="blue-grey--text text--darken-2 font-weight-medium text-subtitle-1">Review Kosong :(</p>
+          </div>
+        </v-card-text>
+        <v-card-text v-else>
+          <div class="fill-height d-flex justify-center align-center">
+            <v-img src="@/assets/Circles-menu-3.gif" max-height="25" max-width="50"></v-img>
+          </div>
+        </v-card-text>
       </v-card>
     </v-dialog>
     <!-- snackbar ingfo -->
@@ -249,6 +260,8 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <!-- imageViewer dialog -->
+    <imageViewer @close="showImageViewer = false" :show="showImageViewer" :source="imageViewerSource" />
   </v-container>
 </template>
 
@@ -258,14 +271,18 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import produkCard from "../components/produckCard.vue";
 import { getDate } from "../composes/composes";
+import imageViewer from '../components/imageViewer.vue';
 
 export default {
   name: "PenjualanTestView",
   components: {
-    produkCard
+    produkCard,
+    imageViewer
   },
   data() {
     return {
+      imageViewerSource: '',
+      showImageViewer: false,
       dialogBelumLogin: false,
       color: false,
       currentHeight: null,
@@ -295,7 +312,8 @@ export default {
       reviews: [],
       finishFetching: false,
       recommendation: [],
-      componentKey: 0
+      componentKey: 0,
+      reviewStatus: 'loading'
     };
   },
 
@@ -314,6 +332,10 @@ export default {
     },
   },
   methods: {
+    initImageViewer(source) {
+      this.showImageViewer = true;
+      this.imageViewerSource = source;
+    },
     initState() {
       this.filterToDetailProduk(this.$route.params.id);
       this.isLiked();
@@ -443,6 +465,14 @@ export default {
         };
         this.reviews.push(review);
       });
+
+      setTimeout(() => {
+        if (arr.length > 0) {
+          this.reviewStatus = 'notNull'
+        } else {
+          this.reviewStatus = 'null';
+        }
+      }, 1000)
     },
     async hapusSelfRating() {
       this.isKirim = true;

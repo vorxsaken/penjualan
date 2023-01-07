@@ -152,8 +152,11 @@ export default {
       this.checkState();
     },
   },
-  mounted() {
+  // mounted() {
+  //   document.getElementById("home").scrollTo(0, this.$store.state.scrollY);
+  // },
+  activated() {
     document.getElementById("home").scrollTo(0, this.$store.state.scrollY);
-  },
+  }
 };
 </script>

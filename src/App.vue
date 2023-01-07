@@ -9,10 +9,10 @@
     <div v-else>
       <navbar />
       <v-main>
-        <!-- <keep-alive include="Home">
-          <router-view :key="$route.fullPath" v-keep-scroll-position></router-view>
-        </keep-alive> -->
-        <router-view> </router-view>
+        <keep-alive include="Home">
+          <router-view :key="$route.fullPath"></router-view>
+        </keep-alive>
+        <!-- <router-view> </router-view> -->
       </v-main>
       <foot v-if="foot" />
       <v-dialog width="400" v-model="firstVisit" persistent>

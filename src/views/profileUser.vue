@@ -39,7 +39,7 @@
     <v-dialog persistent v-model="dialog" width="350">
       <v-card elevation="0">
         <v-card-title class="d-flex justify-center">
-          <video ref="myvideo" width="200" height="200" src="../assets/order-success.mp4"></video>
+          <v-icon size="100" class="success">mdi-check-circle</v-icon>
         </v-card-title>
         <v-card-subtitle class="d-flex justify-center text-caption blue-grey--text text--darken-1 mt-2">
           Data User Berhasil Diupdate
