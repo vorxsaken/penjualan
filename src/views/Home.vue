@@ -64,7 +64,7 @@ export default {
     detailProduk(payload) {
       this.$router.push({
         name: "detailProduk",
-        params: { id: payload, isFromLike: "false" },
+        params: { id: payload, isFromLike: "true" },
       });
     },
     async addFavorit(produkID) {

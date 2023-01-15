@@ -5,7 +5,7 @@
       <p class="text-h6 ml-2">Kategori</p>
       <v-row dense>
         <v-col v-for="(card, index) in this.$store.state.kategori" :key="index" cols="6" md="3" lg="3">
-          <v-card @click="toKategori(card.namaKategori)">
+          <v-card @click="toKategori(card.kategoriId)">
             <v-img :src="card.coverURL" height="150px" class="align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.8)">
               <div class="white--text text-h6 font-weight-bold px-3 py-2" v-text="card.namaKategori"></div>

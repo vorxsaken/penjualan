@@ -1,0 +1,90 @@
+Date : 2023-01-10 18:03:43
+Directory : e:\tugas akhir\program\penjualan\src
+Total : 54 files,  6577 codes, 291 comments, 222 blanks, all 7090 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| Vue        |         36 |      5,749 |        288 |        168 |      6,205 |
+| JavaScript |         10 |        777 |          2 |         48 |        827 |
+| XML        |          7 |         47 |          1 |          2 |         50 |
+| Sass       |          1 |          4 |          0 |          4 |          8 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                 | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                    |         54 |      6,577 |        291 |        222 |      7,090 |
+| . (Files)                                                            |          2 |        312 |         55 |         22 |        389 |
+| assets                                                               |          7 |         47 |          1 |          2 |         50 |
+| components                                                           |         14 |        835 |         33 |         51 |        919 |
+| composes                                                             |          5 |        181 |          0 |         21 |        202 |
+| plugins                                                              |          2 |         70 |          0 |          6 |         76 |
+| router                                                               |          1 |        204 |          1 |          6 |        211 |
+| sass                                                                 |          1 |          4 |          0 |          4 |          8 |
+| store                                                                |          1 |        303 |          1 |         12 |        316 |
+| views                                                                |         21 |      4,621 |        200 |         98 |      4,919 |
++----------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                             | language   | code       | comment    | blank      | total      |
++----------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| e:\tugas akhir\program\penjualan\src\App.vue                         | Vue        |        293 |         55 |         19 |        367 |
+| e:\tugas akhir\program\penjualan\src\assets\cart.svg                 | XML        |          1 |          0 |          0 |          1 |
+| e:\tugas akhir\program\penjualan\src\assets\favorit.svg              | XML        |          1 |          0 |          0 |          1 |
+| e:\tugas akhir\program\penjualan\src\assets\home.svg                 | XML        |         41 |          1 |          1 |         43 |
+| e:\tugas akhir\program\penjualan\src\assets\icons8-express-js-96.svg | XML        |          1 |          0 |          0 |          1 |
+| e:\tugas akhir\program\penjualan\src\assets\logo.svg                 | XML        |          1 |          0 |          1 |          2 |
+| e:\tugas akhir\program\penjualan\src\assets\pesanan.svg              | XML        |          1 |          0 |          0 |          1 |
+| e:\tugas akhir\program\penjualan\src\assets\profil.svg               | XML        |          1 |          0 |          0 |          1 |
+| e:\tugas akhir\program\penjualan\src\components\cartIcon.vue         | Vue        |         13 |          0 |          1 |         14 |
+| e:\tugas akhir\program\penjualan\src\components\dialogPanduan.vue    | Vue        |        139 |          0 |          5 |        144 |
+| e:\tugas akhir\program\penjualan\src\components\expressIcon.vue      | Vue        |         11 |          0 |          2 |         13 |
+| e:\tugas akhir\program\penjualan\src\components\favoritIcon.vue      | Vue        |         13 |          0 |          2 |         15 |
+| e:\tugas akhir\program\penjualan\src\components\favoritList.vue      | Vue        |         70 |          0 |          2 |         72 |
+| e:\tugas akhir\program\penjualan\src\components\footer.vue           | Vue        |         58 |          0 |          2 |         60 |
+| e:\tugas akhir\program\penjualan\src\components\homeIcon.vue         | Vue        |         12 |          0 |          1 |         13 |
+| e:\tugas akhir\program\penjualan\src\components\imageViewer.vue      | Vue        |         54 |          0 |          8 |         62 |
+| e:\tugas akhir\program\penjualan\src\components\menuButtonGroup.vue  | Vue        |         76 |          0 |          4 |         80 |
+| e:\tugas akhir\program\penjualan\src\components\navbar.vue           | Vue        |        163 |          3 |          7 |        173 |
+| e:\tugas akhir\program\penjualan\src\components\pesananIcon.vue      | Vue        |         13 |          0 |          2 |         15 |
+| e:\tugas akhir\program\penjualan\src\components\pesananList.vue      | Vue        |         80 |          7 |          3 |         90 |
+| e:\tugas akhir\program\penjualan\src\components\produckCard.vue      | Vue        |        120 |         23 |         10 |        153 |
+| e:\tugas akhir\program\penjualan\src\components\profilIcon.vue       | Vue        |         13 |          0 |          2 |         15 |
+| e:\tugas akhir\program\penjualan\src\composes\add.js                 | JavaScript |         68 |          0 |          4 |         72 |
+| e:\tugas akhir\program\penjualan\src\composes\composes.js            | JavaScript |         31 |          0 |          9 |         40 |
+| e:\tugas akhir\program\penjualan\src\composes\delete.js              | JavaScript |         23 |          0 |          2 |         25 |
+| e:\tugas akhir\program\penjualan\src\composes\edit.js                | JavaScript |         38 |          0 |          2 |         40 |
+| e:\tugas akhir\program\penjualan\src\composes\mergeSort.js           | JavaScript |         21 |          0 |          4 |         25 |
+| e:\tugas akhir\program\penjualan\src\main.js                         | JavaScript |         19 |          0 |          3 |         22 |
+| e:\tugas akhir\program\penjualan\src\plugins\firebaseInit.js         | JavaScript |         14 |          0 |          3 |         17 |
+| e:\tugas akhir\program\penjualan\src\plugins\vuetify.js              | JavaScript |         56 |          0 |          3 |         59 |
+| e:\tugas akhir\program\penjualan\src\router\index.js                 | JavaScript |        204 |          1 |          6 |        211 |
+| e:\tugas akhir\program\penjualan\src\sass\variables.sass             | Sass       |          4 |          0 |          4 |          8 |
+| e:\tugas akhir\program\penjualan\src\store\index.js                  | JavaScript |        303 |          1 |         12 |        316 |
+| e:\tugas akhir\program\penjualan\src\views\Favorit.vue               | Vue        |         87 |         41 |          3 |        131 |
+| e:\tugas akhir\program\penjualan\src\views\Home.vue                  | Vue        |        153 |          8 |          2 |        163 |
+| e:\tugas akhir\program\penjualan\src\views\Kategori.vue              | Vue        |         32 |          2 |          5 |         39 |
+| e:\tugas akhir\program\penjualan\src\views\Pesanan.vue               | Vue        |         81 |          0 |          4 |         85 |
+| e:\tugas akhir\program\penjualan\src\views\Profile.vue               | Vue        |         79 |          4 |          5 |         88 |
+| e:\tugas akhir\program\penjualan\src\views\about.vue                 | Vue        |         99 |          0 |          2 |        101 |
+| e:\tugas akhir\program\penjualan\src\views\alamat.vue                | Vue        |        103 |          0 |          4 |        107 |
+| e:\tugas akhir\program\penjualan\src\views\buatAkun.vue              | Vue        |        188 |          4 |          4 |        196 |
+| e:\tugas akhir\program\penjualan\src\views\detailPesanan.vue         | Vue        |        312 |          4 |          5 |        321 |
+| e:\tugas akhir\program\penjualan\src\views\detailProduk.vue          | Vue        |        622 |         10 |          9 |        641 |
+| e:\tugas akhir\program\penjualan\src\views\editAlamat.vue            | Vue        |        233 |          0 |          2 |        235 |
+| e:\tugas akhir\program\penjualan\src\views\imagePreview.vue          | Vue        |         26 |          1 |          3 |         30 |
+| e:\tugas akhir\program\penjualan\src\views\inputAlamat.vue           | Vue        |        213 |          0 |          2 |        215 |
+| e:\tugas akhir\program\penjualan\src\views\kategoriView.vue          | Vue        |        208 |          0 |          4 |        212 |
+| e:\tugas akhir\program\penjualan\src\views\keranjang.vue             | Vue        |        658 |         82 |         12 |        752 |
+| e:\tugas akhir\program\penjualan\src\views\login.vue                 | Vue        |        139 |         13 |          6 |        158 |
+| e:\tugas akhir\program\penjualan\src\views\profileUser.vue           | Vue        |        149 |          1 |          4 |        154 |
+| e:\tugas akhir\program\penjualan\src\views\riwayatPesanan.vue        | Vue        |         89 |          2 |          6 |         97 |
+| e:\tugas akhir\program\penjualan\src\views\searchView.vue            | Vue        |        199 |          0 |          4 |        203 |
+| e:\tugas akhir\program\penjualan\src\views\testView.vue              | Vue        |        823 |         27 |          4 |        854 |
+| e:\tugas akhir\program\penjualan\src\views\ubahPassword.vue          | Vue        |        128 |          1 |          8 |        137 |
+| Total                                                                |            |      6,577 |        291 |        222 |      7,090 |
++----------------------------------------------------------------------+------------+------------+------------+------------+------------+

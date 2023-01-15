@@ -209,6 +209,12 @@ export default {
                   status: 'shipped'
                 }
                 this.$store.dispatch("changeOrderStatus", payload)
+              } else if(change.doc.data().status == 'declined') {
+                let payload = {
+                  id: change.doc.data().pemesananId,
+                  status: 'declined'
+                }
+                this.$store.dispatch("changeOrderStatus", payload)
               }
             }
           })
