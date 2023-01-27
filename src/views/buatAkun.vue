@@ -51,7 +51,74 @@
               </v-card-actions>
             </v-card>
           </v-stepper-content>
+          <!-- users input their address -->
           <v-stepper-content step="4">
+            <v-card elevation="0">
+              <v-card-title class="pt-0 text-subtitle-1 d-flex justify-center">
+                <span>Tambahkan Alamat</span>
+              </v-card-title>
+              <v-card-subtitle class="d-flex justify-center">
+                <span>langkah ini wajib untuk ke tahap selanjutnya</span>
+              </v-card-subtitle>
+              <v-card-text class="px-2">
+                <v-list two-line>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        class="mb-2 text-subtitle-2 grey--text text--darken-2">Provinsi</v-list-item-title>
+                      <div>
+                        <v-select v-model="pilihProvinsi" hide-details="auto" flat outlined single-line
+                          :rules="[(v) => !!v || 'provinsi tidak boleh kosong']" label="Provinsi" :items="provinsi"
+                          item-text="province" item-value="province_id">
+                        </v-select>
+                      </div>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title class="mb-2 text-subtitle-2 grey--text text--darken-2">Kabupaten/kota
+                      </v-list-item-title>
+                      <div>
+                        <v-select v-model="pilihKabupaten" hide-details="auto" flat outlined single-line
+                          :rules="[(v) => !!v || 'kota tidak boleh kosong']" label="Kabupaten/kota" :items="kabupaten"
+                          item-text="city_name" item-value="city_id">
+                        </v-select>
+                      </div>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        class="mb-2 text-subtitle-2 grey--text text--darken-2">No.Telp</v-list-item-title>
+                      <div>
+                        <v-text-field v-model="notelp" hide-details="auto"
+                          :rules="[(v) => !!v || 'no telepon tidak boleh kosong']" single-line flat outlined
+                          type="number" label="No telepon" hide-spin-buttons>
+                        </v-text-field>
+                      </div>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title class="mb-2 text-subtitle-2 grey--text text--darken-2">Detail Alamat
+                      </v-list-item-title>
+                      <div>
+                        <v-textarea hide-details="auto" v-model="detailAlamat" flat outlined single-line no-resize
+                          auto-grow clearable label="detail alamat minimal 40 karakter" rows="4"
+                          :rules="[(v) => !!v || 'detail alamat tidak boleh kosong']">
+                        </v-textarea>
+                      </div>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
+              <v-card-actions class="d-flex justify-center">
+                <v-btn :disabled="isDisabled" @click="el = 5" class="primary" width="210"
+                  height="50">Selanjutnya</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-stepper-content>
+          <v-stepper-content step="5">
             <v-card elevation="0">
               <v-card-title class="pt-0 text-h5 d-flex justify-center">
                 <span>Pilih Foto Profil</span>
@@ -98,6 +165,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import db from "../plugins/firebaseInit.js";
 import "firebase/storage";
+import axios from "axios";
+
 export default {
   name: "PenjualanBuatakun",
 
@@ -111,6 +180,13 @@ export default {
       fotoProfil: null,
       loading: false,
       suksesBuatAkun: false,
+      provinsi: [],
+      kabupaten: [],
+      pilihProvinsi: '',
+      pilihKabupaten: '',
+      notelp: '',
+      detailAlamat: '',
+      isDisabled: true
     };
   },
 
@@ -121,7 +197,56 @@ export default {
     this.$store.state.backCounter = 1;
     return;
   },
+  created() {
+    this.getProvinsi();
+  },
+  watch: {
+    pilihProvinsi() {
+      this.getKabupaten();
+      this.validate();
+    },
+    pilihKabupaten() {
+      this.validate();
+    },
+    notelp() {
+      this.validate();
+    },
+    detailAlamat() {
+      this.validate();
+    },
+  },
   methods: {
+    getProvinsi() {
+      this.provinsi = [];
+      axios.get("https://thisisezabackend.vercel.app/user/getProvinsi").then((res) => {
+        res.data.rajaongkir.results.forEach((i) => {
+          this.provinsi.push(i);
+        });
+      });
+    },
+    getKabupaten() {
+      this.kabupaten = [];
+      axios
+        .get(`https://thisisezabackend.vercel.app/user/getKota/${this.pilihProvinsi}`)
+        .then((res) => {
+          res.data.rajaongkir.results.forEach((i) => {
+            this.kabupaten.push(i);
+          });
+        });
+    },
+    validate() {
+      if (
+        this.pilihProvinsi.length != 0 &&
+        this.pilihKabupaten.length != 0 &&
+        this.notelp.length != 0 &&
+        this.detailAlamat != null &&
+        this.detailAlamat.length > 40
+      ) {
+        this.isDisabled = false;
+      } else {
+        this.isDisabled = true;
+      }
+    },
     async ok() {
       await firebase.auth().signOut();
       this.$router.replace({ name: "Home" });
@@ -145,6 +270,7 @@ export default {
         this.password
       ).then(async (user) => {
         // send email verification
+        var getCityNameAndProvinceName = this.kabupaten.filter(kab => kab.city_id == this.pilihKabupaten);
         await user.user.sendEmailVerification();
         //membuat collection user
         const database = db.collection("client").doc(user.user.uid);
@@ -155,6 +281,12 @@ export default {
           enable: true,
           access: "user",
           avatar: profil,
+          provinsi: this.pilihProvinsi,
+          nama_provinsi: getCityNameAndProvinceName[0].province,
+          kabupaten: this.pilihKabupaten,
+          nama_kota: getCityNameAndProvinceName[0].city_name,
+          telpon: this.notelp,
+          detail_alamat: this.detailAlamat
         });
         this.loading = false;
         this.suksesBuatAkun = true;

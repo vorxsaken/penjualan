@@ -32,7 +32,7 @@
             <v-list-item-icon><v-icon>mdi-history</v-icon></v-list-item-icon>
             <v-list-item-title>Riwayat Pesanan</v-list-item-title>
           </v-list-item>
-          <v-list-item link :to="{ name: 'alamat' }">
+          <v-list-item link :to="{ name: 'editAlamat' }">
             <v-list-item-icon
               ><v-icon>mdi-home-map-marker</v-icon></v-list-item-icon
             >

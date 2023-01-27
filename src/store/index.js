@@ -23,6 +23,12 @@ export default new Vuex.Store({
     userEmail: '',
     userName: '',
     userAvatar: '',
+    provinsi: '',
+    nama_provinsi: '',
+    kabupaten: '',
+    nama_kota: '',
+    telpon: '',
+    detailAlamat: '',
     scrollY: 0,
     lastVisible: null,
     totalLength: 0,
@@ -49,10 +55,13 @@ export default new Vuex.Store({
     filterPemesanan(state, payload) {
       state.pemesanan = state.pemesanan.filter((pem) => { return pem.pemesananId !== payload });
     },
-    filterAlamat(state, payload) {
-      state.alamat = state.alamat.filter((address) => {
-        return address.alamatId !== payload
-      })
+    setNewAlamat(state, payload) {
+      state.provinsi = payload.provinsi;
+      state.nama_provinsi = payload.nama_provinsi;
+      state.kabupaten = payload.kabupaten;
+      state.nama_kota = payload.nama_kota;
+      state.telpon = payload.telpon;
+      state.detailAlamat = payload.detail_alamat;
     },
     changeFootbarValue(state, payload) {
       state.footbarValue = payload;
@@ -63,6 +72,12 @@ export default new Vuex.Store({
       state.userEmail = payload.data().email;
       state.userName = payload.data().username;
       state.userAvatar = payload.data().avatar;
+      state.provinsi = payload.data().provinsi;
+      state.nama_provinsi = payload.data().nama_provinsi;
+      state.kabupaten = payload.data().kabupaten;
+      state.nama_kota = payload.data().nama_kota;
+      state.telpon = payload.data().telpon;
+      state.detailAlamat = payload.data().detail_alamat;
     }
   },
   actions: {
@@ -305,9 +320,8 @@ export default new Vuex.Store({
         })
       }
     },
-    async updateAlamat({ commit, dispatch }, payload) {
-      commit("filterAlamat", payload);
-      await dispatch("getAlamat");
+    async updateAlamat({ commit }, payload) {
+      commit("setNewAlamat", payload);
     }
   },
   modules: {

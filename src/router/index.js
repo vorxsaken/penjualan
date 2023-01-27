@@ -8,7 +8,7 @@ import Kategori from '../views/Kategori.vue';
 // import detailProduk from "../views/detailProduk.vue";
 import Login from "../views/login.vue";
 import buatAkun from "../views/buatAkun.vue";
-import Keranjang from "../views/keranjang.vue";
+import Keranjang from "../views/testKeranjang.vue";
 import Alamat from "../views/alamat.vue";
 import inputAlamat from "../views/inputAlamat.vue"; 
 import detailPesanan from "../views/detailPesanan.vue";
@@ -123,7 +123,7 @@ const routes = [
     }
   },
   {
-    path: '/editAlamat/:id',
+    path: '/editAlamat/',
     name:'editAlamat',
     component: editAlamat,
     meta: {

@@ -101,7 +101,6 @@ export default {
           likeId: database.id,
           user: firebase.auth().currentUser.email,
           produkId: produkID,
-          likedAt: this.getDate(),
         };
         this.$store.dispatch("pushFavorit", like);
         await database
@@ -109,7 +108,6 @@ export default {
             likeId: database.id,
             user: firebase.auth().currentUser.email,
             produkId: produkID,
-            likedAt: this.getDate(),
           })
           .then(() => {
             console.log("Tambah Favorit");

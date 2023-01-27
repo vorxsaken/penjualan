@@ -18,17 +18,17 @@
       <v-col cols="12" lg="6" :class="this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.md ?
       'pa-0 pb-4 d-flex justify-center' : ''">
         <v-card elevation="0" :width="this.$vuetify.breakpoint.md ? '100%' : '400'">
-          <v-card-title>
-            <v-row>
+          <div class="px-4 py-0">
+            <v-row no-gutters class="pb-0">
               <v-col cols="10" class="text-h6 blue-grey--text text--darken-2 font-weight-bold">
-                <div>{{ detailProduk[0].title }}</div>
+                <span>{{ detailProduk[0].title }}</span>
               </v-col>
               <v-col cols="2" class="d-flex justify-center align-start">
                 <v-icon @click="addLike" :color="liked ? 'red' : 'blue-grey darken-2'" class="mt-2" size="35">
                   mdi-heart</v-icon>
               </v-col>
             </v-row>
-          </v-card-title>
+          </div>
           <v-card-subtitle class="pl-2 d-flex flex-column">
             <v-rating size="15" color="yellow" readonly length="5" :value="detailProduk[0].rating">
             </v-rating>
@@ -418,7 +418,6 @@ export default {
           likeId: database.id,
           user: firebase.auth().currentUser.email,
           produkId: produkID,
-          likedAt: this.getDate(),
         };
         this.$store.dispatch("pushFavorit", like);
         await database
@@ -426,7 +425,6 @@ export default {
             likeId: database.id,
             user: firebase.auth().currentUser.email,
             produkId: produkID,
-            likedAt: this.getDate(),
           })
           .then(() => {
             console.log("Tambah Favorit");

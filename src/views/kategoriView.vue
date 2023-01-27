@@ -18,7 +18,7 @@
                 <v-card class="mb-2" elevation="0">
                     <v-card-title class="py-1 pl-2 d-flex justify-start">
                         <span class="text-body-1 pl-0 black--text font-weight-bold">
-                            Kategori: {{ this.$route.params.id }}
+                            Kategori: {{ this.$route.params.nama }}
                         </span>
                     </v-card-title>
                 </v-card>

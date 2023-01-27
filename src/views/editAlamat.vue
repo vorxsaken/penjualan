@@ -25,10 +25,11 @@
       </v-card>
     </v-dialog>
     <v-card elevation="0" class="pb-4">
-      <v-card-title class="pb-0">Edit Alamat</v-card-title>
+      <v-card-title class="pb-0 font-weight-bold ml-4 text-h5">Edit Alamat</v-card-title>
+      <v-card-subtitle class="text-caption mt-1 ml-4 pb-0">Disini kamu bisa edit alamat kamu</v-card-subtitle>
       <v-card-text class="py-0">
         <v-list two-line>
-          <v-list-item>
+          <!-- <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="pb-2 text-subtitle-2 grey--text text--darken-2">Title Alamat</v-list-item-title>
               <v-list-item-subtitle>
@@ -39,59 +40,51 @@
                 </div>
               </v-list-item-subtitle>
             </v-list-item-content>
-          </v-list-item>
+          </v-list-item> -->
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="pb-2 text-subtitle-2 grey--text text--darken-2">Provinsi</v-list-item-title>
-              <v-list-item-subtitle>
                 <div>
                   <v-select v-model="pilihProvinsi" hide-details="auto" flat outlined single-line
                     :rules="[(v) => !!v || 'provinsi tidak boleh kosong']" label="Provinsi" :items="provinsi"
                     item-text="province" item-value="province_id">
                   </v-select>
                 </div>
-              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title
                 class="pb-2 text-subtitle-2 grey--text text--darken-2">Kabupaten/kota</v-list-item-title>
-              <v-list-item-subtitle>
                 <div>
                   <v-select v-model="pilihKabupaten" hide-details="auto" flat outlined single-line
                     :rules="[(v) => !!v || 'kota tidak boleh kosong']" label="Kabupaten/kota" :items="kabupaten"
                     item-text="city_name" item-value="city_id">
                   </v-select>
                 </div>
-              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="pb-2 text-subtitle-2 grey--text text--darken-2">No.Telp</v-list-item-title>
-              <v-list-item-subtitle>
                 <div>
                   <v-text-field v-model="notelp" hide-details="auto"
                     :rules="[(v) => !!v || 'no telepon tidak boleh kosong']" single-line flat outlined type="number"
                     label="No telepon" hide-spin-buttons>
                   </v-text-field>
                 </div>
-              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="pb-2 text-subtitle-2 grey--text text--darken-2">Detail
                 Alamat</v-list-item-title>
-              <v-list-item-subtitle>
                 <div>
                   <v-textarea hide-details="auto" v-model="detailAlamat" flat outlined single-line no-resize auto-grow
                     clearable label="detail alamat minimal 40 karakter" rows="4"
                     :rules="[(v) => !!v || 'detail alamat tidak boleh kosong']">
                   </v-textarea>
                 </div>
-              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -161,16 +154,16 @@ export default {
       window.history.back();
     },
     async loadData() {
-      const database = await db
-        .collection("alamat")
-        .where("alamatId", "==", this.$route.params.id)
-        .get();
-      const alamat = database.docs.map((doc) => doc.data());
-      this.title = alamat[0].title;
-      this.pilihProvinsi = alamat[0].provinsi;
-      this.pilihKabupaten = alamat[0].kabupaten;
-      this.notelp = alamat[0].telp;
-      this.detailAlamat = alamat[0].detailAlamat;
+      // const database = await db
+      //   .collection("alamat")
+      //   .where("alamatId", "==", this.$route.params.id)
+      //   .get();
+      // const alamat = database.docs.map((doc) => doc.data());
+      // this.title = alamat[0].title;
+      this.pilihProvinsi = this.$store.state.provinsi;
+      this.pilihKabupaten = this.$store.state.kabupaten;
+      this.notelp = this.$store.state.telpon;
+      this.detailAlamat = this.$store.state.detailAlamat;
     },
     getProvinsi() {
       this.provinsi = [];
@@ -192,7 +185,6 @@ export default {
     },
     validate() {
       if (
-        this.title.length != 0 &&
         this.pilihProvinsi.length != 0 &&
         this.pilihKabupaten.length != 0 &&
         this.notelp.length != 0 &&
@@ -206,23 +198,22 @@ export default {
     },
     async updateAlamat() {
       this.isLoading = true;
-      const database = db.collection("alamat").doc(this.$route.params.id);
+      const { uid } = firebase.auth().currentUser;
+      const database = db.collection("client").doc(uid);
       var literal = this.kabupaten.filter((kab) => { return kab.city_id == this.pilihKabupaten });
-      await database
-        .update({
-          alamatId: database.id,
-          userId: firebase.auth().currentUser.uid,
-          title: this.title,
+      var data = {
           provinsi: this.pilihProvinsi,
           nama_provinsi: literal[0].province,
           kabupaten: this.pilihKabupaten,
           nama_kota: literal[0].city_name,
-          telp: this.notelp,
-          detailAlamat: this.detailAlamat,
-        })
+          telpon: this.notelp,
+          detail_alamat: this.detailAlamat,
+        }
+      await database
+        .update( data )
         .then(() => {
           console.log("alamat terupdate");
-          this.$store.dispatch("updateAlamat", this.$route.params.id);
+          this.$store.dispatch("updateAlamat", data);
           this.isLoading = false;
           this.isSukses = true;
         })
